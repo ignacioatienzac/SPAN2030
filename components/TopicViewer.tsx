@@ -7,8 +7,11 @@ interface TopicViewerProps {
   onBack: () => void;
 }
 
+type DeterminantsTab = 'introduccion' | 'numerales' | 'demostrativos' | 'posesivos' | 'indefinidos' | 'articulos' | 'practica';
+
 export const TopicViewer: React.FC<TopicViewerProps> = ({ topic, onBack }) => {
   const [activeTab, setActiveTab] = useState<'teoria' | 'practica'>('teoria');
+  const [determinantsTab, setDeterminantsTab] = useState<DeterminantsTab>('introduccion');
 
   // Topic IDs
   const isMorphology = topic.id === '1-1';
@@ -33,63 +36,163 @@ export const TopicViewer: React.FC<TopicViewerProps> = ({ topic, onBack }) => {
               </div>
             </div>
 
-            {/* Tabs */}
-            <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
-              <button
-                onClick={() => setActiveTab('teoria')}
-                className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                  activeTab === 'teoria' 
-                    ? 'bg-white text-hku-blue shadow-sm' 
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <BookOpen size={16} className="mr-2" />
-                Teoría
-              </button>
-              <button
-                onClick={() => setActiveTab('practica')}
-                className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                  activeTab === 'practica' 
-                    ? 'bg-white text-hku-green shadow-sm' 
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <PenTool size={16} className="mr-2" />
-                Práctica
-              </button>
-            </div>
+            {/* Tabs for Morphology */}
+            {!isDeterminants && (
+              <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+                <button
+                  onClick={() => setActiveTab('teoria')}
+                  className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                    activeTab === 'teoria' 
+                      ? 'bg-white text-hku-blue shadow-sm' 
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <BookOpen size={16} className="mr-2" />
+                  Teoría
+                </button>
+                <button
+                  onClick={() => setActiveTab('practica')}
+                  className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                    activeTab === 'practica' 
+                      ? 'bg-white text-hku-green shadow-sm' 
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <PenTool size={16} className="mr-2" />
+                  Práctica
+                </button>
+              </div>
+            )}
           </div>
+
+          {/* Tabs for Determinants - 7 tabs */}
+          {isDeterminants && (
+            <div className="overflow-x-auto -mx-4 px-4 pb-4">
+              <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg min-w-max">
+                <button
+                  onClick={() => setDeterminantsTab('introduccion')}
+                  className={`flex items-center px-3 py-2 rounded-md text-xs md:text-sm font-medium transition-all whitespace-nowrap ${
+                    determinantsTab === 'introduccion' 
+                      ? 'bg-white text-hku-blue shadow-sm' 
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <BookOpen size={14} className="mr-1.5" />
+                  Introducción
+                </button>
+                <button
+                  onClick={() => setDeterminantsTab('numerales')}
+                  className={`flex items-center px-3 py-2 rounded-md text-xs md:text-sm font-medium transition-all whitespace-nowrap ${
+                    determinantsTab === 'numerales' 
+                      ? 'bg-white text-hku-blue shadow-sm' 
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <Hash size={14} className="mr-1.5" />
+                  Numerales
+                </button>
+                <button
+                  onClick={() => setDeterminantsTab('demostrativos')}
+                  className={`flex items-center px-3 py-2 rounded-md text-xs md:text-sm font-medium transition-all whitespace-nowrap ${
+                    determinantsTab === 'demostrativos' 
+                      ? 'bg-white text-hku-blue shadow-sm' 
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <MapPin size={14} className="mr-1.5" />
+                  Demostrativos
+                </button>
+                <button
+                  onClick={() => setDeterminantsTab('posesivos')}
+                  className={`flex items-center px-3 py-2 rounded-md text-xs md:text-sm font-medium transition-all whitespace-nowrap ${
+                    determinantsTab === 'posesivos' 
+                      ? 'bg-white text-hku-blue shadow-sm' 
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <User size={14} className="mr-1.5" />
+                  Posesivos
+                </button>
+                <button
+                  onClick={() => setDeterminantsTab('indefinidos')}
+                  className={`flex items-center px-3 py-2 rounded-md text-xs md:text-sm font-medium transition-all whitespace-nowrap ${
+                    determinantsTab === 'indefinidos' 
+                      ? 'bg-white text-hku-blue shadow-sm' 
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <HelpCircle size={14} className="mr-1.5" />
+                  Indefinidos
+                </button>
+                <button
+                  onClick={() => setDeterminantsTab('articulos')}
+                  className={`flex items-center px-3 py-2 rounded-md text-xs md:text-sm font-medium transition-all whitespace-nowrap ${
+                    determinantsTab === 'articulos' 
+                      ? 'bg-white text-hku-blue shadow-sm' 
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <Key size={14} className="mr-1.5" />
+                  Artículos
+                </button>
+                <button
+                  onClick={() => setDeterminantsTab('practica')}
+                  className={`flex items-center px-3 py-2 rounded-md text-xs md:text-sm font-medium transition-all whitespace-nowrap ${
+                    determinantsTab === 'practica' 
+                      ? 'bg-white text-hku-green shadow-sm' 
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <PenTool size={14} className="mr-1.5" />
+                  Práctica
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Content Area */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {activeTab === 'teoria' ? (
+        {isDeterminants ? (
           <div className="space-y-12">
-            {isMorphology && <MorphologyContent />}
-            {isDeterminants && <DeterminantsContent />}
-            {!isMorphology && !isDeterminants && (
-              <div className="text-center py-20 bg-white rounded-2xl border border-gray-200 shadow-sm">
-                <p className="text-gray-500">Contenido disponible próximamente para {topic.title}.</p>
-              </div>
-            )}
+            {determinantsTab === 'introduccion' && <DeterminantsIntroduccion />}
+            {determinantsTab === 'numerales' && <DeterminantsNumerales />}
+            {determinantsTab === 'demostrativos' && <DeterminantsDemostrativos />}
+            {determinantsTab === 'posesivos' && <DeterminantsPosesivos />}
+            {determinantsTab === 'indefinidos' && <DeterminantsIndefinidos />}
+            {determinantsTab === 'articulos' && <DeterminantsArticulos />}
+            {determinantsTab === 'practica' && <DeterminantsPractica />}
           </div>
         ) : (
-          <div>
-            {isMorphology ? (
-               <MorphologyPractice />
+          <>
+            {activeTab === 'teoria' ? (
+              <div className="space-y-12">
+                {isMorphology && <MorphologyContent />}
+                {!isMorphology && (
+                  <div className="text-center py-20 bg-white rounded-2xl border border-gray-200 shadow-sm">
+                    <p className="text-gray-500">Contenido disponible próximamente para {topic.title}.</p>
+                  </div>
+                )}
+              </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-gray-200 shadow-sm border-l-4 border-l-hku-green">
-                <div className="bg-green-50 p-4 rounded-full mb-4">
-                  <PenTool className="w-8 h-8 text-hku-green" />
-                </div>
-                <h3 className="text-xl font-bold text-hku-ash mb-2">Sección de Práctica</h3>
-                <p className="text-gray-500 text-center max-w-md">
-                  Próximamente incluiremos ejercicios para este tema.
-                </p>
+              <div>
+                {isMorphology ? (
+                  <MorphologyPractice />
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-gray-200 shadow-sm border-l-4 border-l-hku-green">
+                    <div className="bg-green-50 p-4 rounded-full mb-4">
+                      <PenTool className="w-8 h-8 text-hku-green" />
+                    </div>
+                    <h3 className="text-xl font-bold text-hku-ash mb-2">Sección de Práctica</h3>
+                    <p className="text-gray-500 text-center max-w-md">
+                      Próximamente incluiremos ejercicios para este tema.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>
@@ -542,61 +645,350 @@ const MorphologyContent: React.FC = () => {
   );
 };
 
-// --- CONTENT COMPONENT: DETERMINANTS (Topic 1-2) ---
-const DeterminantsContent: React.FC = () => {
+// --- DETERMINANTS COMPONENTS (Topic 1-2) ---
+
+// 1. INTRODUCCIÓN
+const DeterminantsIntroduccion: React.FC = () => {
   return (
     <div className="space-y-12 text-gray-700 font-sans">
+      {/* Definición de Determinante */}
       <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
         <h2 className="text-2xl font-bold text-hku-blue mb-6 flex items-center font-serif">
-          <BookOpen className="mr-2" /> Los Determinantes
+          <BookOpen className="mr-2" /> ¿Qué es un determinante?
         </h2>
         
-        <div className="prose max-w-none text-gray-600">
-          <p className="mb-4">
-            Los determinantes son palabras que acompañan al sustantivo para <strong>actualizarlo</strong> y <strong>concretar</strong> su significado. Concuerdan siempre en género y número con el sustantivo al que acompañan.
-          </p>
-          
-          <div className="grid md:grid-cols-2 gap-6 mt-8">
-            <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
-                <h3 className="font-bold text-hku-blue text-lg mb-2">Artículos</h3>
-                <p className="text-sm mb-2">Identifican al sustantivo como conocido o desconocido.</p>
-                <ul className="list-disc list-inside text-sm pl-2">
-                    <li>Determinado: el, la, los, las</li>
-                    <li>Indeterminado: un, una, unos, unas</li>
-                    <li>Neutro: lo</li>
-                </ul>
+        <div className="space-y-6">
+          <div className="bg-blue-50 p-6 rounded-xl border-l-4 border-hku-blue">
+            <p className="text-lg text-gray-800 leading-relaxed">
+              Un <strong>determinante</strong> es una palabra que <strong>acompaña</strong> y <strong>modifica</strong> al sustantivo, 
+              aportando información sobre él. <span className="text-hku-blue font-semibold">Siempre se coloca delante del sustantivo</span> y 
+              concuerda con él en <strong>género</strong> y <strong>número</strong>.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+              <h3 className="font-bold text-hku-ash mb-3 flex items-center">
+                <CheckCircle size={20} className="mr-2 text-green-500" />
+                Ejemplos correctos
+              </h3>
+              <ul className="space-y-2 text-sm">
+                <li className="flex items-start">
+                  <span className="text-hku-blue font-bold mr-2">•</span>
+                  <span><span className="bg-blue-100 px-2 py-0.5 rounded font-semibold">El</span> perro</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-hku-blue font-bold mr-2">•</span>
+                  <span><span className="bg-blue-100 px-2 py-0.5 rounded font-semibold">Mi</span> casa</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-hku-blue font-bold mr-2">•</span>
+                  <span><span className="bg-blue-100 px-2 py-0.5 rounded font-semibold">Tres</span> gatos</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-hku-blue font-bold mr-2">•</span>
+                  <span><span className="bg-blue-100 px-2 py-0.5 rounded font-semibold">Este</span> libro</span>
+                </li>
+              </ul>
             </div>
 
-            <div className="bg-green-50 p-6 rounded-xl border border-green-100">
-                <h3 className="font-bold text-hku-green text-lg mb-2">Posesivos</h3>
-                <p className="text-sm mb-2">Indican posesión o pertenencia.</p>
-                <ul className="list-disc list-inside text-sm pl-2">
-                    <li>Átonos (ante puestos): mi, tu, su...</li>
-                    <li>Tónicos (pospuestos): mío, tuyo, suyo...</li>
-                </ul>
-            </div>
-
-            <div className="bg-orange-50 p-6 rounded-xl border border-orange-100">
-                <h3 className="font-bold text-orange-600 text-lg mb-2">Demostrativos</h3>
-                <p className="text-sm mb-2">Ubican el objeto en el espacio o tiempo.</p>
-                <ul className="list-disc list-inside text-sm pl-2">
-                    <li>Cercanía: este, esta, esto</li>
-                    <li>Distancia media: ese, esa, eso</li>
-                    <li>Lejanía: aquel, aquella, aquello</li>
-                </ul>
-            </div>
-
-             <div className="bg-purple-50 p-6 rounded-xl border border-purple-100">
-                <h3 className="font-bold text-purple-600 text-lg mb-2">Cuantificadores</h3>
-                <p className="text-sm mb-2">Expresan cantidad, número o grado.</p>
-                <ul className="list-disc list-inside text-sm pl-2">
-                    <li>Numerales: uno, dos, primero...</li>
-                    <li>Indefinidos: mucho, poco, algún...</li>
-                </ul>
+            <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
+              <h3 className="font-bold text-gray-700 mb-3 flex items-center">
+                <Lightbulb size={20} className="mr-2 text-yellow-500" />
+                Función principal
+              </h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Los determinantes <strong>actualizan</strong> y <strong>concretan</strong> el significado del sustantivo. 
+                Es decir, nos dan más información sobre él: si es conocido, a quién pertenece, cuántos hay, dónde está, etc.
+              </p>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Tipos de Determinantes - Overview */}
+      <section>
+        <h2 className="text-2xl font-bold text-hku-ash mb-6 flex items-center font-serif">
+          <Layers className="mr-2 text-hku-green" /> Tipos de Determinantes
+        </h2>
+        
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Artículos */}
+          <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-blue-400 hover:shadow-lg transition-shadow">
+            <div className="flex items-center mb-3">
+              <div className="bg-blue-100 p-2 rounded-lg mr-3">
+                <Key className="w-5 h-5 text-blue-600" />
+              </div>
+              <h3 className="font-bold text-lg text-gray-800">Artículos</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-3">
+              Identifican al sustantivo como conocido (determinado) o desconocido (indeterminado).
+            </p>
+            <div className="bg-blue-50 p-3 rounded-lg">
+              <p className="text-xs font-semibold text-gray-500 mb-1">Ejemplos:</p>
+              <p className="text-sm font-mono"><span className="font-bold text-blue-600">El</span> niño, <span className="font-bold text-blue-600">una</span> mesa</p>
+            </div>
+          </div>
+
+          {/* Numerales */}
+          <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-purple-400 hover:shadow-lg transition-shadow">
+            <div className="flex items-center mb-3">
+              <div className="bg-purple-100 p-2 rounded-lg mr-3">
+                <Hash className="w-5 h-5 text-purple-600" />
+              </div>
+              <h3 className="font-bold text-lg text-gray-800">Numerales</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-3">
+              Expresan cantidad exacta (cardinales) o posición en una serie (ordinales).
+            </p>
+            <div className="bg-purple-50 p-3 rounded-lg">
+              <p className="text-xs font-semibold text-gray-500 mb-1">Ejemplos:</p>
+              <p className="text-sm font-mono"><span className="font-bold text-purple-600">Dos</span> perros, el <span className="font-bold text-purple-600">primer</span> día</p>
+            </div>
+          </div>
+
+          {/* Demostrativos */}
+          <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-orange-400 hover:shadow-lg transition-shadow">
+            <div className="flex items-center mb-3">
+              <div className="bg-orange-100 p-2 rounded-lg mr-3">
+                <MapPin className="w-5 h-5 text-orange-600" />
+              </div>
+              <h3 className="font-bold text-lg text-gray-800">Demostrativos</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-3">
+              Ubican al sustantivo en el espacio o en el tiempo respecto al hablante.
+            </p>
+            <div className="bg-orange-50 p-3 rounded-lg">
+              <p className="text-xs font-semibold text-gray-500 mb-1">Ejemplos:</p>
+              <p className="text-sm font-mono"><span className="font-bold text-orange-600">Este</span> libro, <span className="font-bold text-orange-600">aquella</span> casa</p>
+            </div>
+          </div>
+
+          {/* Posesivos */}
+          <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-green-400 hover:shadow-lg transition-shadow">
+            <div className="flex items-center mb-3">
+              <div className="bg-green-100 p-2 rounded-lg mr-3">
+                <User className="w-5 h-5 text-green-600" />
+              </div>
+              <h3 className="font-bold text-lg text-gray-800">Posesivos</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-3">
+              Indican posesión o pertenencia del sustantivo a una persona.
+            </p>
+            <div className="bg-green-50 p-3 rounded-lg">
+              <p className="text-xs font-semibold text-gray-500 mb-1">Ejemplos:</p>
+              <p className="text-sm font-mono"><span className="font-bold text-green-600">Mi</span> coche, <span className="font-bold text-green-600">su</span> familia</p>
+            </div>
+          </div>
+
+          {/* Indefinidos */}
+          <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-yellow-400 hover:shadow-lg transition-shadow">
+            <div className="flex items-center mb-3">
+              <div className="bg-yellow-100 p-2 rounded-lg mr-3">
+                <HelpCircle className="w-5 h-5 text-yellow-600" />
+              </div>
+              <h3 className="font-bold text-lg text-gray-800">Indefinidos</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-3">
+              Expresan cantidad o existencia de forma imprecisa o vaga.
+            </p>
+            <div className="bg-yellow-50 p-3 rounded-lg">
+              <p className="text-xs font-semibold text-gray-500 mb-1">Ejemplos:</p>
+              <p className="text-sm font-mono"><span className="font-bold text-yellow-600">Algunos</span> días, <span className="font-bold text-yellow-600">mucha</span> gente</p>
+            </div>
+          </div>
+
+          {/* Interrogativos/Exclamativos */}
+          <div className="bg-white p-6 rounded-xl shadow-sm border-t-4 border-red-400 hover:shadow-lg transition-shadow">
+            <div className="flex items-center mb-3">
+              <div className="bg-red-100 p-2 rounded-lg mr-3">
+                <MessageSquare className="w-5 h-5 text-red-600" />
+              </div>
+              <h3 className="font-bold text-lg text-gray-800">Interrog./Exclam.</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-3">
+              Introducen preguntas o exclamaciones sobre el sustantivo.
+            </p>
+            <div className="bg-red-50 p-3 rounded-lg">
+              <p className="text-xs font-semibold text-gray-500 mb-1">Ejemplos:</p>
+              <p className="text-sm font-mono"><span className="font-bold text-red-600">¿Qué</span> libro?, <span className="font-bold text-red-600">¡Cuánto</span> dinero!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Concordancia */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-2xl font-bold text-hku-ash mb-6 flex items-center font-serif">
+          <Split className="mr-2 text-hku-blue" /> Concordancia
+        </h2>
+        
+        <p className="text-gray-600 mb-6 leading-relaxed">
+          Los determinantes <strong>siempre concuerdan</strong> con el sustantivo al que acompañan en <strong>género</strong> (masculino/femenino) 
+          y <strong>número</strong> (singular/plural).
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="space-y-4">
+            <h3 className="font-bold text-hku-blue flex items-center">
+              <CheckCircle size={18} className="mr-2" />
+              Concordancia correcta
+            </h3>
+            <div className="space-y-3">
+              <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                <p className="font-mono text-sm">
+                  <span className="text-green-600 font-bold">El</span> <span className="underline">perro</span>
+                  <span className="text-xs text-gray-500 ml-2">(Masc. Sing. + Masc. Sing.)</span>
+                </p>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                <p className="font-mono text-sm">
+                  <span className="text-green-600 font-bold">Las</span> <span className="underline">casas</span>
+                  <span className="text-xs text-gray-500 ml-2">(Fem. Pl. + Fem. Pl.)</span>
+                </p>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                <p className="font-mono text-sm">
+                  <span className="text-green-600 font-bold">Mis</span> <span className="underline">libros</span>
+                  <span className="text-xs text-gray-500 ml-2">(Masc. Pl. + Masc. Pl.)</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="font-bold text-red-600 flex items-center">
+              <XCircle size={18} className="mr-2" />
+              Errores de concordancia
+            </h3>
+            <div className="space-y-3">
+              <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                <p className="font-mono text-sm line-through text-red-600">
+                  <span className="font-bold">El</span> <span className="underline">casa</span>
+                  <span className="text-xs text-gray-500 ml-2">(Masc. ≠ Fem.)</span>
+                </p>
+                <p className="font-mono text-sm text-green-600 mt-2">
+                  ✓ <span className="font-bold">La</span> <span className="underline">casa</span>
+                </p>
+              </div>
+              <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                <p className="font-mono text-sm line-through text-red-600">
+                  <span className="font-bold">Los</span> <span className="underline">niña</span>
+                  <span className="text-xs text-gray-500 ml-2">(Masc. ≠ Fem.)</span>
+                </p>
+                <p className="font-mono text-sm text-green-600 mt-2">
+                  ✓ <span className="font-bold">La</span> <span className="underline">niña</span>
+                </p>
+              </div>
+              <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+                <p className="font-mono text-sm line-through text-red-600">
+                  <span className="font-bold">Este</span> <span className="underline">flores</span>
+                  <span className="text-xs text-gray-500 ml-2">(Sing. ≠ Pl.)</span>
+                </p>
+                <p className="font-mono text-sm text-green-600 mt-2">
+                  ✓ <span className="font-bold">Estas</span> <span className="underline">flores</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 bg-blue-50 p-5 rounded-xl border-l-4 border-hku-blue">
+          <h4 className="font-bold text-hku-ash mb-2 flex items-center">
+            <AlertTriangle size={18} className="mr-2 text-blue-600" />
+            Recuerda
+          </h4>
+          <p className="text-sm text-gray-700 leading-relaxed">
+            La concordancia es <strong>obligatoria</strong>. Un determinante que no concuerda con su sustantivo 
+            es un error gramatical que puede dificultar la comprensión del mensaje.
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+// 2. NUMERALES
+const DeterminantsNumerales: React.FC = () => {
+  return (
+    <div className="space-y-12 text-gray-700 font-sans">
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-2xl font-bold text-hku-blue mb-6 flex items-center font-serif">
+          <Hash className="mr-2" /> Determinantes Numerales
+        </h2>
+        <p className="text-gray-600">Contenido de numerales próximamente...</p>
+      </section>
+    </div>
+  );
+};
+
+// 3. DEMOSTRATIVOS
+const DeterminantsDemostrativos: React.FC = () => {
+  return (
+    <div className="space-y-12 text-gray-700 font-sans">
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-2xl font-bold text-hku-blue mb-6 flex items-center font-serif">
+          <MapPin className="mr-2" /> Determinantes Demostrativos
+        </h2>
+        <p className="text-gray-600">Contenido próximamente...</p>
+      </section>
+    </div>
+  );
+};
+
+// 4. POSESIVOS
+const DeterminantsPosesivos: React.FC = () => {
+  return (
+    <div className="space-y-12 text-gray-700 font-sans">
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-2xl font-bold text-hku-blue mb-6 flex items-center font-serif">
+          <User className="mr-2" /> Determinantes Posesivos
+        </h2>
+        <p className="text-gray-600">Contenido próximamente...</p>
+      </section>
+    </div>
+  );
+};
+
+// 5. INDEFINIDOS
+const DeterminantsIndefinidos: React.FC = () => {
+  return (
+    <div className="space-y-12 text-gray-700 font-sans">
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-2xl font-bold text-hku-blue mb-6 flex items-center font-serif">
+          <HelpCircle className="mr-2" /> Determinantes Indefinidos
+        </h2>
+        <p className="text-gray-600">Contenido próximamente...</p>
+      </section>
+    </div>
+  );
+};
+
+// 6. ARTÍCULOS
+const DeterminantsArticulos: React.FC = () => {
+  return (
+    <div className="space-y-12 text-gray-700 font-sans">
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-2xl font-bold text-hku-blue mb-6 flex items-center font-serif">
+          <Key className="mr-2" /> Artículos
+        </h2>
+        <p className="text-gray-600">Contenido próximamente...</p>
+      </section>
+    </div>
+  );
+};
+
+// 7. PRÁCTICA
+const DeterminantsPractica: React.FC = () => {
+  return (
+    <div className="space-y-8">
+      <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="flex items-center mb-6">
+          <div className="bg-hku-green p-2 rounded-lg text-white mr-3"><PenTool size={20} /></div>
+          <h2 className="text-2xl font-bold text-hku-ash font-serif">Práctica de Determinantes</h2>
+        </div>
+        <p className="text-gray-600">Ejercicios próximamente...</p>
+      </div>
     </div>
   );
 };
