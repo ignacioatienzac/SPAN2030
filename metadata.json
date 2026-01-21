@@ -1,0 +1,5 @@
+{
+  "name": "SPAN2030 Course Portal",
+  "description": "A university course portal for SPAN2030 at HKU, featuring syllabus access, topic resources, and grammar modules.",
+  "requestFramePermissions": []
+}
