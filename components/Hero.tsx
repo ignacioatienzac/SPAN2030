@@ -14,7 +14,7 @@ export const Hero: React.FC = () => {
           <div className="space-y-8">
             <div className="inline-flex items-center space-x-2 bg-white border border-gray-200 rounded-full px-3 py-1 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-hku-green animate-pulse"></span>
-              <span className="text-sm font-medium text-hku-ash">Semestre 1, 2024-2025</span>
+              <span className="text-sm font-medium text-hku-ash">Semestre 2, 2025-26</span>
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-serif text-hku-ash leading-tight">
@@ -30,10 +30,10 @@ export const Hero: React.FC = () => {
                 Ver Contenidos
                 <ArrowRight className="ml-2 -mr-1 h-5 w-5" />
               </a>
-              <button className="inline-flex justify-center items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-hku-ash bg-white hover:bg-gray-50 hover:border-hku-green transition-all duration-200">
+              <a href="https://hkuhk-my.sharepoint.com/:w:/g/personal/ignacio_hku_hk/IQCGPv03ZJWTTojAIHkD8GjHASZtZw6vFV-MKU2GH1f5Nuk?e=bg1amb" target="_blank" rel="noreferrer" className="inline-flex justify-center items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg text-hku-ash bg-white hover:bg-gray-50 hover:border-hku-green transition-all duration-200">
                 <Download className="mr-2 -ml-1 h-5 w-5 text-hku-green" />
-                Descargar Sílabo
-              </button>
+                Acceder Sílabo
+              </a>
             </div>
           </div>
 

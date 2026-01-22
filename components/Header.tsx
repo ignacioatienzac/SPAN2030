@@ -31,12 +31,12 @@ export const Header: React.FC = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <a href="#inicio" className="text-hku-ash hover:text-hku-blue font-medium transition-colors">Inicio</a>
-            <a href="#syllabus" className="text-hku-ash hover:text-hku-blue font-medium transition-colors">Sílabo</a>
+            <a href="https://hkuhk-my.sharepoint.com/:w:/g/personal/ignacio_hku_hk/IQCGPv03ZJWTTojAIHkD8GjHASZtZw6vFV-MKU2GH1f5Nuk?e=bg1amb" target="_blank" rel="noreferrer" className="text-hku-ash hover:text-hku-blue font-medium transition-colors">Sílabo</a>
             <a href="#parte-1" className="text-hku-ash hover:text-hku-blue font-medium transition-colors">Primera Parte</a>
             <a href="#parte-2" className="text-hku-ash hover:text-hku-blue font-medium transition-colors">Segunda Parte</a>
-            <button className="bg-hku-green text-white px-5 py-2 rounded-full font-semibold hover:bg-[#7cb335] transition-colors shadow-sm">
+            <a href="https://moodle.hku.hk/course/view.php?id=132580" target="_blank" rel="noreferrer" className="bg-hku-green text-white px-5 py-2 rounded-full font-semibold hover:bg-[#7cb335] transition-colors shadow-sm">
               Moodle
-            </button>
+            </a>
           </div>
 
           {/* Mobile menu button */}
@@ -56,13 +56,13 @@ export const Header: React.FC = () => {
         <div className="md:hidden bg-white border-t border-gray-100 absolute w-full shadow-lg">
           <div className="px-4 pt-2 pb-6 space-y-1">
             <a href="#inicio" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-3 text-hku-ash hover:bg-gray-50 hover:text-hku-blue font-medium rounded-md">Inicio</a>
-            <a href="#syllabus" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-3 text-hku-ash hover:bg-gray-50 hover:text-hku-blue font-medium rounded-md">Sílabo</a>
+            <a href="https://hkuhk-my.sharepoint.com/:w:/g/personal/ignacio_hku_hk/IQCGPv03ZJWTTojAIHkD8GjHASZtZw6vFV-MKU2GH1f5Nuk?e=bg1amb" target="_blank" rel="noreferrer" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-3 text-hku-ash hover:bg-gray-50 hover:text-hku-blue font-medium rounded-md">Sílabo</a>
             <a href="#parte-1" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-3 text-hku-ash hover:bg-gray-50 hover:text-hku-blue font-medium rounded-md">Primera Parte</a>
             <a href="#parte-2" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-3 text-hku-ash hover:bg-gray-50 hover:text-hku-blue font-medium rounded-md">Segunda Parte</a>
             <div className="pt-4 px-3">
-               <button className="w-full bg-hku-green text-white px-5 py-3 rounded-lg font-semibold shadow-sm">
+               <a href="https://moodle.hku.hk/course/view.php?id=132580" target="_blank" rel="noreferrer" className="block w-full bg-hku-green text-white px-5 py-3 rounded-lg font-semibold shadow-sm text-center">
                 Ir a Moodle
-              </button>
+              </a>
             </div>
           </div>
         </div>

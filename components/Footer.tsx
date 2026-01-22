@@ -29,11 +29,11 @@ export const Footer: React.FC = () => {
             <h5 className="text-lg font-bold text-hku-green mb-4">Contacto</h5>
             <div className="flex items-start space-x-3 text-gray-300 text-sm">
               <MapPin className="w-5 h-5 flex-shrink-0 text-hku-blue" />
-              <span>Run Run Shaw Tower, Centennial Campus, HKU</span>
+              <span>Office 522, Run Run Shaw Tower, Centennial Campus</span>
             </div>
             <div className="flex items-center space-x-3 text-gray-300 text-sm">
               <Mail className="w-5 h-5 flex-shrink-0 text-hku-blue" />
-              <a href="mailto:general@hku.hk" className="hover:text-white">spanish@hku.hk</a>
+              <a href="mailto:ignacio@hku.hk" className="hover:text-white">ignacio@hku.hk</a>
             </div>
             <div className="flex items-center space-x-3 text-gray-300 text-sm">
               <Globe className="w-5 h-5 flex-shrink-0 text-hku-blue" />

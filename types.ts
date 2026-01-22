@@ -17,7 +17,7 @@ export const COURSE_TOPICS_PART_1: Topic[] = [
   { id: '1-2', title: 'Determinantes', description: 'Artículos, posesivos, demostrativos y cuantificadores.', icon: 'link' },
   { id: '1-3', title: 'Sustantivos', description: 'El género, el número y la clasificación semántica.', icon: 'book' },
   { id: '1-4', title: 'Adjetivos', description: 'Posición, concordancia y grados del adjetivo.', icon: 'edit' },
-  { id: '1-5', title: 'Los tiempos verbales', description: 'Usos del indicativo, subjuntivo y contrastes aspectuales.', icon: 'message' },
+  { id: '1-5', title: 'Los verbos', description: 'Usos del indicativo, subjuntivo y contrastes aspectuales.', icon: 'message' },
 ];
 
 export const COURSE_TOPICS_PART_2: Topic[] = [
