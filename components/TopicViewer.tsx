@@ -197,6 +197,10 @@ export const TopicViewer: React.FC<TopicViewerProps> = ({ topic, onBack }) => {
                   <MorphologyPractice />
                 ) : isNouns ? (
                   <NounsPractice />
+                ) : isAdjectives ? (
+                  <AdjectivesPractice />
+                ) : isVerbs ? (
+                  <VerbsPractice />
                 ) : (
                   <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-gray-200 shadow-sm border-l-4 border-l-hku-green">
                     <div className="bg-green-50 p-4 rounded-full mb-4">
@@ -5540,7 +5544,498 @@ const MorphologyPractice: React.FC = () => {
     );
 };
 
+// --- ADJECTIVES PRACTICE (Topic 1-4) ---
+const AdjectivesPractice: React.FC = () => {
+    const [ej1Answers, setEj1Answers] = useState<{ [key: string]: string }>({});
+    const [ej1Results, setEj1Results] = useState<{ [key: string]: boolean | null }>({});
+    const [ej2Answers, setEj2Answers] = useState<{ [key: string]: string }>({});
+    const [ej2Results, setEj2Results] = useState<{ [key: string]: boolean | null }>({});
+    const [ej3Answers, setEj3Answers] = useState<{ [key: string]: string }>({});
+    const [ej3Results, setEj3Results] = useState<{ [key: string]: boolean | null }>({});
+    const [ej4Answers, setEj4Answers] = useState<{ [key: string]: string }>({});
+    const [ej4Results, setEj4Results] = useState<{ [key: string]: boolean | null }>({});
+    const [ej5Answers, setEj5Answers] = useState<{ [key: string]: string }>({});
+    const [ej5Results, setEj5Results] = useState<{ [key: string]: boolean | null }>({});
+
+    const ej3Items = [
+        { key: 'a1', before: 'Hoy es un', after: 'día para pasear.',      opts: ['bueno', 'buen'],   sol: 'buen'   },
+        { key: 'a2', before: 'Es una',   after: 'oportunidad para nosotros.', opts: ['grande', 'gran'], sol: 'gran'   },
+        { key: 'a3', before: 'No quiero tener un recuerdo', after: 'de este viaje.', opts: ['malo', 'mal'], sol: 'malo' },
+        { key: 'a4', before: 'Ese es un edificio', after: '.',              opts: ['grande', 'gran'],   sol: 'grande' },
+        { key: 'a5', before: 'Juan es un', after: 'amigo.',                opts: ['bueno', 'buen'],   sol: 'buen'   },
+    ];
+
+    const ej4Items = [
+        { key: 'i1', prompt: '(mesa / una / cuadrada / madera / de)',    sol: 'una mesa cuadrada de madera' },
+        { key: 'i2', prompt: '(español / un / vino / tinto)',             sol: 'un vino tinto español'       },
+        { key: 'i3', prompt: '(abierta / la / puerta / está)',            sol: 'la puerta está abierta'      },
+        { key: 'i4', prompt: '(frío / el / invierno / llegó)',            sol: 'el frío invierno llegó', sol2: 'llegó el frío invierno' },
+    ];
+
+    const ej5Groups = [
+        {
+            key: 'g1', num: 1,
+            phraseA: 'Un viejo amigo',   phraseB: 'Un amigo viejo',
+            optA: 'Es un amigo mayor',   optB: 'Es un amigo que conoces de hace mucho tiempo',
+            solA: 'b', solB: 'a',
+        },
+        {
+            key: 'g2', num: 2,
+            phraseA: 'Un pobre hombre',  phraseB: 'Un hombre pobre',
+            optA: 'Te da pena',          optB: 'Tiene muy poco dinero',
+            solA: 'a', solB: 'b',
+        },
+        {
+            key: 'g3', num: 3,
+            phraseA: 'Una gran ciudad',  phraseB: 'Una ciudad grande',
+            optA: 'De gran tamaño',      optB: 'Muy importante',
+            solA: 'b', solB: 'a',
+        },
+        {
+            key: 'g4', num: 4,
+            phraseA: 'Un coche nuevo',   phraseB: 'Un nuevo coche',
+            optA: 'Destaca su aspecto',  optB: 'Destaca cuándo se hizo',
+            solA: 'b', solB: 'a',
+        },
+    ];
+
+    const ej1Pairs = [
+        { key: 'p1', promptA: 'Un profesor', promptB: 'Una profesora', hint: '(forma de trabajar)' },
+        { key: 'p2', promptA: 'Una amiga', promptB: 'Un amigo', hint: '(nacionalidad)' },
+        { key: 'p3', promptA: 'El examen de español es', promptB: 'La lección es', hint: '' },
+        { key: 'p4', promptA: 'Mi hermano es', promptB: 'Mi hermana es', hint: '(personalidad)' },
+        { key: 'p5', promptA: 'El coche es', promptB: 'y la bicicleta es', hint: '' },
+        { key: 'p6', promptA: 'Un hombre', promptB: 'Una mujer', hint: '(nacionalidad)' },
+    ];
+
+    const checkEj1 = () => {
+        const results: { [key: string]: boolean | null } = {};
+        const norm = (s: string) => s.toLowerCase().trim();
+        const va = (k: string) => norm(ej1Answers[k + 'a'] || '');
+        const vb = (k: string) => norm(ej1Answers[k + 'b'] || '');
+
+        results['p1a'] = va('p1') === 'vago';
+        results['p1b'] = vb('p1') === 'vaga';
+
+        // p2: "Una amiga / Un amigo" — feminine first, masculine second
+        const p2_hindu  = va('p2') === 'hindú'  && vb('p2') === 'hindú';
+        const p2_aleman = va('p2') === 'alemana' && vb('p2') === 'alemán';
+
+        // p6: "Un hombre / Una mujer" — masculine first, feminine second
+        const p6_hindu  = va('p6') === 'hindú'  && vb('p6') === 'hindú';
+        const p6_aleman = va('p6') === 'alemán'  && vb('p6') === 'alemana';
+
+        // Cross-constraint: p2 and p6 must use DIFFERENT adjectives
+        const p2p6ok = (p2_hindu && p6_aleman) || (p2_aleman && p6_hindu);
+        results['p2a'] = p2p6ok;
+        results['p2b'] = p2p6ok;
+        results['p6a'] = p2p6ok;
+        results['p6b'] = p2p6ok;
+
+        results['p3a'] = va('p3') === 'difícil';
+        results['p3b'] = vb('p3') === 'difícil';
+
+        results['p4a'] = va('p4') === 'optimista';
+        results['p4b'] = vb('p4') === 'optimista';
+
+        results['p5a'] = va('p5') === 'marrón';
+        results['p5b'] = vb('p5') === 'marrón';
+
+        setEj1Results(results);
+    };
+
+    const ej2Items = [
+        { key: 'i1', prompt: 'El libro azul →', solution: 'los libros azules' },
+        { key: 'i2', prompt: 'La casa grande →', solution: 'las casas grandes' },
+        { key: 'i3', prompt: 'Un problema común →', solution: 'unos problemas comunes' },
+        { key: 'i4', prompt: 'La ventana abierta →', solution: 'las ventanas abiertas' },
+        { key: 'i5', prompt: 'El estudiante francés →', solution: 'los estudiantes franceses' },
+    ];
+
+    const checkEj2 = () => {
+        const results: { [key: string]: boolean | null } = {};
+        ej2Items.forEach(item => {
+            results[item.key] = (ej2Answers[item.key] || '').toLowerCase().trim() === item.solution;
+        });
+        setEj2Results(results);
+    };
+
+    const checkEj3 = () => {
+        const results: { [key: string]: boolean | null } = {};
+        ej3Items.forEach(item => {
+            results[item.key] = ej3Answers[item.key] === item.sol;
+        });
+        setEj3Results(results);
+    };
+
+    const checkEj4 = () => {
+        const results: { [key: string]: boolean | null } = {};
+        ej4Items.forEach(item => {
+            const v = (ej4Answers[item.key] || '').toLowerCase().trim();
+            results[item.key] = v === item.sol || ('sol2' in item && v === (item as typeof item & { sol2: string }).sol2);
+        });
+        setEj4Results(results);
+    };
+
+    const checkEj5 = () => {
+        const results: { [key: string]: boolean | null } = {};
+        ej5Groups.forEach(g => {
+            results[g.key + 'A'] = ej5Answers[g.key + 'A'] === g.solA;
+            results[g.key + 'B'] = ej5Answers[g.key + 'B'] === g.solB;
+        });
+        setEj5Results(results);
+    };
+
+    const resetAll = () => {
+        setEj1Answers({});
+        setEj1Results({});
+        setEj2Answers({});
+        setEj2Results({});
+        setEj3Answers({});
+        setEj3Results({});
+        setEj4Answers({});
+        setEj4Results({});
+        setEj5Answers({});
+        setEj5Results({});
+    };
+
+    const inputCls = (result: boolean | null | undefined) =>
+        `flex-1 px-3 py-2 border-2 rounded focus:outline-none ${
+            (result ?? null) === null
+                ? 'border-gray-300 focus:border-hku-blue'
+                : result
+                ? 'border-green-500 bg-green-50'
+                : 'border-red-500 bg-red-50'
+        }`;
+
+    return (
+        <div className="space-y-12">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-hku-green to-green-600 text-white p-8 rounded-2xl shadow-lg">
+                <h2 className="text-3xl font-bold mb-3 flex items-center">
+                    <Pencil className="mr-3" size={32} />
+                    Práctica: Adjetivos
+                </h2>
+                <p className="text-green-100 text-lg">
+                    Pon a prueba tus conocimientos sobre concordancia y formación del plural en los adjetivos.
+                </p>
+            </div>
+
+            {/* Ejercicio 1: Concordancia de Género */}
+            <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                <div className="bg-orange-50 p-6 rounded-xl border-l-4 border-orange-400">
+                    <h4 className="text-xl font-bold text-orange-700 mb-2 flex items-center">
+                        <Tag className="mr-2" size={22} />
+                        Ejercicio 1: Concordancia de Género
+                    </h4>
+                    <p className="text-gray-700 mb-6">
+                        Completa las frases eligiendo un adjetivo de la tabla y aplicando el género correcto.
+                    </p>
+
+                    <div className="space-y-5">
+                        {ej1Pairs.map((pair) => (
+                            <div key={pair.key} className="bg-white p-5 rounded-lg">
+                                {pair.hint && (
+                                    <p className="text-sm text-gray-500 italic mb-3">{pair.hint}</p>
+                                )}
+                                <div className="space-y-3">
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-gray-800 font-medium min-w-[260px]">{pair.promptA}</span>
+                                        <input
+                                            type="text"
+                                            value={ej1Answers[pair.key + 'a'] || ''}
+                                            onChange={(e) => setEj1Answers({ ...ej1Answers, [pair.key + 'a']: e.target.value })}
+                                            placeholder="adjetivo"
+                                            className={inputCls(ej1Results[pair.key + 'a'])}
+                                        />
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-gray-800 font-medium min-w-[260px]">{pair.promptB}</span>
+                                        <input
+                                            type="text"
+                                            value={ej1Answers[pair.key + 'b'] || ''}
+                                            onChange={(e) => setEj1Answers({ ...ej1Answers, [pair.key + 'b']: e.target.value })}
+                                            placeholder="adjetivo"
+                                            className={inputCls(ej1Results[pair.key + 'b'])}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Reference table */}
+                    <div className="mt-8">
+                        <p className="text-sm font-semibold text-gray-600 mb-3 uppercase tracking-wide">Opciones (en masculino):</p>
+                        <table className="w-full border-collapse text-center rounded-lg overflow-hidden shadow-sm">
+                            <tbody>
+                                {[['hindú', 'difícil', 'optimista'], ['marrón', 'vago', 'alemán']].map((row, ri) => (
+                                    <tr key={ri} className={ri % 2 === 0 ? 'bg-orange-50' : 'bg-orange-100'}>
+                                        {row.map((word) => (
+                                            <td key={word} className="py-3 px-4 font-medium text-gray-800 border border-orange-200">{word}</td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <button
+                        onClick={checkEj1}
+                        className="mt-6 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md"
+                    >
+                        <CheckCircle size={18} className="mr-2" />
+                        Comprobar Ejercicio 1
+                    </button>
+                </div>
+            </section>
+
+            {/* Ejercicio 2: Plural de Adjetivos */}
+            <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                <div className="bg-blue-50 p-6 rounded-xl border-l-4 border-blue-400">
+                    <h4 className="text-xl font-bold text-blue-700 mb-2 flex items-center">
+                        <Copy className="mr-2" size={22} />
+                        Ejercicio 2: El Plural de los Adjetivos
+                    </h4>
+                    <p className="text-gray-700 mb-6">
+                        Cambia las siguientes expresiones al plural (artículo + sustantivo + adjetivo).
+                    </p>
+
+                    <div className="space-y-4">
+                        {ej2Items.map((item) => (
+                            <div key={item.key} className="bg-white p-4 rounded-lg flex items-center gap-4">
+                                <span className="text-gray-800 font-medium min-w-[260px]">{item.prompt}</span>
+                                <input
+                                    type="text"
+                                    value={ej2Answers[item.key] || ''}
+                                    onChange={(e) => setEj2Answers({ ...ej2Answers, [item.key]: e.target.value })}
+                                    placeholder="Escribe el plural"
+                                    className={inputCls(ej2Results[item.key])}
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    <button
+                        onClick={checkEj2}
+                        className="mt-6 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md"
+                    >
+                        <CheckCircle size={18} className="mr-2" />
+                        Comprobar Ejercicio 2
+                    </button>
+                </div>
+            </section>
+
+            {/* Ejercicio 3: Apócope */}
+            <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                <div className="bg-purple-50 p-6 rounded-xl border-l-4 border-purple-400">
+                    <h4 className="text-xl font-bold text-purple-700 mb-2 flex items-center">
+                        <Scissors className="mr-2" size={22} />
+                        Ejercicio 3: Adjetivos que Cambian de Forma (Apócope)
+                    </h4>
+                    <p className="text-gray-700 mb-6">
+                        Elige la forma correcta del adjetivo para completar cada frase.
+                    </p>
+                    <div className="space-y-5">
+                        {ej3Items.map((item, idx) => (
+                            <div key={item.key} className="bg-white p-5 rounded-lg">
+                                <p className="text-gray-800 font-medium mb-3">
+                                    {idx + 1}. {item.before} <span className="text-purple-600 font-bold">______</span> {item.after}
+                                </p>
+                                <div className="flex gap-3">
+                                    {item.opts.map(opt => (
+                                        <button
+                                            key={opt}
+                                            onClick={() => setEj3Answers({ ...ej3Answers, [item.key]: opt })}
+                                            className={`px-5 py-2 rounded-lg border-2 font-medium transition-all ${
+                                                ej3Answers[item.key] === opt
+                                                    ? ej3Results[item.key] === true
+                                                        ? 'bg-green-100 border-green-500 text-green-800'
+                                                        : ej3Results[item.key] === false
+                                                        ? 'bg-red-100 border-red-500 text-red-800'
+                                                        : 'bg-purple-100 border-purple-500 text-purple-800'
+                                                    : 'bg-gray-50 border-gray-300 text-gray-700 hover:bg-gray-100'
+                                            }`}
+                                        >
+                                            {opt}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <button
+                        onClick={checkEj3}
+                        className="mt-6 bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md"
+                    >
+                        <CheckCircle size={18} className="mr-2" />
+                        Comprobar Ejercicio 3
+                    </button>
+                </div>
+            </section>
+
+            {/* Ejercicio 4: Posición del Adjetivo */}
+            <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                <div className="bg-teal-50 p-6 rounded-xl border-l-4 border-teal-400">
+                    <h4 className="text-xl font-bold text-teal-700 mb-2 flex items-center">
+                        <ListOrdered className="mr-2" size={22} />
+                        Ejercicio 4: La Posición del Adjetivo
+                    </h4>
+                    <p className="text-gray-700 mb-6">
+                        Reorganiza las palabras para formar frases correctas.
+                    </p>
+                    <div className="space-y-4">
+                        {ej4Items.map((item, idx) => (
+                            <div key={item.key} className="bg-white p-5 rounded-lg">
+                                <p className="text-gray-600 italic mb-3">{idx + 1}. {item.prompt}</p>
+                                <input
+                                    type="text"
+                                    value={ej4Answers[item.key] || ''}
+                                    onChange={(e) => setEj4Answers({ ...ej4Answers, [item.key]: e.target.value })}
+                                    placeholder="Escribe la frase"
+                                    className={`w-full px-3 py-2 border-2 rounded focus:outline-none ${
+                                        (ej4Results[item.key] ?? null) === null
+                                            ? 'border-gray-300 focus:border-hku-blue'
+                                            : ej4Results[item.key]
+                                            ? 'border-green-500 bg-green-50'
+                                            : 'border-red-500 bg-red-50'
+                                    }`}
+                                />
+            {idx === 3 && <p className="text-xs text-gray-500 italic mt-1">Usa la posición para enfatizar la cualidad.</p>}
+                            </div>
+                        ))}
+                    </div>
+                    <button
+                        onClick={checkEj4}
+                        className="mt-6 bg-teal-500 hover:bg-teal-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md"
+                    >
+                        <CheckCircle size={18} className="mr-2" />
+                        Comprobar Ejercicio 4
+                    </button>
+                </div>
+            </section>
+
+            {/* Ejercicio 5: Cambio de Significado */}
+            <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                <div className="bg-red-50 p-6 rounded-xl border-l-4 border-red-400">
+                    <h4 className="text-xl font-bold text-red-700 mb-2 flex items-center">
+                        <Split className="mr-2" size={22} />
+                        Ejercicio 5: Cambio de Significado según la Posición
+                    </h4>
+                    <p className="text-gray-700 mb-6">
+                        Cada grupo muestra dos frases con el mismo adjetivo en distinta posición. Asigna la opción correcta (a o b) a cada frase.
+                    </p>
+                    <div className="space-y-6">
+                        {ej5Groups.map(g => (
+                            <div key={g.key} className="bg-white p-5 rounded-lg">
+                                <p className="font-semibold text-gray-700 mb-3">{g.num}.</p>
+                                {/* Options legend */}
+                                <div className="mb-4 space-y-1 text-sm text-gray-600">
+                                    <p><span className="font-bold">a)</span> {g.optA}</p>
+                                    <p><span className="font-bold">b)</span> {g.optB}</p>
+                                </div>
+                                {/* Phrase A */}
+                                <div className="flex items-center gap-3 mb-3">
+                                    <span className="font-medium text-gray-800 min-w-[220px]">→ {g.phraseA}</span>
+                                    {['a', 'b'].map(opt => (
+                                        <button
+                                            key={opt}
+                                            onClick={() => setEj5Answers({ ...ej5Answers, [g.key + 'A']: opt })}
+                                            className={`px-4 py-2 rounded-lg border-2 font-medium transition-all ${
+                                                ej5Answers[g.key + 'A'] === opt
+                                                    ? ej5Results[g.key + 'A'] === true
+                                                        ? 'bg-green-100 border-green-500 text-green-800'
+                                                        : ej5Results[g.key + 'A'] === false
+                                                        ? 'bg-red-100 border-red-500 text-red-800'
+                                                        : 'bg-red-100 border-red-400 text-red-800'
+                                                    : 'bg-gray-50 border-gray-300 text-gray-700 hover:bg-gray-100'
+                                            }`}
+                                        >
+                                            {opt})
+                                        </button>
+                                    ))}
+                                </div>
+                                {/* Phrase B */}
+                                <div className="flex items-center gap-3">
+                                    <span className="font-medium text-gray-800 min-w-[220px]">→ {g.phraseB}</span>
+                                    {['a', 'b'].map(opt => (
+                                        <button
+                                            key={opt}
+                                            onClick={() => setEj5Answers({ ...ej5Answers, [g.key + 'B']: opt })}
+                                            className={`px-4 py-2 rounded-lg border-2 font-medium transition-all ${
+                                                ej5Answers[g.key + 'B'] === opt
+                                                    ? ej5Results[g.key + 'B'] === true
+                                                        ? 'bg-green-100 border-green-500 text-green-800'
+                                                        : ej5Results[g.key + 'B'] === false
+                                                        ? 'bg-red-100 border-red-500 text-red-800'
+                                                        : 'bg-red-100 border-red-400 text-red-800'
+                                                    : 'bg-gray-50 border-gray-300 text-gray-700 hover:bg-gray-100'
+                                            }`}
+                                        >
+                                            {opt})
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    <button
+                        onClick={checkEj5}
+                        className="mt-6 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md"
+                    >
+                        <CheckCircle size={18} className="mr-2" />
+                        Comprobar Ejercicio 5
+                    </button>
+                </div>
+            </section>
+
+            {/* Reiniciar */}
+            <section className="flex justify-center">
+                <button
+                    onClick={resetAll}
+                    className="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md"
+                >
+                    <RefreshCw size={18} className="mr-2" />
+                    Reiniciar todos
+                </button>
+            </section>
+
+            {/* Nota final */}
+            <section className="bg-gradient-to-r from-green-50 to-teal-50 p-6 rounded-xl border-l-4 border-green-500">
+                <p className="text-gray-700 flex items-start">
+                    <Lightbulb size={20} className="mr-2 text-green-600 flex-shrink-0 mt-1" />
+                    <span>
+                        <strong>Consejo:</strong> Recuerda que los adjetivos invariables (como <em>hindú</em>, <em>difícil</em>, <em>optimista</em>) no cambian su forma para el femenino, solo para el plural.
+                    </span>
+                </p>
+            </section>
+        </div>
+    );
+};
+
 // --- NOUNS PRACTICE (Topic 1-3) ---
+const NounInputField: React.FC<{
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    placeholder?: string;
+    isCorrect: boolean | null;
+    className?: string;
+}> = ({ value, onChange, placeholder, isCorrect, className = '' }) => (
+    <input
+        type="text"
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className={`${className} px-3 py-2 border-2 rounded focus:outline-none ${
+            isCorrect === null
+                ? 'border-gray-300 focus:border-hku-blue'
+                : isCorrect
+                ? 'border-green-500 bg-green-50'
+                : 'border-red-500 bg-red-50'
+        }`}
+    />
+);
+
 const NounsPractice: React.FC = () => {
     // Estados para las respuestas
     const [ejercicio1Answers, setEjercicio1Answers] = useState<{ [key: string]: string }>({});
@@ -5559,13 +6054,13 @@ const NounsPractice: React.FC = () => {
     // Soluciones
     const ejercicio1Solutions = {
         'intruso1': 'montaña',
-        'razon1': 'es un sustantivo común, los demás son propios',
+        'razon1': 'no es un sustantivo propio',
         'intruso2': 'reloj',
-        'razon2': 'es un sustantivo concreto, los demás son abstractos',
-        'intruso3': 'soldado',
-        'razon3': 'es un sustantivo individual, los demás son colectivos',
+        'razon2': 'no es un sustantivo abstracto',
+        'intruso3': 'mueble',
+        'razon3': 'no es un sustantivo colectivo',
         'intruso4': 'lápiz',
-        'razon4': 'es un sustantivo contable, los demás son incontables'
+        'razon4': 'no es un sustantivo incontable'
     };
 
     const ejercicio2Solutions = {
@@ -5578,11 +6073,11 @@ const NounsPractice: React.FC = () => {
     };
 
     const ejercicio3Solutions = {
-        'juez': 'la jueza',
-        'heroe': 'la heroína',
-        'yerno': 'la nuera',
+        'piloto': 'la piloto',
+        'doctor': 'la doctora',
+        'alcalde': 'la alcaldesa',
         'jabali': 'el jabalí hembra',
-        'poeta': 'la poetisa'
+        'actor': 'la actriz'
     };
 
     const ejercicio4Solutions = {
@@ -5594,10 +6089,9 @@ const NounsPractice: React.FC = () => {
     };
 
     const ejercicio5Solutions = {
-        'frase1': 'alumnado',
-        'frase2': 'tijeras',
-        'frase3': 'unos pantalones',
-        'frase4': 'gente'
+        'frase1': '2 maletas',
+        'frase2': 'diversas familias',
+        'frase3': 'un microondas'
     };
 
     // Funciones de validación
@@ -5670,6 +6164,24 @@ const NounsPractice: React.FC = () => {
         setEjercicio5Results({});
     };
 
+    const razonOptions = React.useMemo(() => {
+        const options = [
+            'no es un sustantivo común',
+            'no es un sustantivo propio',
+            'no es un sustantivo concreto',
+            'no es un sustantivo abstracto',
+            'no es un sustantivo contable',
+            'no es un sustantivo incontable',
+            'no es un sustantivo colectivo',
+            'no es un sustantivo individual',
+        ];
+        for (let i = options.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [options[i], options[j]] = [options[j], options[i]];
+        }
+        return options;
+    }, []);
+
     return (
         <div className="space-y-12">
             {/* Header */}
@@ -5709,17 +6221,17 @@ const NounsPractice: React.FC = () => {
                         {/* Caso 1 */}
                         <div className="bg-white p-5 rounded-lg">
                             <p className="font-semibold text-gray-800 mb-3">
-                                1. <span className="text-orange-600">Categoría:</span> <em>Sustantivos Propios</em>
+                                1.
                             </p>
                             <p className="text-gray-700 mb-4">
-                                → Madrid, Mediterráneo, <strong>Montaña</strong>, Marta
+                                → Madrid, Mediterráneo, Montaña, Marta
                             </p>
                             <div className="space-y-3">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                         El intruso es:
                                     </label>
-                                    <PracticeInputField
+                                    <NounInputField
                                         value={ejercicio1Answers['intruso1'] || ''}
                                         onChange={(e) => setEjercicio1Answers({...ejercicio1Answers, 'intruso1': e.target.value})}
                                         placeholder="Escribe el sustantivo"
@@ -5730,12 +6242,22 @@ const NounsPractice: React.FC = () => {
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                         Razón:
                                     </label>
-                                    <PracticeInputField
+                                    <select
                                         value={ejercicio1Answers['razon1'] || ''}
                                         onChange={(e) => setEjercicio1Answers({...ejercicio1Answers, 'razon1': e.target.value})}
-                                        placeholder="Explica por qué"
-                                        isCorrect={(ejercicio1Results['razon1'] ?? null) === null ? null : ejercicio1Results['razon1']}
-                                    />
+                                        className={`w-full px-3 py-2 border-2 rounded focus:outline-none ${
+                                            (ejercicio1Results['razon1'] ?? null) === null
+                                                ? 'border-gray-300 focus:border-hku-blue'
+                                                : ejercicio1Results['razon1']
+                                                ? 'border-green-500 bg-green-50'
+                                                : 'border-red-500 bg-red-50'
+                                        }`}
+                                    >
+                                        <option value="">— Selecciona una razón —</option>
+                                        {razonOptions.map(opt => (
+                                            <option key={opt} value={opt}>{opt}</option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -5743,17 +6265,17 @@ const NounsPractice: React.FC = () => {
                         {/* Caso 2 */}
                         <div className="bg-white p-5 rounded-lg">
                             <p className="font-semibold text-gray-800 mb-3">
-                                2. <span className="text-orange-600">Categoría:</span> <em>Sustantivos Abstractos</em>
+                                2.
                             </p>
                             <p className="text-gray-700 mb-4">
-                                → Inteligencia, Justicia, <strong>Reloj</strong>, Valentía
+                                → Inteligencia, Justicia, Reloj, Valentía
                             </p>
                             <div className="space-y-3">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                         El intruso es:
                                     </label>
-                                    <PracticeInputField
+                                    <NounInputField
                                         value={ejercicio1Answers['intruso2'] || ''}
                                         onChange={(e) => setEjercicio1Answers({...ejercicio1Answers, 'intruso2': e.target.value})}
                                         placeholder="Escribe el sustantivo"
@@ -5764,12 +6286,22 @@ const NounsPractice: React.FC = () => {
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                         Razón:
                                     </label>
-                                    <PracticeInputField
+                                    <select
                                         value={ejercicio1Answers['razon2'] || ''}
                                         onChange={(e) => setEjercicio1Answers({...ejercicio1Answers, 'razon2': e.target.value})}
-                                        placeholder="Explica por qué"
-                                        isCorrect={(ejercicio1Results['razon2'] ?? null) === null ? null : ejercicio1Results['razon2']}
-                                    />
+                                        className={`w-full px-3 py-2 border-2 rounded focus:outline-none ${
+                                            (ejercicio1Results['razon2'] ?? null) === null
+                                                ? 'border-gray-300 focus:border-hku-blue'
+                                                : ejercicio1Results['razon2']
+                                                ? 'border-green-500 bg-green-50'
+                                                : 'border-red-500 bg-red-50'
+                                        }`}
+                                    >
+                                        <option value="">— Selecciona una razón —</option>
+                                        {razonOptions.map(opt => (
+                                            <option key={opt} value={opt}>{opt}</option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -5777,19 +6309,19 @@ const NounsPractice: React.FC = () => {
                         {/* Caso 3 */}
                         <div className="bg-white p-5 rounded-lg">
                             <p className="font-semibold text-gray-800 mb-3">
-                                3. <span className="text-orange-600">Categoría:</span> <em>Sustantivos Colectivos</em>
+                                3.
                             </p>
                             <p className="text-gray-700 mb-4">
-                                → Jauría, <strong>Soldado</strong>, Flota, Enjambre
+                                → Familia, Mueble, Fauna, Equipo
                             </p>
                             <div className="space-y-3">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                         El intruso es:
                                     </label>
-                                    <PracticeInputField
+                                    <NounInputField
                                         value={ejercicio1Answers['intruso3'] || ''}
-                                        onChange={(e) => setEjercicio1Answers({...ejercicio1Answers, 'intruso3': e.target.value})}
+                                        onChange={(e) => setEjercicio1Answers({...ejercicio1Answers, 'intruso3': e.target.value.toLowerCase()})}
                                         placeholder="Escribe el sustantivo"
                                         isCorrect={(ejercicio1Results['intruso3'] ?? null) === null ? null : ejercicio1Results['intruso3']}
                                     />
@@ -5798,12 +6330,22 @@ const NounsPractice: React.FC = () => {
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                         Razón:
                                     </label>
-                                    <PracticeInputField
+                                    <select
                                         value={ejercicio1Answers['razon3'] || ''}
                                         onChange={(e) => setEjercicio1Answers({...ejercicio1Answers, 'razon3': e.target.value})}
-                                        placeholder="Explica por qué"
-                                        isCorrect={(ejercicio1Results['razon3'] ?? null) === null ? null : ejercicio1Results['razon3']}
-                                    />
+                                        className={`w-full px-3 py-2 border-2 rounded focus:outline-none ${
+                                            (ejercicio1Results['razon3'] ?? null) === null
+                                                ? 'border-gray-300 focus:border-hku-blue'
+                                                : ejercicio1Results['razon3']
+                                                ? 'border-green-500 bg-green-50'
+                                                : 'border-red-500 bg-red-50'
+                                        }`}
+                                    >
+                                        <option value="">— Selecciona una razón —</option>
+                                        {razonOptions.map(opt => (
+                                            <option key={opt} value={opt}>{opt}</option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -5811,17 +6353,17 @@ const NounsPractice: React.FC = () => {
                         {/* Caso 4 */}
                         <div className="bg-white p-5 rounded-lg">
                             <p className="font-semibold text-gray-800 mb-3">
-                                4. <span className="text-orange-600">Categoría:</span> <em>Sustantivos Incontables</em>
+                                4.
                             </p>
                             <p className="text-gray-700 mb-4">
-                                → Sal, Arena, <strong>Lápiz</strong>, Gasolina
+                                → Sal, Arena, Lápiz, Gasolina
                             </p>
                             <div className="space-y-3">
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                         El intruso es:
                                     </label>
-                                    <PracticeInputField
+                                    <NounInputField
                                         value={ejercicio1Answers['intruso4'] || ''}
                                         onChange={(e) => setEjercicio1Answers({...ejercicio1Answers, 'intruso4': e.target.value})}
                                         placeholder="Escribe el sustantivo"
@@ -5832,12 +6374,22 @@ const NounsPractice: React.FC = () => {
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
                                         Razón:
                                     </label>
-                                    <PracticeInputField
+                                    <select
                                         value={ejercicio1Answers['razon4'] || ''}
                                         onChange={(e) => setEjercicio1Answers({...ejercicio1Answers, 'razon4': e.target.value})}
-                                        placeholder="Explica por qué"
-                                        isCorrect={(ejercicio1Results['razon4'] ?? null) === null ? null : ejercicio1Results['razon4']}
-                                    />
+                                        className={`w-full px-3 py-2 border-2 rounded focus:outline-none ${
+                                            (ejercicio1Results['razon4'] ?? null) === null
+                                                ? 'border-gray-300 focus:border-hku-blue'
+                                                : ejercicio1Results['razon4']
+                                                ? 'border-green-500 bg-green-50'
+                                                : 'border-red-500 bg-red-50'
+                                        }`}
+                                    >
+                                        <option value="">— Selecciona una razón —</option>
+                                        {razonOptions.map(opt => (
+                                            <option key={opt} value={opt}>{opt}</option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -5885,7 +6437,7 @@ const NounsPractice: React.FC = () => {
                             { key: 'pasion', word: 'Pasión', hint: 'termina en -sión' }
                         ].map((item) => (
                             <div key={item.key} className="bg-white p-4 rounded-lg flex items-center gap-4">
-                                <PracticeInputField
+                                <NounInputField
                                     value={ejercicio2Answers[item.key] || ''}
                                     onChange={(e) => setEjercicio2Answers({...ejercicio2Answers, [item.key]: e.target.value})}
                                     placeholder="el/la"
@@ -5893,7 +6445,6 @@ const NounsPractice: React.FC = () => {
                                     className="w-24"
                                 />
                                 <span className="text-gray-800 font-medium">{item.word}</span>
-                                <span className="text-gray-500 text-sm italic">({item.hint})</span>
                             </div>
                         ))}
                     </div>
@@ -5919,16 +6470,16 @@ const NounsPractice: React.FC = () => {
 
                     <div className="space-y-4">
                         {[
-                            { key: 'juez', prompt: 'El Juez →', hint: 'consonante + -a' },
-                            { key: 'heroe', prompt: 'El Héroe →', hint: 'terminación especial' },
-                            { key: 'yerno', prompt: 'El Yerno →', hint: 'palabra diferente' },
-                            { key: 'jabali', prompt: 'El Jabalí macho →', hint: 'animal de una sola forma' },
-                            { key: 'poeta', prompt: 'El Poeta →', hint: 'terminación especial' }
+                            { key: 'piloto', prompt: 'El Piloto →' },
+                            { key: 'doctor', prompt: 'El Doctor →' },
+                            { key: 'alcalde', prompt: 'El Alcalde →' },
+                            { key: 'jabali', prompt: 'El Jabalí macho →' },
+                            { key: 'actor', prompt: 'El Actor →' }
                         ].map((item, index) => (
                             <div key={item.key} className="bg-white p-4 rounded-lg">
-                                <div className="flex items-start gap-4 mb-2">
+                                <div className="flex items-start gap-4">
                                     <span className="font-semibold text-gray-700 min-w-[200px]">{index + 1}. {item.prompt}</span>
-                                    <PracticeInputField
+                                    <NounInputField
                                         value={ejercicio3Answers[item.key] || ''}
                                         onChange={(e) => setEjercicio3Answers({...ejercicio3Answers, [item.key]: e.target.value})}
                                         placeholder="Escribe la forma femenina"
@@ -5936,7 +6487,6 @@ const NounsPractice: React.FC = () => {
                                         className="flex-1"
                                     />
                                 </div>
-                                <p className="text-gray-500 text-sm italic ml-4">({item.hint})</p>
                             </div>
                         ))}
                     </div>
@@ -5982,9 +6532,9 @@ const NounsPractice: React.FC = () => {
                             { key: 'bambu', word: 'Bambú', hint: 'dos formas válidas' }
                         ].map((item) => (
                             <div key={item.key} className="bg-white p-4 rounded-lg">
-                                <div className="flex items-center gap-4 mb-2">
+                                <div className="flex items-center gap-4">
                                     <span className="text-gray-800 font-medium min-w-[100px]">{item.word} →</span>
-                                    <PracticeInputField
+                                    <NounInputField
                                         value={ejercicio4Answers[item.key] || ''}
                                         onChange={(e) => setEjercicio4Answers({...ejercicio4Answers, [item.key]: e.target.value})}
                                         placeholder="Escribe el plural"
@@ -5992,7 +6542,6 @@ const NounsPractice: React.FC = () => {
                                         className="flex-1"
                                     />
                                 </div>
-                                <p className="text-gray-500 text-sm italic ml-4">({item.hint})</p>
                             </div>
                         ))}
                     </div>
@@ -6019,163 +6568,92 @@ const NounsPractice: React.FC = () => {
                     </p>
                 </div>
 
-                {/* Ejercicio 5: ¿Singular o Plural? */}
+                {/* Ejercicio 5: Elige la opción correcta */}
                 <div className="bg-red-50 p-6 rounded-xl border-l-4 border-red-400 mb-6">
                     <h4 className="text-xl font-bold text-red-700 mb-4 flex items-center">
                         <HelpCircle className="mr-2" size={22} />
-                        Ejercicio 5: ¿Singular o Plural?
+                        Ejercicio 5: Elige la opción correcta
                     </h4>
                     <p className="text-gray-700 mb-6">
-                        Elige la opción correcta para que la frase tenga sentido gramatical.
+                        Selecciona la opción que completa correctamente cada frase.
                     </p>
 
                     <div className="space-y-6">
                         {/* Frase 1 */}
                         <div className="bg-white p-5 rounded-lg">
                             <p className="text-gray-800 mb-4">
-                                1. El <strong>_________</strong> de esta escuela estudia mucho.
+                                1. Llevo <strong>_________</strong> para este viaje.
                             </p>
-                            <p className="text-gray-600 text-sm mb-3 italic">(se refiere a un conjunto en singular)</p>
                             <div className="space-y-2">
-                                <button
-                                    onClick={() => setEjercicio5Answers({...ejercicio5Answers, 'frase1': 'alumnado'})}
-                                    className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
-                                        ejercicio5Answers['frase1'] === 'alumnado'
-                                            ? ejercicio5Results['frase1'] === true
-                                                ? 'bg-green-100 border-green-500'
-                                                : ejercicio5Results['frase1'] === false
-                                                ? 'bg-red-100 border-red-500'
-                                                : 'bg-blue-100 border-blue-500'
-                                            : 'bg-gray-50 border-gray-300 hover:bg-gray-100'
-                                    }`}
-                                >
-                                    alumnado
-                                </button>
-                                <button
-                                    onClick={() => setEjercicio5Answers({...ejercicio5Answers, 'frase1': 'alumnos'})}
-                                    className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
-                                        ejercicio5Answers['frase1'] === 'alumnos'
-                                            ? ejercicio5Results['frase1'] === true
-                                                ? 'bg-green-100 border-green-500'
-                                                : ejercicio5Results['frase1'] === false
-                                                ? 'bg-red-100 border-red-500'
-                                                : 'bg-blue-100 border-blue-500'
-                                            : 'bg-gray-50 border-gray-300 hover:bg-gray-100'
-                                    }`}
-                                >
-                                    alumnos
-                                </button>
+                                {['2 piezas de maleta', '2 maletas'].map(opt => (
+                                    <button
+                                        key={opt}
+                                        onClick={() => setEjercicio5Answers({...ejercicio5Answers, 'frase1': opt})}
+                                        className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
+                                            ejercicio5Answers['frase1'] === opt
+                                                ? ejercicio5Results['frase1'] === true
+                                                    ? 'bg-green-100 border-green-500'
+                                                    : ejercicio5Results['frase1'] === false
+                                                    ? 'bg-red-100 border-red-500'
+                                                    : 'bg-blue-100 border-blue-500'
+                                                : 'bg-gray-50 border-gray-300 hover:bg-gray-100'
+                                        }`}
+                                    >
+                                        {opt}
+                                    </button>
+                                ))}
                             </div>
                         </div>
 
                         {/* Frase 2 */}
                         <div className="bg-white p-5 rounded-lg">
                             <p className="text-gray-800 mb-4">
-                                2. ¿Dónde están mis <strong>_________</strong>? No puedo cortar el papel.
+                                2. El evento reunió a <strong>_________</strong> de la comunidad.
                             </p>
                             <div className="space-y-2">
-                                <button
-                                    onClick={() => setEjercicio5Answers({...ejercicio5Answers, 'frase2': 'paraguas'})}
-                                    className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
-                                        ejercicio5Answers['frase2'] === 'paraguas'
-                                            ? ejercicio5Results['frase2'] === true
-                                                ? 'bg-green-100 border-green-500'
-                                                : ejercicio5Results['frase2'] === false
-                                                ? 'bg-red-100 border-red-500'
-                                                : 'bg-blue-100 border-blue-500'
-                                            : 'bg-gray-50 border-gray-300 hover:bg-gray-100'
-                                    }`}
-                                >
-                                    paraguas
-                                </button>
-                                <button
-                                    onClick={() => setEjercicio5Answers({...ejercicio5Answers, 'frase2': 'tijeras'})}
-                                    className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
-                                        ejercicio5Answers['frase2'] === 'tijeras'
-                                            ? ejercicio5Results['frase2'] === true
-                                                ? 'bg-green-100 border-green-500'
-                                                : ejercicio5Results['frase2'] === false
-                                                ? 'bg-red-100 border-red-500'
-                                                : 'bg-blue-100 border-blue-500'
-                                            : 'bg-gray-50 border-gray-300 hover:bg-gray-100'
-                                    }`}
-                                >
-                                    tijeras
-                                </button>
+                                {['diversas familias', 'diversa familia'].map(opt => (
+                                    <button
+                                        key={opt}
+                                        onClick={() => setEjercicio5Answers({...ejercicio5Answers, 'frase2': opt})}
+                                        className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
+                                            ejercicio5Answers['frase2'] === opt
+                                                ? ejercicio5Results['frase2'] === true
+                                                    ? 'bg-green-100 border-green-500'
+                                                    : ejercicio5Results['frase2'] === false
+                                                    ? 'bg-red-100 border-red-500'
+                                                    : 'bg-blue-100 border-blue-500'
+                                                : 'bg-gray-50 border-gray-300 hover:bg-gray-100'
+                                        }`}
+                                    >
+                                        {opt}
+                                    </button>
+                                ))}
                             </div>
                         </div>
 
                         {/* Frase 3 */}
                         <div className="bg-white p-5 rounded-lg">
                             <p className="text-gray-800 mb-4">
-                                3. Me he comprado <strong>_________</strong> nuevos para la fiesta.
+                                3. He comprado <strong>_________</strong> nuevo en MediaMarkt.
                             </p>
                             <div className="space-y-2">
-                                <button
-                                    onClick={() => setEjercicio5Answers({...ejercicio5Answers, 'frase3': 'un pantalón'})}
-                                    className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
-                                        ejercicio5Answers['frase3'] === 'un pantalón'
-                                            ? ejercicio5Results['frase3'] === true
-                                                ? 'bg-green-100 border-green-500'
-                                                : ejercicio5Results['frase3'] === false
-                                                ? 'bg-red-100 border-red-500'
-                                                : 'bg-blue-100 border-blue-500'
-                                            : 'bg-gray-50 border-gray-300 hover:bg-gray-100'
-                                    }`}
-                                >
-                                    un pantalón
-                                </button>
-                                <button
-                                    onClick={() => setEjercicio5Answers({...ejercicio5Answers, 'frase3': 'unos pantalones'})}
-                                    className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
-                                        ejercicio5Answers['frase3'] === 'unos pantalones'
-                                            ? ejercicio5Results['frase3'] === true
-                                                ? 'bg-green-100 border-green-500'
-                                                : ejercicio5Results['frase3'] === false
-                                                ? 'bg-red-100 border-red-500'
-                                                : 'bg-blue-100 border-blue-500'
-                                            : 'bg-gray-50 border-gray-300 hover:bg-gray-100'
-                                    }`}
-                                >
-                                    unos pantalones
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Frase 4 */}
-                        <div className="bg-white p-5 rounded-lg">
-                            <p className="text-gray-800 mb-4">
-                                4. La <strong>_________</strong> es muy amable en este pueblo.
-                            </p>
-                            <div className="space-y-2">
-                                <button
-                                    onClick={() => setEjercicio5Answers({...ejercicio5Answers, 'frase4': 'gente'})}
-                                    className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
-                                        ejercicio5Answers['frase4'] === 'gente'
-                                            ? ejercicio5Results['frase4'] === true
-                                                ? 'bg-green-100 border-green-500'
-                                                : ejercicio5Results['frase4'] === false
-                                                ? 'bg-red-100 border-red-500'
-                                                : 'bg-blue-100 border-blue-500'
-                                            : 'bg-gray-50 border-gray-300 hover:bg-gray-100'
-                                    }`}
-                                >
-                                    gente
-                                </button>
-                                <button
-                                    onClick={() => setEjercicio5Answers({...ejercicio5Answers, 'frase4': 'gentes'})}
-                                    className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
-                                        ejercicio5Answers['frase4'] === 'gentes'
-                                            ? ejercicio5Results['frase4'] === true
-                                                ? 'bg-green-100 border-green-500'
-                                                : ejercicio5Results['frase4'] === false
-                                                ? 'bg-red-100 border-red-500'
-                                                : 'bg-blue-100 border-blue-500'
-                                            : 'bg-gray-50 border-gray-300 hover:bg-gray-100'
-                                    }`}
-                                >
-                                    gentes
-                                </button>
+                                {['un microondas', 'un microonda', 'unos microondas', 'unos microonda'].map(opt => (
+                                    <button
+                                        key={opt}
+                                        onClick={() => setEjercicio5Answers({...ejercicio5Answers, 'frase3': opt})}
+                                        className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
+                                            ejercicio5Answers['frase3'] === opt
+                                                ? ejercicio5Results['frase3'] === true
+                                                    ? 'bg-green-100 border-green-500'
+                                                    : ejercicio5Results['frase3'] === false
+                                                    ? 'bg-red-100 border-red-500'
+                                                    : 'bg-blue-100 border-blue-500'
+                                                : 'bg-gray-50 border-gray-300 hover:bg-gray-100'
+                                        }`}
+                                    >
+                                        {opt}
+                                    </button>
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -6213,4 +6691,559 @@ const NounsPractice: React.FC = () => {
             </section>
         </div>
     );
+};
+
+// --- VERBS PRACTICE ---
+const VerbsPractice: React.FC = () => {
+  type ColKey = 'prinAux' | 'transIntrans' | 'reflRecipr' | 'copPred';
+
+  interface Row {
+    id: number;
+    sentence: [string, string, string];
+    prinAux: string[] | null;
+    transIntrans: string[] | null;
+    reflRecipr: string[] | null;
+    copPred: string[] | null;
+    sol: Partial<Record<ColKey, string>>;
+  }
+
+  const rows: Row[] = [
+    {
+      id: 1,
+      sentence: ['La mesa ', 'es', ' verde y muy antigua.'],
+      prinAux: ['Principal', 'Auxiliar'],
+      transIntrans: null,
+      reflRecipr: null,
+      copPred: ['Copulativo', 'Predicativo'],
+      sol: { prinAux: 'Principal', copPred: 'Copulativo' },
+    },
+    {
+      id: 2,
+      sentence: ['Luisa ', 'salta', ' muy alto en las competencias.'],
+      prinAux: ['Principal', 'Auxiliar'],
+      transIntrans: ['Transitivo', 'Intransitivo'],
+      reflRecipr: null,
+      copPred: ['Copulativo', 'Predicativo'],
+      sol: { prinAux: 'Principal', transIntrans: 'Intransitivo', copPred: 'Predicativo' },
+    },
+    {
+      id: 3,
+      sentence: ['Mi hermano ', 'estudia', ' matemáticas por la tarde.'],
+      prinAux: ['Principal', 'Auxiliar'],
+      transIntrans: ['Transitivo', 'Intransitivo'],
+      reflRecipr: null,
+      copPred: ['Copulativo', 'Predicativo'],
+      sol: { prinAux: 'Principal', transIntrans: 'Transitivo', copPred: 'Predicativo' },
+    },
+    {
+      id: 4,
+      sentence: ['En psicología siempre se destaca lo importante que es ', 'quererse', '.'],
+      prinAux: ['Principal', 'Auxiliar'],
+      transIntrans: ['Transitivo', 'Intransitivo'],
+      reflRecipr: ['Reflexivo', 'Recíproco'],
+      copPred: ['Copulativo', 'Predicativo'],
+      sol: { prinAux: 'Principal', transIntrans: 'Transitivo', reflRecipr: 'Reflexivo', copPred: 'Predicativo' },
+    },
+    {
+      id: 5,
+      sentence: ['Ese examen ', 'parece', ' bastante difícil.'],
+      prinAux: ['Principal', 'Auxiliar'],
+      transIntrans: null,
+      reflRecipr: null,
+      copPred: ['Copulativo', 'Predicativo'],
+      sol: { prinAux: 'Principal', copPred: 'Copulativo' },
+    },
+    {
+      id: 6,
+      sentence: ['Mi padre ', 'está', ' trabajando de camarero.'],
+      prinAux: ['Principal', 'Auxiliar'],
+      transIntrans: null,
+      reflRecipr: null,
+      copPred: ['Copulativo', 'Predicativo'],
+      sol: { prinAux: 'Auxiliar', copPred: 'Predicativo' },
+    },
+  ];
+
+  const cols: { key: ColKey; label: string }[] = [
+    { key: 'prinAux',     label: '¿Principal o Auxiliar?' },
+    { key: 'transIntrans',label: '¿Transitivo o Intransitivo?' },
+    { key: 'reflRecipr',  label: '¿Reflexivo o Recíproco?' },
+    { key: 'copPred',     label: '¿Copulativo o Predicativo?' },
+  ];
+
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [results, setResults] = useState<Record<string, boolean | null>>({});
+  const [checked, setChecked] = useState(false);
+
+  // Ej2
+  const [ej2Answers, setEj2Answers] = useState<Record<string, string>>({});
+  const [ej2Results, setEj2Results] = useState<Record<string, boolean | null>>({});
+  // Ej3
+  const [ej3Answers, setEj3Answers] = useState<Record<string, string>>({});
+  const [ej3Results, setEj3Results] = useState<Record<string, boolean | null>>({});
+  // Ej4
+  const [ej4Answers, setEj4Answers] = useState<Record<string, string>>({});
+  const [ej4Results, setEj4Results] = useState<Record<string, boolean | null>>({});
+  // Ej5
+  const [ej5Answers, setEj5Answers] = useState<Record<string, string>>({});
+  const [ej5Results, setEj5Results] = useState<Record<string, boolean | null>>({});
+
+  const setAnswer = (rowId: number, col: string, val: string) => {
+    setAnswers(prev => ({ ...prev, [`${rowId}_${col}`]: val }));
+    if (checked) {
+      setResults({});
+      setChecked(false);
+    }
+  };
+
+  const check = () => {
+    const newResults: Record<string, boolean | null> = {};
+    rows.forEach(row => {
+      (Object.keys(row.sol) as ColKey[]).forEach(col => {
+        const key = `${row.id}_${col}`;
+        newResults[key] = answers[key] === row.sol[col];
+      });
+    });
+    setResults(newResults);
+    setChecked(true);
+  };
+
+  const reset = () => {
+    setAnswers({});
+    setResults({});
+    setChecked(false);
+  };
+
+  const btnCls = (rowId: number, col: string, opt: string) => {
+    const key = `${rowId}_${col}`;
+    const selected = answers[key] === opt;
+    const result = results[key];
+    if (selected) {
+      if (result === true)  return 'bg-green-100 border-green-500 text-green-800';
+      if (result === false) return 'bg-red-100 border-red-500 text-red-800';
+      return 'bg-indigo-100 border-indigo-500 text-indigo-800';
+    }
+    return 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300';
+  };
+
+  const allAnswered = rows.every(row =>
+    (Object.keys(row.sol) as ColKey[]).every(col => !!answers[`${row.id}_${col}`])
+  );
+
+  const score = checked
+    ? Object.values(results).filter(Boolean).length
+    : null;
+  const total = rows.reduce((acc, row) => acc + Object.keys(row.sol).length, 0);
+
+  // ── Ej2 data & helpers ──
+  const ej2Rows = [
+    { base: 'Hablar',  inf: 'hablar',  ger: 'hablando',  part: 'hablado'  },
+    { base: 'Comer',   inf: 'comer',   ger: 'comiendo',  part: 'comido'   },
+    { base: 'Vivir',   inf: 'vivir',   ger: 'viviendo',  part: 'vivido'   },
+    { base: 'Sonreír', inf: 'sonreír', ger: 'sonriendo', part: 'sonreído' },
+  ];
+  const checkEj2 = () => {
+    const r: Record<string, boolean | null> = {};
+    ej2Rows.forEach(row => {
+      const k = row.base.toLowerCase();
+      r[k + '_inf']  = (ej2Answers[k + '_inf']  || '').trim().toLowerCase() === row.inf;
+      r[k + '_ger']  = (ej2Answers[k + '_ger']  || '').trim().toLowerCase() === row.ger;
+      r[k + '_part'] = (ej2Answers[k + '_part'] || '').trim().toLowerCase() === row.part;
+    });
+    setEj2Results(r);
+  };
+  const resetEj2 = () => { setEj2Answers({}); setEj2Results({}); };
+  const inCls2 = (k: string) => `w-full px-3 py-2 border-2 rounded-lg focus:outline-none text-sm ${
+    ej2Results[k] === null || ej2Results[k] === undefined
+      ? 'border-gray-300 focus:border-green-400'
+      : ej2Results[k] ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'
+  }`;
+
+  // ── Ej3 data & helpers ──
+  const ej3Items = [
+    { id: '1', text: 'Siempre me levanto a las 9 de la mañana.', sol: 'Reflexivo' },
+    { id: '2', text: 'En España, normalmente los hombres se dan la mano para saludarse.', sol: 'Recíproco' },
+    { id: '3', text: 'María se peina frente al espejo antes de salir.', sol: 'Reflexivo' },
+    { id: '4', text: 'Los dos amigos se ayudan con los deberes de clase.', sol: 'Recíproco' },
+  ];
+  const checkEj3 = () => {
+    const r: Record<string, boolean | null> = {};
+    ej3Items.forEach(item => { r[item.id] = ej3Answers[item.id] === item.sol; });
+    setEj3Results(r);
+  };
+  const resetEj3 = () => { setEj3Answers({}); setEj3Results({}); };
+
+  // ── Ej4 data & helpers ──
+  const ej4Items = [
+    { id: '1', text: '"Ayer llovió toda la noche".', sol: 'Perfectivo' },
+    { id: '2', text: '"Todas las semanas voy al gimnasio".', sol: 'Imperfectivo' },
+    { id: '3', text: '"Hace 15 años viajaba mucho".', sol: 'Imperfectivo' },
+    { id: '4', text: '"Esta semana he ido al cine".', sol: 'Perfectivo' },
+    { id: '5', text: '"¡Dentro de 10 años viviré en España!".', sol: 'Imperfectivo' },
+  ];
+  const checkEj4 = () => {
+    const r: Record<string, boolean | null> = {};
+    ej4Items.forEach(item => { r[item.id] = ej4Answers[item.id] === item.sol; });
+    setEj4Results(r);
+  };
+  const resetEj4 = () => { setEj4Answers({}); setEj4Results({}); };
+
+  // ── Ej5 data & helpers ──
+  const ej5Questions = [
+    {
+      id: '1',
+      question: '¿Por qué el verbo "llover" se considera defectivo en este contexto?',
+      opts: [
+        { key: 'a', text: 'Porque solo se conjuga en terceras personas.' },
+        { key: 'b', text: 'Porque no tiene infinitivo.' },
+        { key: 'c', text: 'Porque es un verbo copulativo.' },
+      ],
+      sol: 'a',
+    },
+    {
+      id: '2',
+      question: '¿Cuál es la razón por la que el modo imperativo se puede considerar "defectivo"?',
+      opts: [
+        { key: 'a', text: 'Porque no tiene tiempo futuro.' },
+        { key: 'b', text: 'Porque no se conjuga en todas las personas (ej. "yo", "él").' },
+        { key: 'c', text: 'Porque siempre es irregular.' },
+      ],
+      sol: 'b',
+    },
+  ];
+  const checkEj5 = () => {
+    const r: Record<string, boolean | null> = {};
+    ej5Questions.forEach(q => { r[q.id] = ej5Answers[q.id] === q.sol; });
+    setEj5Results(r);
+  };
+  const resetEj5 = () => { setEj5Answers({}); setEj5Results({}); };
+
+  const selBtnCls = (answer: string | undefined, opt: string, result: boolean | null | undefined) => {
+    const selected = answer === opt;
+    if (selected) {
+      if (result === true)  return 'bg-green-100 border-green-500 text-green-800';
+      if (result === false) return 'bg-red-100 border-red-500 text-red-800';
+      return 'bg-blue-100 border-blue-500 text-blue-800';
+    }
+    return 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300';
+  };
+
+  return (
+    <div className="space-y-10">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-hku-blue to-blue-700 text-white p-8 rounded-2xl shadow-lg">
+        <h2 className="text-3xl font-bold mb-3 flex items-center">
+          <Pencil className="mr-3" size={32} />
+          Práctica: Los Verbos
+        </h2>
+        <p className="text-blue-100 text-lg">
+          Analiza los verbos en negrita y clasifícalos según su función y características.
+        </p>
+      </div>
+
+      {/* Ejercicio 1 */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="bg-indigo-50 p-6 rounded-xl border-l-4 border-indigo-400">
+          <h4 className="text-xl font-bold text-indigo-700 mb-2 flex items-center">
+            <ListOrdered className="mr-2" size={22} />
+            Ejercicio 1: Análisis del Verbo
+          </h4>
+          <p className="text-gray-700 mb-1">
+            Analiza el verbo en <strong>negrita</strong> de cada oración y marca la opción correcta en cada columna.
+          </p>
+          <p className="text-sm text-gray-500 mb-6 italic">
+            Las casillas en gris indican que esa categoría no aplica a la frase.
+          </p>
+
+          {/* Scrollable table */}
+          <div className="overflow-x-auto rounded-xl border border-indigo-100 shadow-sm">
+            <table className="w-full border-collapse min-w-[700px]">
+              <thead>
+                <tr className="bg-indigo-600 text-white">
+                  <th className="p-4 text-left font-semibold text-sm w-56 rounded-tl-xl">Frase</th>
+                  {cols.map((col, i) => (
+                    <th key={col.key} className={`p-4 text-center font-semibold text-xs leading-snug ${i === cols.length - 1 ? 'rounded-tr-xl' : ''}`}>
+                      {col.label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row, idx) => (
+                  <tr key={row.id} className={`border-t border-indigo-100 ${idx % 2 === 0 ? 'bg-white' : 'bg-indigo-50/30'}`}>
+                    {/* Sentence */}
+                    <td className="p-4 text-sm text-gray-800 align-top">
+                      <span className="leading-relaxed">
+                        <span className="font-bold text-indigo-800 mr-1">{row.id}.</span>
+                        {row.sentence[0]}
+                        <strong className="text-indigo-700 underline underline-offset-2">{row.sentence[1]}</strong>
+                        {row.sentence[2]}
+                      </span>
+                    </td>
+
+                    {/* Option columns */}
+                    {cols.map(col => {
+                      const options = row[col.key] as string[] | null;
+                      if (options === null) {
+                        return (
+                          <td key={col.key} className="p-4 text-center align-middle">
+                            <span className="inline-block bg-gray-200 text-gray-400 text-xs font-semibold px-3 py-1.5 rounded-full tracking-wide">
+                              N/A
+                            </span>
+                          </td>
+                        );
+                      }
+                      return (
+                        <td key={col.key} className="p-4 align-top">
+                          <div className="flex flex-col gap-2">
+                            {options.map(opt => (
+                              <button
+                                key={opt}
+                                onClick={() => setAnswer(row.id, col.key, opt)}
+                                className={`px-3 py-1.5 rounded-lg border-2 text-xs font-medium transition-all w-full text-center ${btnCls(row.id, col.key, opt)}`}
+                              >
+                                {opt}
+                              </button>
+                            ))}
+                          </div>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Score feedback */}
+          {checked && score !== null && (
+            <div className={`mt-5 p-4 rounded-xl flex items-center gap-3 font-semibold ${
+              score === total ? 'bg-green-100 text-green-800 border border-green-300' : 'bg-amber-50 text-amber-800 border border-amber-300'
+            }`}>
+              {score === total
+                ? <><CheckCircle size={20} className="text-green-600" /> ¡Perfecto! Has acertado las {total} respuestas.</>
+                : <><AlertCircle size={20} className="text-amber-500" /> Has acertado {score} de {total}. Revisa las opciones marcadas en rojo.</>}
+            </div>
+          )}
+
+          {/* Buttons */}
+          <div className="mt-6 flex flex-wrap gap-3">
+            <button
+              onClick={check}
+              disabled={!allAnswered}
+              className={`px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md ${
+                allAnswered
+                  ? 'bg-indigo-500 hover:bg-indigo-600 text-white'
+                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              }`}
+            >
+              <CheckCircle size={18} className="mr-2" />
+              Comprobar
+            </button>
+            <button
+              onClick={reset}
+              className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md"
+            >
+              <RefreshCw size={18} className="mr-2" />
+              Reiniciar
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Ejercicio 2: Formas impersonales */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="bg-green-50 p-6 rounded-xl border-l-4 border-green-400">
+          <h4 className="text-xl font-bold text-green-700 mb-2 flex items-center">
+            <GitBranch className="mr-2" size={22} />
+            Ejercicio 2: Formas Impersonales
+          </h4>
+          <p className="text-gray-700 mb-6">
+            Completa la tabla transformando el verbo base a sus tres formas impersonales: <strong>infinitivo</strong>, <strong>gerundio</strong> y <strong>participio</strong>.
+          </p>
+          <div className="overflow-x-auto rounded-xl border border-green-200 shadow-sm">
+            <table className="w-full border-collapse min-w-[420px]">
+              <thead>
+                <tr className="bg-green-600 text-white">
+                  <th className="p-3 text-left font-semibold text-sm rounded-tl-xl">Verbo Base</th>
+                  <th className="p-3 text-center font-semibold text-sm">Infinitivo</th>
+                  <th className="p-3 text-center font-semibold text-sm">Gerundio</th>
+                  <th className="p-3 text-center font-semibold text-sm rounded-tr-xl">Participio</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ej2Rows.map((row, idx) => {
+                  const k = row.base.toLowerCase();
+                  return (
+                    <tr key={row.base} className={`border-t border-green-100 ${idx % 2 === 0 ? 'bg-white' : 'bg-green-50/40'}`}>
+                      <td className="p-3 font-bold text-green-800 text-sm">{row.base}</td>
+                      {(['inf', 'ger', 'part'] as const).map(type => (
+                        <td key={type} className="p-3">
+                          <input
+                            type="text"
+                            value={ej2Answers[k + '_' + type] || ''}
+                            onChange={e => setEj2Answers(prev => ({ ...prev, [k + '_' + type]: e.target.value }))}
+                            placeholder="..."
+                            className={inCls2(k + '_' + type)}
+                          />
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <button onClick={checkEj2} className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
+              <CheckCircle size={18} className="mr-2" /> Comprobar
+            </button>
+            <button onClick={resetEj2} className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
+              <RefreshCw size={18} className="mr-2" /> Reiniciar
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Ejercicio 3: Reflexivos vs. Recíprocos */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="bg-orange-50 p-6 rounded-xl border-l-4 border-orange-400">
+          <h4 className="text-xl font-bold text-orange-700 mb-2 flex items-center">
+            <Users className="mr-2" size={22} />
+            Ejercicio 3: Reflexivos vs. Recíprocos
+          </h4>
+          <p className="text-gray-700 mb-6">
+            Clasifica estas oraciones indicando si el verbo es <strong>reflexivo</strong> o <strong>recíproco</strong>.
+          </p>
+          <div className="space-y-4">
+            {ej3Items.map((item, idx) => (
+              <div key={item.id} className="bg-white p-5 rounded-lg border border-orange-100">
+                <p className="text-gray-800 font-medium mb-3">
+                  <span className="font-bold text-orange-600 mr-2">{idx + 1}.</span>{item.text}
+                </p>
+                <div className="flex gap-3 flex-wrap">
+                  {['Reflexivo', 'Recíproco'].map(opt => (
+                    <button
+                      key={opt}
+                      onClick={() => setEj3Answers(prev => ({ ...prev, [item.id]: opt }))}
+                      className={`px-5 py-2 rounded-lg border-2 text-sm font-medium transition-all ${selBtnCls(ej3Answers[item.id], opt, ej3Results[item.id])}`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                  {ej3Results[item.id] === false && (
+                    <span className="text-xs text-red-600 self-center italic">Respuesta incorrecta</span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <button onClick={checkEj3} className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
+              <CheckCircle size={18} className="mr-2" /> Comprobar
+            </button>
+            <button onClick={resetEj3} className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
+              <RefreshCw size={18} className="mr-2" /> Reiniciar
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Ejercicio 4: Aspecto perfectivo e imperfectivo */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="bg-purple-50 p-6 rounded-xl border-l-4 border-purple-400">
+          <h4 className="text-xl font-bold text-purple-700 mb-2 flex items-center">
+            <Clock className="mr-2" size={22} />
+            Ejercicio 4: Aspecto Perfectivo e Imperfectivo
+          </h4>
+          <p className="text-gray-700 mb-6">
+            Determina si el tiempo verbal utilizado tiene un aspecto <strong>perfectivo</strong> o <strong>imperfectivo</strong>.
+          </p>
+          <div className="space-y-4">
+            {ej4Items.map((item, idx) => (
+              <div key={item.id} className="bg-white p-5 rounded-lg border border-purple-100">
+                <p className="text-gray-800 font-medium mb-3 italic">
+                  <span className="not-italic font-bold text-purple-600 mr-2">{idx + 1}.</span>{item.text}
+                </p>
+                <div className="flex gap-3 flex-wrap">
+                  {['Perfectivo', 'Imperfectivo'].map(opt => (
+                    <button
+                      key={opt}
+                      onClick={() => setEj4Answers(prev => ({ ...prev, [item.id]: opt }))}
+                      className={`px-5 py-2 rounded-lg border-2 text-sm font-medium transition-all ${selBtnCls(ej4Answers[item.id], opt, ej4Results[item.id])}`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <button onClick={checkEj4} className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
+              <CheckCircle size={18} className="mr-2" /> Comprobar
+            </button>
+            <button onClick={resetEj4} className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
+              <RefreshCw size={18} className="mr-2" /> Reiniciar
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Ejercicio 5: Verbos defectivos */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="bg-red-50 p-6 rounded-xl border-l-4 border-red-400">
+          <h4 className="text-xl font-bold text-red-700 mb-2 flex items-center">
+            <AlertCircle className="mr-2" size={22} />
+            Ejercicio 5: Los Verbos Defectivos
+          </h4>
+          <p className="text-gray-700 mb-6">
+            Selecciona la respuesta correcta basándote en la definición de verbos defectivos o <em>"incompletos"</em>.
+          </p>
+          <div className="space-y-8">
+            {ej5Questions.map((q, qi) => (
+              <div key={q.id} className="bg-white p-5 rounded-lg border border-red-100">
+                <p className="text-gray-800 font-semibold mb-4">
+                  <span className="text-red-600 font-bold mr-2">{qi + 1}.</span>{q.question}
+                </p>
+                <div className="space-y-3">
+                  {q.opts.map(opt => (
+                    <button
+                      key={opt.key}
+                      onClick={() => setEj5Answers(prev => ({ ...prev, [q.id]: opt.key }))}
+                      className={`w-full text-left px-5 py-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                        selBtnCls(ej5Answers[q.id], opt.key, ej5Results[q.id])
+                      }`}
+                    >
+                      <span className="font-bold mr-2">{opt.key})</span>{opt.text}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <button onClick={checkEj5} className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
+              <CheckCircle size={18} className="mr-2" /> Comprobar
+            </button>
+            <button onClick={resetEj5} className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
+              <RefreshCw size={18} className="mr-2" /> Reiniciar
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Nota final */}
+      <section className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border-l-4 border-blue-500">
+        <p className="text-gray-700 flex items-start">
+          <Lightbulb size={20} className="mr-2 text-blue-600 flex-shrink-0 mt-1" />
+          <span>
+            <strong>Consejo:</strong> Revisa la teoría siempre que dudes. Presta especial atención
+            a las formas irregulares (gerundios como <em>sonriendo</em>, <em>pidiendo</em>) y recuerda
+            que el aspecto perfectivo implica una acción completada, mientras que el imperfectivo la presenta como en curso o habitual.
+          </span>
+        </p>
+      </section>
+    </div>
+  );
 };
