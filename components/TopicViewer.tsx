@@ -5138,14 +5138,28 @@ const MorphologyPractice: React.FC = () => {
                                 <span className="text-gray-600">(Sufijo)</span>
                             </div>
                             <div className="ml-4">
-                                <p className="text-sm text-gray-700 mb-2">Función del sufijo:</p>
-                                <PracticeInputField 
-                                    id="2-funcion"
-                                    value={ejercicio1Answers['2-funcion'] || ''}
-                                    onChange={(v) => setEjercicio1Answers({...ejercicio1Answers, '2-funcion': v})}
-                                    result={ejercicio1Results['2-funcion'] ?? null}
-                                    width="w-full"
-                                />
+                                <p className="text-sm text-gray-700 mb-2">Significado del sufijo:</p>
+                                <div className="flex gap-2 flex-wrap">
+                                    {['forma sustantivos abstractos', 'indica agente o profesión', 'expresa diminutivo'].map((option) => (
+                                        <button
+                                            key={option}
+                                            onClick={() => setEjercicio1Answers({...ejercicio1Answers, '2-funcion': option})}
+                                            className={`px-4 py-2 rounded border-2 transition-colors ${
+                                                ejercicio1Results['2-funcion'] === null
+                                                    ? ejercicio1Answers['2-funcion'] === option
+                                                        ? 'border-hku-blue bg-hku-blue text-white'
+                                                        : 'border-gray-300 hover:border-hku-blue'
+                                                    : ejercicio1Answers['2-funcion'] === option
+                                                    ? ejercicio1Results['2-funcion']
+                                                        ? 'border-green-500 bg-green-50'
+                                                        : 'border-red-500 bg-red-50'
+                                                    : 'border-gray-300'
+                                            }`}
+                                        >
+                                            {option}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </div>
