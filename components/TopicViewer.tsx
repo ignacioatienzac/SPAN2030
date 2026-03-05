@@ -3722,11 +3722,11 @@ const DeterminantsPractica: React.FC = () => {
     '4': 'Los'
   };
 
-  const demonstrativosSolutions = {
+  const demonstrativosSolutions: Record<string, string | string[]> = {
     '1': 'este',
     '2': 'Aquella',
     '3': 'esa',
-    '4': 'eso',
+    '4': ['eso', 'aquello'],
     '5': 'aquellos',
     '6': 'Este',
     '7': 'eso',
@@ -3761,37 +3761,36 @@ const DeterminantsPractica: React.FC = () => {
     'cardinal5': 'novecientos diez millones'
   };
 
-  const indefinidosSolutions = {
+  const indefinidosSolutions: Record<string, string | string[]> = {
     'a1': 'mucho',
-    'a2': 'muchos',
+    'a2': ['muchos', 'bastantes'],
     'a3': 'alguna',
     'b1': 'nadie',
     'b2': 'algo',
     'b3': 'nada'
   };
 
-  const repasoSolutions = {
-    '1': 'Posesivo átono',
-    '2': 'Demostrativo',
+  const repasoSolutions: Record<string, string> = {
+    '1-correcta': 'correcta',
+    '2-correcta': 'correcta',
     '3-correcta': 'incorrecta',
     '3-correccion': 'No he comprado nada de fruta',
-    '4': 'Indefinido',
+    '4-correcta': 'correcta',
     '5-correcta': 'incorrecta',
     '5-correccion': 'Es el tercer chico',
-    '6': 'Indefinido',
-    '7': 'Artículo definido',
+    '6-correcta': 'correcta',
+    '7-correcta': 'correcta',
     '8-correcta': 'incorrecta',
     '8-correccion': 'Me duele la mano',
-    '9': 'Artículo indefinido',
-    '10': 'Artículo neutro',
-    '11': 'Artículo indefinido',
+    '9-correcta': 'correcta',
+    '10-correcta': 'correcta',
+    '11-correcta': 'correcta',
     '12-correcta': 'incorrecta',
     '12-correccion': 'Ese reloj es mío',
-    '13': 'Indefinido',
+    '13-correcta': 'correcta',
     '14-correcta': 'incorrecta',
     '14-correccion': 'Me gusta este café',
     '15-correcta': 'correcta',
-    '15-correccion': 'correcta'
   };
 
   const checkAnswer = (userAnswer: string, correctAnswer: string): boolean => {
@@ -3809,7 +3808,13 @@ const DeterminantsPractica: React.FC = () => {
   const checkDemostrativos = () => {
     const results: { [key: string]: boolean | null } = {};
     Object.keys(demonstrativosSolutions).forEach(key => {
-      results[key] = checkAnswer(demonstrativosAnswers[key] || '', demonstrativosSolutions[key as keyof typeof demonstrativosSolutions]);
+      const sol = demonstrativosSolutions[key];
+      const user = (demonstrativosAnswers[key] || '').trim().toLowerCase();
+      if (Array.isArray(sol)) {
+        results[key] = sol.some(s => s.toLowerCase() === user);
+      } else {
+        results[key] = checkAnswer(demonstrativosAnswers[key] || '', sol);
+      }
     });
     setDemonstrativosResults(results);
   };
@@ -3853,7 +3858,13 @@ const DeterminantsPractica: React.FC = () => {
   const checkIndefinidos = () => {
     const results: { [key: string]: boolean | null } = {};
     Object.keys(indefinidosSolutions).forEach(key => {
-      results[key] = checkAnswer(indefinidosAnswers[key] || '', indefinidosSolutions[key as keyof typeof indefinidosSolutions]);
+      const sol = indefinidosSolutions[key];
+      const user = (indefinidosAnswers[key] || '').trim().toLowerCase();
+      if (Array.isArray(sol)) {
+        results[key] = sol.some(s => s.toLowerCase() === user);
+      } else {
+        results[key] = checkAnswer(indefinidosAnswers[key] || '', sol);
+      }
     });
     setIndefinidosResults(results);
   };
@@ -3865,8 +3876,11 @@ const DeterminantsPractica: React.FC = () => {
 
   const checkRepaso = () => {
     const results: { [key: string]: boolean | null } = {};
-    Object.keys(repasoSolutions).forEach(key => {
-      results[key] = checkAnswer(repasoAnswers[key] || '', repasoSolutions[key as keyof typeof repasoSolutions]);
+    ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15'].forEach(id => {
+      results[`${id}-correcta`] = checkAnswer(repasoAnswers[`${id}-correcta`] || '', repasoSolutions[`${id}-correcta`]);
+      if (repasoSolutions[`${id}-correccion`] && repasoAnswers[`${id}-correcta`] === 'incorrecta') {
+        results[`${id}-correccion`] = checkAnswer(repasoAnswers[`${id}-correccion`] || '', repasoSolutions[`${id}-correccion`]);
+      }
     });
     setRepasoResults(results);
   };
@@ -4078,7 +4092,7 @@ const DeterminantsPractica: React.FC = () => {
             { id: '3', text: 'Esa idea _____ me parece la mejor solución al problema.', options: '(tuya / tu)' },
             { id: '4', text: '¿Has visto _____ gafas? No las encuentro por ninguna parte.', options: '(tus / las)' },
             { id: '5', text: 'Se ha puesto _____ abrigo porque tiene mucho frío.', options: '(el / su)' },
-            { id: '6', text: '_____ directora está muy contenta con los resultados.', options: '(Nuestra / Nuestra)' },
+            { id: '6', text: '_____ directora está muy contenta con los resultados.', options: '(Nuestra / Nos)' },
             { id: '7', text: 'No me gusta nada ese comportamiento _____.', options: '(suyo / su)' },
             { id: '8', text: '¡Cuidado! Tienes una mancha en _____ mejilla.', options: '(la / tu)' },
             { id: '9', text: 'He quedado con unas primas _____ para ir a merendar.', options: '(mías / mis)' },
@@ -4470,36 +4484,112 @@ const DeterminantsPractica: React.FC = () => {
         </h2>
         
         <p className="text-gray-700 mb-6">
-          <strong>Instrucciones:</strong> Identifica el tipo de determinante subrayado o corrige la frase si es necesario.
+          <strong>Instrucciones:</strong> Indica si la oración es correcta o incorrecta. Si es incorrecta, escribe la oración correcta.
         </p>
 
         <div className="space-y-6">
           {/* Pregunta 1 */}
           <div className="bg-red-50 p-5 rounded-lg">
-            <p className="text-gray-800 mb-2">
-              <span className="font-bold text-red-600">1.</span> "He olvidado <strong>mis</strong> guantes". Tipo:
+            <p className="text-gray-800 mb-3">
+              <span className="font-bold text-red-600">1.</span> "He olvidado <strong>mis</strong> guantes".
             </p>
-            <PracticeInputField 
-              id="1" 
-              value={repasoAnswers['1'] || ''} 
-              onChange={(v) => setRepasoAnswers({...repasoAnswers, '1': v})}
-              result={repasoResults['1'] ?? null}
-              width="w-64"
-            />
+            <div className="ml-4 space-y-3">
+              <div>
+                <p className="text-sm text-gray-700 mb-2">¿Correcta o incorrecta?</p>
+                <div className="flex gap-3">
+                  {['correcta', 'incorrecta'].map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => setRepasoAnswers({...repasoAnswers, '1-correcta': option})}
+                      className={`px-6 py-2 rounded border-2 transition-colors ${
+                        repasoResults['1-correcta'] === null
+                          ? repasoAnswers['1-correcta'] === option
+                            ? 'border-hku-blue bg-hku-blue text-white'
+                            : 'border-gray-300 hover:border-red-400'
+                          : repasoAnswers['1-correcta'] === option
+                          ? repasoResults['1-correcta']
+                            ? 'border-green-500 bg-green-50'
+                            : 'border-red-500 bg-red-50'
+                          : 'border-gray-300'
+                      }`}
+                    >
+                      {option.charAt(0).toUpperCase() + option.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="text-sm text-gray-700 mb-1">Escribe aquí la oración correcta:</p>
+                <input
+                  type="text"
+                  value={repasoAnswers['1-correccion'] || ''}
+                  onChange={(e) => setRepasoAnswers({...repasoAnswers, '1-correccion': e.target.value})}
+                  disabled={repasoAnswers['1-correcta'] !== 'incorrecta'}
+                  className={`w-full px-3 py-2 border-2 rounded ${
+                    repasoAnswers['1-correcta'] !== 'incorrecta'
+                      ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : (repasoResults['1-correccion'] ?? null) === null
+                      ? 'border-gray-300 focus:border-hku-blue'
+                      : repasoResults['1-correccion']
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-red-500 bg-red-50'
+                  } focus:outline-none`}
+                  placeholder="Escribe aquí la oración correcta"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Pregunta 2 */}
           <div className="bg-red-50 p-5 rounded-lg">
-            <p className="text-gray-800 mb-2">
-              <span className="font-bold text-red-600">2.</span> "<strong>Este</strong> verano ha sido caluroso". Tipo:
+            <p className="text-gray-800 mb-3">
+              <span className="font-bold text-red-600">2.</span> "<strong>Este</strong> verano ha sido caluroso".
             </p>
-            <PracticeInputField 
-              id="2" 
-              value={repasoAnswers['2'] || ''} 
-              onChange={(v) => setRepasoAnswers({...repasoAnswers, '2': v})}
-              result={repasoResults['2'] ?? null}
-              width="w-64"
-            />
+            <div className="ml-4 space-y-3">
+              <div>
+                <p className="text-sm text-gray-700 mb-2">¿Correcta o incorrecta?</p>
+                <div className="flex gap-3">
+                  {['correcta', 'incorrecta'].map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => setRepasoAnswers({...repasoAnswers, '2-correcta': option})}
+                      className={`px-6 py-2 rounded border-2 transition-colors ${
+                        repasoResults['2-correcta'] === null
+                          ? repasoAnswers['2-correcta'] === option
+                            ? 'border-hku-blue bg-hku-blue text-white'
+                            : 'border-gray-300 hover:border-red-400'
+                          : repasoAnswers['2-correcta'] === option
+                          ? repasoResults['2-correcta']
+                            ? 'border-green-500 bg-green-50'
+                            : 'border-red-500 bg-red-50'
+                          : 'border-gray-300'
+                      }`}
+                    >
+                      {option.charAt(0).toUpperCase() + option.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="text-sm text-gray-700 mb-1">Escribe aquí la oración correcta:</p>
+                <input
+                  type="text"
+                  value={repasoAnswers['2-correccion'] || ''}
+                  onChange={(e) => setRepasoAnswers({...repasoAnswers, '2-correccion': e.target.value})}
+                  disabled={repasoAnswers['2-correcta'] !== 'incorrecta'}
+                  className={`w-full px-3 py-2 border-2 rounded ${
+                    repasoAnswers['2-correcta'] !== 'incorrecta'
+                      ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : (repasoResults['2-correccion'] ?? null) === null
+                      ? 'border-gray-300 focus:border-hku-blue'
+                      : repasoResults['2-correccion']
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-red-500 bg-red-50'
+                  } focus:outline-none`}
+                  placeholder="Escribe aquí la oración correcta"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Pregunta 3 */}
@@ -4533,19 +4623,22 @@ const DeterminantsPractica: React.FC = () => {
                 </div>
               </div>
               <div>
-                <p className="text-sm text-gray-700 mb-1">Corrige la frase si es incorrecta:</p>
+                <p className="text-sm text-gray-700 mb-1">Escribe aquí la oración correcta:</p>
                 <input
                   type="text"
                   value={repasoAnswers['3-correccion'] || ''}
                   onChange={(e) => setRepasoAnswers({...repasoAnswers, '3-correccion': e.target.value})}
+                  disabled={repasoAnswers['3-correcta'] !== 'incorrecta'}
                   className={`w-full px-3 py-2 border-2 rounded ${
-                    (repasoResults['3-correccion'] ?? null) === null 
+                    repasoAnswers['3-correcta'] !== 'incorrecta'
+                      ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : (repasoResults['3-correccion'] ?? null) === null 
                       ? 'border-gray-300 focus:border-hku-blue' 
                       : repasoResults['3-correccion'] 
                       ? 'border-green-500 bg-green-50' 
                       : 'border-red-500 bg-red-50'
                   } focus:outline-none`}
-                  placeholder="Escribe la corrección"
+                  placeholder="Escribe aquí la oración correcta"
                 />
               </div>
             </div>
@@ -4553,16 +4646,54 @@ const DeterminantsPractica: React.FC = () => {
 
           {/* Pregunta 4 */}
           <div className="bg-red-50 p-5 rounded-lg">
-            <p className="text-gray-800 mb-2">
-              <span className="font-bold text-red-600">4.</span> "He visto a <strong>alguien</strong> conocido". Tipo:
+            <p className="text-gray-800 mb-3">
+              <span className="font-bold text-red-600">4.</span> "He visto a <strong>alguien</strong> conocido".
             </p>
-            <PracticeInputField 
-              id="4" 
-              value={repasoAnswers['4'] || ''} 
-              onChange={(v) => setRepasoAnswers({...repasoAnswers, '4': v})}
-              result={repasoResults['4'] ?? null}
-              width="w-64"
-            />
+            <div className="ml-4 space-y-3">
+              <div>
+                <p className="text-sm text-gray-700 mb-2">¿Correcta o incorrecta?</p>
+                <div className="flex gap-3">
+                  {['correcta', 'incorrecta'].map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => setRepasoAnswers({...repasoAnswers, '4-correcta': option})}
+                      className={`px-6 py-2 rounded border-2 transition-colors ${
+                        repasoResults['4-correcta'] === null
+                          ? repasoAnswers['4-correcta'] === option
+                            ? 'border-hku-blue bg-hku-blue text-white'
+                            : 'border-gray-300 hover:border-red-400'
+                          : repasoAnswers['4-correcta'] === option
+                          ? repasoResults['4-correcta']
+                            ? 'border-green-500 bg-green-50'
+                            : 'border-red-500 bg-red-50'
+                          : 'border-gray-300'
+                      }`}
+                    >
+                      {option.charAt(0).toUpperCase() + option.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="text-sm text-gray-700 mb-1">Escribe aquí la oración correcta:</p>
+                <input
+                  type="text"
+                  value={repasoAnswers['4-correccion'] || ''}
+                  onChange={(e) => setRepasoAnswers({...repasoAnswers, '4-correccion': e.target.value})}
+                  disabled={repasoAnswers['4-correcta'] !== 'incorrecta'}
+                  className={`w-full px-3 py-2 border-2 rounded ${
+                    repasoAnswers['4-correcta'] !== 'incorrecta'
+                      ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : (repasoResults['4-correccion'] ?? null) === null
+                      ? 'border-gray-300 focus:border-hku-blue'
+                      : repasoResults['4-correccion']
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-red-500 bg-red-50'
+                  } focus:outline-none`}
+                  placeholder="Escribe aquí la oración correcta"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Pregunta 5 */}
@@ -4596,19 +4727,22 @@ const DeterminantsPractica: React.FC = () => {
                 </div>
               </div>
               <div>
-                <p className="text-sm text-gray-700 mb-1">Corrige la frase si es incorrecta:</p>
+                <p className="text-sm text-gray-700 mb-1">Escribe aquí la oración correcta:</p>
                 <input
                   type="text"
                   value={repasoAnswers['5-correccion'] || ''}
                   onChange={(e) => setRepasoAnswers({...repasoAnswers, '5-correccion': e.target.value})}
+                  disabled={repasoAnswers['5-correcta'] !== 'incorrecta'}
                   className={`w-full px-3 py-2 border-2 rounded ${
-                    (repasoResults['5-correccion'] ?? null) === null 
+                    repasoAnswers['5-correcta'] !== 'incorrecta'
+                      ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : (repasoResults['5-correccion'] ?? null) === null 
                       ? 'border-gray-300 focus:border-hku-blue' 
                       : repasoResults['5-correccion'] 
                       ? 'border-green-500 bg-green-50' 
                       : 'border-red-500 bg-red-50'
                   } focus:outline-none`}
-                  placeholder="Escribe la corrección"
+                  placeholder="Escribe aquí la oración correcta"
                 />
               </div>
             </div>
@@ -4616,30 +4750,106 @@ const DeterminantsPractica: React.FC = () => {
 
           {/* Pregunta 6 */}
           <div className="bg-red-50 p-5 rounded-lg">
-            <p className="text-gray-800 mb-2">
-              <span className="font-bold text-red-600">6.</span> "Tengo <strong>pocos</strong> exámenes en junio". Tipo:
+            <p className="text-gray-800 mb-3">
+              <span className="font-bold text-red-600">6.</span> "Tengo <strong>pocos</strong> exámenes en junio".
             </p>
-            <PracticeInputField 
-              id="6" 
-              value={repasoAnswers['6'] || ''} 
-              onChange={(v) => setRepasoAnswers({...repasoAnswers, '6': v})}
-              result={repasoResults['6'] ?? null}
-              width="w-64"
-            />
+            <div className="ml-4 space-y-3">
+              <div>
+                <p className="text-sm text-gray-700 mb-2">¿Correcta o incorrecta?</p>
+                <div className="flex gap-3">
+                  {['correcta', 'incorrecta'].map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => setRepasoAnswers({...repasoAnswers, '6-correcta': option})}
+                      className={`px-6 py-2 rounded border-2 transition-colors ${
+                        repasoResults['6-correcta'] === null
+                          ? repasoAnswers['6-correcta'] === option
+                            ? 'border-hku-blue bg-hku-blue text-white'
+                            : 'border-gray-300 hover:border-red-400'
+                          : repasoAnswers['6-correcta'] === option
+                          ? repasoResults['6-correcta']
+                            ? 'border-green-500 bg-green-50'
+                            : 'border-red-500 bg-red-50'
+                          : 'border-gray-300'
+                      }`}
+                    >
+                      {option.charAt(0).toUpperCase() + option.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="text-sm text-gray-700 mb-1">Escribe aquí la oración correcta:</p>
+                <input
+                  type="text"
+                  value={repasoAnswers['6-correccion'] || ''}
+                  onChange={(e) => setRepasoAnswers({...repasoAnswers, '6-correccion': e.target.value})}
+                  disabled={repasoAnswers['6-correcta'] !== 'incorrecta'}
+                  className={`w-full px-3 py-2 border-2 rounded ${
+                    repasoAnswers['6-correcta'] !== 'incorrecta'
+                      ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : (repasoResults['6-correccion'] ?? null) === null
+                      ? 'border-gray-300 focus:border-hku-blue'
+                      : repasoResults['6-correccion']
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-red-500 bg-red-50'
+                  } focus:outline-none`}
+                  placeholder="Escribe aquí la oración correcta"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Pregunta 7 */}
           <div className="bg-red-50 p-5 rounded-lg">
-            <p className="text-gray-800 mb-2">
-              <span className="font-bold text-red-600">7.</span> "<strong>La</strong> primera impresión es la que cuenta". Tipo:
+            <p className="text-gray-800 mb-3">
+              <span className="font-bold text-red-600">7.</span> "<strong>La</strong> primera impresión es la que cuenta".
             </p>
-            <PracticeInputField 
-              id="7" 
-              value={repasoAnswers['7'] || ''} 
-              onChange={(v) => setRepasoAnswers({...repasoAnswers, '7': v})}
-              result={repasoResults['7'] ?? null}
-              width="w-64"
-            />
+            <div className="ml-4 space-y-3">
+              <div>
+                <p className="text-sm text-gray-700 mb-2">¿Correcta o incorrecta?</p>
+                <div className="flex gap-3">
+                  {['correcta', 'incorrecta'].map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => setRepasoAnswers({...repasoAnswers, '7-correcta': option})}
+                      className={`px-6 py-2 rounded border-2 transition-colors ${
+                        repasoResults['7-correcta'] === null
+                          ? repasoAnswers['7-correcta'] === option
+                            ? 'border-hku-blue bg-hku-blue text-white'
+                            : 'border-gray-300 hover:border-red-400'
+                          : repasoAnswers['7-correcta'] === option
+                          ? repasoResults['7-correcta']
+                            ? 'border-green-500 bg-green-50'
+                            : 'border-red-500 bg-red-50'
+                          : 'border-gray-300'
+                      }`}
+                    >
+                      {option.charAt(0).toUpperCase() + option.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="text-sm text-gray-700 mb-1">Escribe aquí la oración correcta:</p>
+                <input
+                  type="text"
+                  value={repasoAnswers['7-correccion'] || ''}
+                  onChange={(e) => setRepasoAnswers({...repasoAnswers, '7-correccion': e.target.value})}
+                  disabled={repasoAnswers['7-correcta'] !== 'incorrecta'}
+                  className={`w-full px-3 py-2 border-2 rounded ${
+                    repasoAnswers['7-correcta'] !== 'incorrecta'
+                      ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : (repasoResults['7-correccion'] ?? null) === null
+                      ? 'border-gray-300 focus:border-hku-blue'
+                      : repasoResults['7-correccion']
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-red-500 bg-red-50'
+                  } focus:outline-none`}
+                  placeholder="Escribe aquí la oración correcta"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Pregunta 8 */}
@@ -4673,19 +4883,22 @@ const DeterminantsPractica: React.FC = () => {
                 </div>
               </div>
               <div>
-                <p className="text-sm text-gray-700 mb-1">Corrige la frase si es incorrecta:</p>
+                <p className="text-sm text-gray-700 mb-1">Escribe aquí la oración correcta:</p>
                 <input
                   type="text"
                   value={repasoAnswers['8-correccion'] || ''}
                   onChange={(e) => setRepasoAnswers({...repasoAnswers, '8-correccion': e.target.value})}
+                  disabled={repasoAnswers['8-correcta'] !== 'incorrecta'}
                   className={`w-full px-3 py-2 border-2 rounded ${
-                    (repasoResults['8-correccion'] ?? null) === null 
+                    repasoAnswers['8-correcta'] !== 'incorrecta'
+                      ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : (repasoResults['8-correccion'] ?? null) === null 
                       ? 'border-gray-300 focus:border-hku-blue' 
                       : repasoResults['8-correccion'] 
                       ? 'border-green-500 bg-green-50' 
                       : 'border-red-500 bg-red-50'
                   } focus:outline-none`}
-                  placeholder="Escribe la corrección"
+                  placeholder="Escribe aquí la oración correcta"
                 />
               </div>
             </div>
@@ -4693,44 +4906,158 @@ const DeterminantsPractica: React.FC = () => {
 
           {/* Pregunta 9 */}
           <div className="bg-red-50 p-5 rounded-lg">
-            <p className="text-gray-800 mb-2">
-              <span className="font-bold text-red-600">9.</span> "He comprado <strong>unas</strong> manzanas". Tipo:
+            <p className="text-gray-800 mb-3">
+              <span className="font-bold text-red-600">9.</span> "He comprado <strong>unas</strong> manzanas".
             </p>
-            <PracticeInputField 
-              id="9" 
-              value={repasoAnswers['9'] || ''} 
-              onChange={(v) => setRepasoAnswers({...repasoAnswers, '9': v})}
-              result={repasoResults['9'] ?? null}
-              width="w-64"
-            />
+            <div className="ml-4 space-y-3">
+              <div>
+                <p className="text-sm text-gray-700 mb-2">¿Correcta o incorrecta?</p>
+                <div className="flex gap-3">
+                  {['correcta', 'incorrecta'].map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => setRepasoAnswers({...repasoAnswers, '9-correcta': option})}
+                      className={`px-6 py-2 rounded border-2 transition-colors ${
+                        repasoResults['9-correcta'] === null
+                          ? repasoAnswers['9-correcta'] === option
+                            ? 'border-hku-blue bg-hku-blue text-white'
+                            : 'border-gray-300 hover:border-red-400'
+                          : repasoAnswers['9-correcta'] === option
+                          ? repasoResults['9-correcta']
+                            ? 'border-green-500 bg-green-50'
+                            : 'border-red-500 bg-red-50'
+                          : 'border-gray-300'
+                      }`}
+                    >
+                      {option.charAt(0).toUpperCase() + option.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="text-sm text-gray-700 mb-1">Escribe aquí la oración correcta:</p>
+                <input
+                  type="text"
+                  value={repasoAnswers['9-correccion'] || ''}
+                  onChange={(e) => setRepasoAnswers({...repasoAnswers, '9-correccion': e.target.value})}
+                  disabled={repasoAnswers['9-correcta'] !== 'incorrecta'}
+                  className={`w-full px-3 py-2 border-2 rounded ${
+                    repasoAnswers['9-correcta'] !== 'incorrecta'
+                      ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : (repasoResults['9-correccion'] ?? null) === null
+                      ? 'border-gray-300 focus:border-hku-blue'
+                      : repasoResults['9-correccion']
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-red-500 bg-red-50'
+                  } focus:outline-none`}
+                  placeholder="Escribe aquí la oración correcta"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Pregunta 10 */}
           <div className="bg-red-50 p-5 rounded-lg">
-            <p className="text-gray-800 mb-2">
-              <span className="font-bold text-red-600">10.</span> "¿Has traído <strong>lo</strong> de ayer?". Tipo:
+            <p className="text-gray-800 mb-3">
+              <span className="font-bold text-red-600">10.</span> "¿Has traído <strong>lo</strong> de ayer?".
             </p>
-            <PracticeInputField 
-              id="10" 
-              value={repasoAnswers['10'] || ''} 
-              onChange={(v) => setRepasoAnswers({...repasoAnswers, '10': v})}
-              result={repasoResults['10'] ?? null}
-              width="w-64"
-            />
+            <div className="ml-4 space-y-3">
+              <div>
+                <p className="text-sm text-gray-700 mb-2">¿Correcta o incorrecta?</p>
+                <div className="flex gap-3">
+                  {['correcta', 'incorrecta'].map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => setRepasoAnswers({...repasoAnswers, '10-correcta': option})}
+                      className={`px-6 py-2 rounded border-2 transition-colors ${
+                        repasoResults['10-correcta'] === null
+                          ? repasoAnswers['10-correcta'] === option
+                            ? 'border-hku-blue bg-hku-blue text-white'
+                            : 'border-gray-300 hover:border-red-400'
+                          : repasoAnswers['10-correcta'] === option
+                          ? repasoResults['10-correcta']
+                            ? 'border-green-500 bg-green-50'
+                            : 'border-red-500 bg-red-50'
+                          : 'border-gray-300'
+                      }`}
+                    >
+                      {option.charAt(0).toUpperCase() + option.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="text-sm text-gray-700 mb-1">Escribe aquí la oración correcta:</p>
+                <input
+                  type="text"
+                  value={repasoAnswers['10-correccion'] || ''}
+                  onChange={(e) => setRepasoAnswers({...repasoAnswers, '10-correccion': e.target.value})}
+                  disabled={repasoAnswers['10-correcta'] !== 'incorrecta'}
+                  className={`w-full px-3 py-2 border-2 rounded ${
+                    repasoAnswers['10-correcta'] !== 'incorrecta'
+                      ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : (repasoResults['10-correccion'] ?? null) === null
+                      ? 'border-gray-300 focus:border-hku-blue'
+                      : repasoResults['10-correccion']
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-red-500 bg-red-50'
+                  } focus:outline-none`}
+                  placeholder="Escribe aquí la oración correcta"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Pregunta 11 */}
           <div className="bg-red-50 p-5 rounded-lg">
-            <p className="text-gray-800 mb-2">
-              <span className="font-bold text-red-600">11.</span> "He ganado <strong>un</strong> billón de euros". Tipo:
+            <p className="text-gray-800 mb-3">
+              <span className="font-bold text-red-600">11.</span> "He ganado <strong>un</strong> billón de euros".
             </p>
-            <PracticeInputField 
-              id="11" 
-              value={repasoAnswers['11'] || ''} 
-              onChange={(v) => setRepasoAnswers({...repasoAnswers, '11': v})}
-              result={repasoResults['11'] ?? null}
-              width="w-64"
-            />
+            <div className="ml-4 space-y-3">
+              <div>
+                <p className="text-sm text-gray-700 mb-2">¿Correcta o incorrecta?</p>
+                <div className="flex gap-3">
+                  {['correcta', 'incorrecta'].map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => setRepasoAnswers({...repasoAnswers, '11-correcta': option})}
+                      className={`px-6 py-2 rounded border-2 transition-colors ${
+                        repasoResults['11-correcta'] === null
+                          ? repasoAnswers['11-correcta'] === option
+                            ? 'border-hku-blue bg-hku-blue text-white'
+                            : 'border-gray-300 hover:border-red-400'
+                          : repasoAnswers['11-correcta'] === option
+                          ? repasoResults['11-correcta']
+                            ? 'border-green-500 bg-green-50'
+                            : 'border-red-500 bg-red-50'
+                          : 'border-gray-300'
+                      }`}
+                    >
+                      {option.charAt(0).toUpperCase() + option.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="text-sm text-gray-700 mb-1">Escribe aquí la oración correcta:</p>
+                <input
+                  type="text"
+                  value={repasoAnswers['11-correccion'] || ''}
+                  onChange={(e) => setRepasoAnswers({...repasoAnswers, '11-correccion': e.target.value})}
+                  disabled={repasoAnswers['11-correcta'] !== 'incorrecta'}
+                  className={`w-full px-3 py-2 border-2 rounded ${
+                    repasoAnswers['11-correcta'] !== 'incorrecta'
+                      ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : (repasoResults['11-correccion'] ?? null) === null
+                      ? 'border-gray-300 focus:border-hku-blue'
+                      : repasoResults['11-correccion']
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-red-500 bg-red-50'
+                  } focus:outline-none`}
+                  placeholder="Escribe aquí la oración correcta"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Pregunta 12 */}
@@ -4764,19 +5091,22 @@ const DeterminantsPractica: React.FC = () => {
                 </div>
               </div>
               <div>
-                <p className="text-sm text-gray-700 mb-1">Corrige la frase si es incorrecta:</p>
+                <p className="text-sm text-gray-700 mb-1">Escribe aquí la oración correcta:</p>
                 <input
                   type="text"
                   value={repasoAnswers['12-correccion'] || ''}
                   onChange={(e) => setRepasoAnswers({...repasoAnswers, '12-correccion': e.target.value})}
+                  disabled={repasoAnswers['12-correcta'] !== 'incorrecta'}
                   className={`w-full px-3 py-2 border-2 rounded ${
-                    (repasoResults['12-correccion'] ?? null) === null 
+                    repasoAnswers['12-correcta'] !== 'incorrecta'
+                      ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : (repasoResults['12-correccion'] ?? null) === null 
                       ? 'border-gray-300 focus:border-hku-blue' 
                       : repasoResults['12-correccion'] 
                       ? 'border-green-500 bg-green-50' 
                       : 'border-red-500 bg-red-50'
                   } focus:outline-none`}
-                  placeholder="Escribe la corrección"
+                  placeholder="Escribe aquí la oración correcta"
                 />
               </div>
             </div>
@@ -4784,16 +5114,54 @@ const DeterminantsPractica: React.FC = () => {
 
           {/* Pregunta 13 */}
           <div className="bg-red-50 p-5 rounded-lg">
-            <p className="text-gray-800 mb-2">
-              <span className="font-bold text-red-600">13.</span> "Hay <strong>demasiadas</strong> personas en el metro". Tipo:
+            <p className="text-gray-800 mb-3">
+              <span className="font-bold text-red-600">13.</span> "Hay <strong>demasiadas</strong> personas en el metro".
             </p>
-            <PracticeInputField 
-              id="13" 
-              value={repasoAnswers['13'] || ''} 
-              onChange={(v) => setRepasoAnswers({...repasoAnswers, '13': v})}
-              result={repasoResults['13'] ?? null}
-              width="w-64"
-            />
+            <div className="ml-4 space-y-3">
+              <div>
+                <p className="text-sm text-gray-700 mb-2">¿Correcta o incorrecta?</p>
+                <div className="flex gap-3">
+                  {['correcta', 'incorrecta'].map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => setRepasoAnswers({...repasoAnswers, '13-correcta': option})}
+                      className={`px-6 py-2 rounded border-2 transition-colors ${
+                        repasoResults['13-correcta'] === null
+                          ? repasoAnswers['13-correcta'] === option
+                            ? 'border-hku-blue bg-hku-blue text-white'
+                            : 'border-gray-300 hover:border-red-400'
+                          : repasoAnswers['13-correcta'] === option
+                          ? repasoResults['13-correcta']
+                            ? 'border-green-500 bg-green-50'
+                            : 'border-red-500 bg-red-50'
+                          : 'border-gray-300'
+                      }`}
+                    >
+                      {option.charAt(0).toUpperCase() + option.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p className="text-sm text-gray-700 mb-1">Escribe aquí la oración correcta:</p>
+                <input
+                  type="text"
+                  value={repasoAnswers['13-correccion'] || ''}
+                  onChange={(e) => setRepasoAnswers({...repasoAnswers, '13-correccion': e.target.value})}
+                  disabled={repasoAnswers['13-correcta'] !== 'incorrecta'}
+                  className={`w-full px-3 py-2 border-2 rounded ${
+                    repasoAnswers['13-correcta'] !== 'incorrecta'
+                      ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : (repasoResults['13-correccion'] ?? null) === null
+                      ? 'border-gray-300 focus:border-hku-blue'
+                      : repasoResults['13-correccion']
+                      ? 'border-green-500 bg-green-50'
+                      : 'border-red-500 bg-red-50'
+                  } focus:outline-none`}
+                  placeholder="Escribe aquí la oración correcta"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Pregunta 14 */}
@@ -4827,19 +5195,22 @@ const DeterminantsPractica: React.FC = () => {
                 </div>
               </div>
               <div>
-                <p className="text-sm text-gray-700 mb-1">Corrige la frase si es incorrecta:</p>
+                <p className="text-sm text-gray-700 mb-1">Escribe aquí la oración correcta:</p>
                 <input
                   type="text"
                   value={repasoAnswers['14-correccion'] || ''}
                   onChange={(e) => setRepasoAnswers({...repasoAnswers, '14-correccion': e.target.value})}
+                  disabled={repasoAnswers['14-correcta'] !== 'incorrecta'}
                   className={`w-full px-3 py-2 border-2 rounded ${
-                    (repasoResults['14-correccion'] ?? null) === null 
+                    repasoAnswers['14-correcta'] !== 'incorrecta'
+                      ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : (repasoResults['14-correccion'] ?? null) === null 
                       ? 'border-gray-300 focus:border-hku-blue' 
                       : repasoResults['14-correccion'] 
                       ? 'border-green-500 bg-green-50' 
                       : 'border-red-500 bg-red-50'
                   } focus:outline-none`}
-                  placeholder="Escribe la corrección"
+                  placeholder="Escribe aquí la oración correcta"
                 />
               </div>
             </div>
@@ -4876,19 +5247,22 @@ const DeterminantsPractica: React.FC = () => {
                 </div>
               </div>
               <div>
-                <p className="text-sm text-gray-700 mb-1">Corrige la frase si es incorrecta:</p>
+                <p className="text-sm text-gray-700 mb-1">Escribe aquí la oración correcta:</p>
                 <input
                   type="text"
                   value={repasoAnswers['15-correccion'] || ''}
                   onChange={(e) => setRepasoAnswers({...repasoAnswers, '15-correccion': e.target.value})}
+                  disabled={repasoAnswers['15-correcta'] !== 'incorrecta'}
                   className={`w-full px-3 py-2 border-2 rounded ${
-                    (repasoResults['15-correccion'] ?? null) === null 
+                    repasoAnswers['15-correcta'] !== 'incorrecta'
+                      ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : (repasoResults['15-correccion'] ?? null) === null 
                       ? 'border-gray-300 focus:border-hku-blue' 
                       : repasoResults['15-correccion'] 
                       ? 'border-green-500 bg-green-50' 
                       : 'border-red-500 bg-red-50'
                   } focus:outline-none`}
-                  placeholder="Escribe 'correcta' si no hay error"
+                  placeholder="Escribe aquí la oración correcta"
                 />
               </div>
             </div>
