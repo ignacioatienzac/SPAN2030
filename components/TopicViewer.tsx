@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Topic } from '../types';
 import { ArrowLeft, BookOpen, PenTool, Lightbulb, Layers, GitBranch, Key, Globe, Scissors, Search, CheckCircle, XCircle, RefreshCw, ChevronRight, Hash, MapPin, Clock, AlertTriangle, ListOrdered, Eye, MessageSquare, MousePointer, HelpCircle, User, Users, Split, Menu, X, ChevronDown, Award, UserCheck, AlertCircle, Pencil, Tag, Copy } from 'lucide-react';
 
@@ -4941,6 +4941,12 @@ const MorphologyPractice: React.FC = () => {
     const [ejercicio3Results, setEjercicio3Results] = useState<{ [key: string]: boolean | null }>({});
     const [ejercicio4Results, setEjercicio4Results] = useState<{ [key: string]: boolean | null }>({});
 
+    // Shuffle helper & shuffled button options (randomised once on mount)
+    const shuffle = <T,>(arr: T[]): T[] => [...arr].sort(() => Math.random() - 0.5);
+    const options1Significado = useMemo(() => shuffle(['contra', 'entre', 'sobre']), []);
+    const options2Funcion = useMemo(() => shuffle(['forma sustantivos abstractos', 'indica agente o profesión', 'expresa diminutivo']), []);
+    const options3Significado = useMemo(() => shuffle(['debajo', 'sobre', 'alrededor']), []);
+
     // Soluciones
     const ejercicio1Solutions = {
         '1-prefijo': 'anti',
@@ -4955,12 +4961,12 @@ const MorphologyPractice: React.FC = () => {
         '3-significado': 'debajo'
     };
 
-    const ejercicio2Solutions = {
-        'el': 'Determinante',
-        'blanco': 'Adjetivo',
-        'tranquilamente': 'Adverbio',
-        'en': 'Preposición',
-        'mesa': 'Sustantivo'
+    const ejercicio2Solutions: Record<string, string[]> = {
+        'el': ['Determinante', 'artículo', 'artículo definido'],
+        'blanco': ['Adjetivo'],
+        'tranquilamente': ['Adverbio'],
+        'en': ['Preposición'],
+        'mesa': ['Sustantivo', 'nombre']
     };
 
     const ejercicio3Solutions = {
@@ -4990,7 +4996,9 @@ const MorphologyPractice: React.FC = () => {
     const checkEjercicio2 = () => {
         const results: { [key: string]: boolean | null } = {};
         Object.keys(ejercicio2Solutions).forEach(key => {
-            results[key] = checkAnswer(ejercicio2Answers[key] || '', ejercicio2Solutions[key as keyof typeof ejercicio2Solutions]);
+            const accepted = ejercicio2Solutions[key];
+            const user = (ejercicio2Answers[key] || '').trim().toLowerCase();
+            results[key] = accepted.some(a => a.toLowerCase() === user);
         });
         setEjercicio2Results(results);
     };
@@ -5089,7 +5097,7 @@ const MorphologyPractice: React.FC = () => {
                             <div className="ml-4">
                                 <p className="text-sm text-gray-700 mb-2">Significado del prefijo:</p>
                                 <div className="flex gap-2 flex-wrap">
-                                    {['contra', 'entre', 'sobre'].map((option) => (
+                                    {options1Significado.map((option) => (
                                         <button
                                             key={option}
                                             onClick={() => setEjercicio1Answers({...ejercicio1Answers, '1-significado': option})}
@@ -5140,7 +5148,7 @@ const MorphologyPractice: React.FC = () => {
                             <div className="ml-4">
                                 <p className="text-sm text-gray-700 mb-2">Significado del sufijo:</p>
                                 <div className="flex gap-2 flex-wrap">
-                                    {['forma sustantivos abstractos', 'indica agente o profesión', 'expresa diminutivo'].map((option) => (
+                                    {options2Funcion.map((option) => (
                                         <button
                                             key={option}
                                             onClick={() => setEjercicio1Answers({...ejercicio1Answers, '2-funcion': option})}
@@ -5200,7 +5208,7 @@ const MorphologyPractice: React.FC = () => {
                             <div className="ml-4">
                                 <p className="text-sm text-gray-700 mb-2">Significado del prefijo:</p>
                                 <div className="flex gap-2 flex-wrap">
-                                    {['debajo', 'sobre', 'alrededor'].map((option) => (
+                                    {options3Significado.map((option) => (
                                         <button
                                             key={option}
                                             onClick={() => setEjercicio1Answers({...ejercicio1Answers, '3-significado': option})}
