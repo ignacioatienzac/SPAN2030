@@ -21,6 +21,7 @@ export const TopicViewer: React.FC<TopicViewerProps> = ({ topic, onBack }) => {
   const isAdjectives = topic.id === '1-4';
   const isVerbs = topic.id === '1-5';
   const isSerEstarHaber = topic.id === '2-1';
+  const isLoUsos = topic.id === '2-2';
 
   // Tabs configuration for Determinants
   const determinantsTabs = [
@@ -187,7 +188,8 @@ export const TopicViewer: React.FC<TopicViewerProps> = ({ topic, onBack }) => {
                 {isAdjectives && <AdjectivesContent />}
                 {isVerbs && <VerbsContent />}
                 {isSerEstarHaber && <SerEstarHaberContent />}
-                {!isMorphology && !isNouns && !isAdjectives && !isVerbs && !isSerEstarHaber && (
+                {isLoUsos && <LoUsosContent />}
+                {!isMorphology && !isNouns && !isAdjectives && !isVerbs && !isSerEstarHaber && !isLoUsos && (
                   <div className="text-center py-20 bg-white rounded-2xl border border-gray-200 shadow-sm">
                     <p className="text-gray-500">Contenido disponible próximamente para {topic.title}.</p>
                   </div>
@@ -7970,7 +7972,7 @@ const SerEstarHaberPractice: React.FC = () => {
   const b2Items = [
     {
       id: '1',
-      sentence: '"Está muy rica".',
+      sentence: '"Está muy rico".',
       opts: [
         { k: 'a', text: 'Tiene mucho dinero.' },
         { k: 'b', text: 'Tiene un sabor delicioso.' },
@@ -8046,6 +8048,7 @@ const SerEstarHaberPractice: React.FC = () => {
 
   const [b3Answers, setB3Answers] = useState<Record<string, string>>({});
   const [b3Results, setB3Results] = useState<Record<string, boolean | null>>({});
+  const [showRespuestas, setShowRespuestas] = useState(false);
 
   const checkB3 = () => {
     const r: Record<string, boolean | null> = {};
@@ -8068,13 +8071,68 @@ const SerEstarHaberPractice: React.FC = () => {
     <div className="space-y-10">
       {/* Header */}
       <div className="bg-gradient-to-r from-hku-blue to-blue-700 text-white p-8 rounded-2xl shadow-lg">
-        <h2 className="text-3xl font-bold mb-3 flex items-center">
-          <Pencil className="mr-3" size={32} />
-          Práctica: Ser, Estar y Haber
-        </h2>
-        <p className="text-blue-100 text-lg">
-          Pon a prueba tu conocimiento sobre los usos de <em>ser</em>, <em>estar</em> y <em>haber</em> con estos tres bloques de ejercicios.
-        </p>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h2 className="text-3xl font-bold mb-3 flex items-center">
+              <Pencil className="mr-3" size={32} />
+              Práctica: Ser, Estar y Haber
+            </h2>
+            <p className="text-blue-100 text-lg">
+              Pon a prueba tu conocimiento sobre los usos de <em>ser</em>, <em>estar</em> y <em>haber</em> con estos tres bloques de ejercicios.
+            </p>
+          </div>
+          <button
+            onClick={() => setShowRespuestas(!showRespuestas)}
+            className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg font-semibold transition-all border border-white/30 text-sm whitespace-nowrap mt-1"
+          >
+            <Eye size={16} />
+            {showRespuestas ? 'Ocultar respuestas' : 'Ver respuestas'}
+          </button>
+        </div>
+
+        {showRespuestas && (
+          <div className="mt-6 bg-white/10 rounded-xl p-5 border border-white/20 space-y-5 text-sm">
+            <div>
+              <p className="font-bold text-white mb-2 uppercase tracking-wide text-xs">Bloque 1 – Completar frases</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {b1Items.map((item, idx) => (
+                  <div key={item.id} className="bg-white/10 rounded-lg px-3 py-2">
+                    <span className="font-bold text-blue-200 mr-1">{idx + 1}.</span>
+                    <span className="text-white font-semibold">{item.sols[0]}</span>
+                    <span className="text-blue-200 italic ml-1">({item.note})</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="font-bold text-white mb-2 uppercase tracking-wide text-xs">Bloque 2 – Opción múltiple</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {b2Items.map((item, idx) => {
+                  const correct = item.opts.find(o => o.k === item.sol);
+                  return (
+                    <div key={item.id} className="bg-white/10 rounded-lg px-3 py-2">
+                      <span className="font-bold text-blue-200 mr-1">{idx + 1}.</span>
+                      <span className="text-blue-200 mr-1">{item.sol})</span>
+                      <span className="text-white">{correct?.text}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <div>
+              <p className="font-bold text-white mb-2 uppercase tracking-wide text-xs">Bloque 3 – Auxiliar vs. Impersonal</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {b3Items.map((item, idx) => (
+                  <div key={item.id} className="bg-white/10 rounded-lg px-3 py-2">
+                    <span className="font-bold text-blue-200 mr-1">{idx + 1}.</span>
+                    <span className="text-white font-semibold">{item.sol}</span>
+                    <span className="text-blue-200 italic ml-1">({item.note})</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Bloque 1 */}
@@ -8244,6 +8302,269 @@ const SerEstarHaberPractice: React.FC = () => {
             Para <em>haber</em> impersonal, fíjate en si hay un participio después: si lo hay, es auxiliar.
           </span>
         </p>
+      </section>
+    </div>
+  );
+};
+
+// --- LO USOS CONTENT (Topic 2-2) ---
+const LoUsosContent: React.FC = () => {
+  return (
+    <div className="space-y-12 text-gray-700 font-sans">
+
+      {/* 1. "Lo" como Pronombre de Objeto Directo */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-3xl font-bold text-hku-blue mb-6 flex items-center font-serif">
+          <MousePointer className="mr-3" size={32} /> 1. &laquo;Lo&raquo; como Pronombre de Objeto Directo
+        </h2>
+        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          En este caso, <strong>lo</strong> actúa como un sustituto para evitar repetir algo que ya sabemos.
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-6 mb-8">
+          {/* Función */}
+          <div className="bg-blue-50 p-5 rounded-xl border border-blue-100">
+            <h3 className="font-bold text-hku-blue mb-3 flex items-center text-lg">
+              <Key className="w-5 h-5 mr-2" /> Función principal
+            </h3>
+            <p className="text-sm text-gray-700">Funciona como el <strong>objeto directo</strong> de un verbo.</p>
+          </div>
+
+          {/* Concordancia */}
+          <div className="bg-blue-50 p-5 rounded-xl border border-blue-100">
+            <h3 className="font-bold text-hku-blue mb-3 flex items-center text-lg">
+              <Layers className="w-5 h-5 mr-2" /> Concordancia
+            </h3>
+            <p className="text-sm text-gray-700 mb-3">Debe concordar en género y número con el sustantivo al que reemplaza.</p>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse text-sm">
+                <thead>
+                  <tr className="bg-hku-blue text-white">
+                    <th className="px-3 py-2 text-left font-semibold rounded-tl-lg">Género</th>
+                    <th className="px-3 py-2 text-center font-semibold">Singular</th>
+                    <th className="px-3 py-2 text-center font-semibold rounded-tr-lg">Plural</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-blue-100">
+                    <td className="px-3 py-2 font-semibold text-hku-ash">Masculino</td>
+                    <td className="px-3 py-2 text-center font-mono font-bold text-hku-blue">lo</td>
+                    <td className="px-3 py-2 text-center font-mono font-bold text-hku-blue">los</td>
+                  </tr>
+                  <tr>
+                    <td className="px-3 py-2 font-semibold text-hku-ash">Femenino</td>
+                    <td className="px-3 py-2 text-center font-mono font-bold text-hku-green">la</td>
+                    <td className="px-3 py-2 text-center font-mono font-bold text-hku-green">las</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <div className="bg-blue-50 p-5 rounded-xl border-l-4 border-hku-blue">
+            <h4 className="font-bold text-hku-ash mb-2">Ejemplo de objeto</h4>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 text-sm">
+              <span className="bg-white px-3 py-2 rounded-lg border border-blue-100 italic text-gray-600">
+                &laquo;Martín devolvió <strong>el préstamo</strong>&raquo;
+              </span>
+              <ChevronRight className="text-hku-blue flex-shrink-0" size={20} />
+              <span className="bg-white px-3 py-2 rounded-lg border border-blue-200 italic text-gray-700">
+                &laquo;Martín <strong className="text-hku-blue">lo</strong> devolvió&raquo;
+              </span>
+            </div>
+          </div>
+
+          <div className="bg-blue-50 p-5 rounded-xl border-l-4 border-hku-blue">
+            <h4 className="font-bold text-hku-ash mb-2">Sustitución de acciones</h4>
+            <p className="text-sm text-gray-600 mb-3">También podemos usar «lo» para representar una acción completa mencionada antes.</p>
+            <div className="bg-white px-3 py-2 rounded-lg border border-blue-100 text-sm italic text-gray-700 inline-block">
+              &laquo;He conseguido completar los deberes. <strong className="text-hku-blue">Lo</strong> he conseguido&raquo;.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. "Lo" como Artículo Neutro */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-3xl font-bold text-hku-green mb-6 flex items-center font-serif">
+          <Tag className="mr-3" size={32} /> 2. &laquo;Lo&raquo; como Artículo Neutro
+        </h2>
+        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          A diferencia de <em>el</em> o <em>la</em>, el <strong>«lo» neutro</strong> es el tercer artículo determinado del español.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-400 p-5 rounded-xl flex items-start mb-8">
+          <Award className="w-6 h-6 text-amber-500 mr-3 mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="font-bold text-amber-800 mb-1">Regla de oro</p>
+            <p className="text-sm text-amber-700">
+              Nunca acompaña a un sustantivo ni cambia por género o número.
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-4 mb-8">
+          <div className="bg-green-50 p-5 rounded-xl border-l-4 border-hku-green">
+            <h4 className="font-bold text-hku-ash mb-2">Significado</h4>
+            <p className="text-sm text-gray-600 mb-3">Se usa para sustantivar conceptos, traduciéndose a menudo como <em>«la cosa»</em>, <em>«la parte»</em> o <em>«el tema»</em>.</p>
+            <div className="bg-white px-3 py-2 rounded-lg border border-green-100 text-sm italic text-gray-700 inline-block">
+              &laquo;<strong className="text-hku-green">Lo</strong> fácil del español es la pronunciación&raquo; (La parte fácil...).
+            </div>
+          </div>
+
+          <div className="bg-green-50 p-5 rounded-xl border-l-4 border-hku-green">
+            <h4 className="font-bold text-hku-ash mb-2">Expresión de grado</h4>
+            <p className="text-sm text-gray-600 mb-3">Sirve para enfatizar la cantidad o calidad de algo.</p>
+            <div className="bg-white px-3 py-2 rounded-lg border border-green-100 text-sm italic text-gray-700 inline-block">
+              &laquo;Ya sé <strong className="text-hku-green">lo</strong> responsable que eres&raquo;.
+            </div>
+          </div>
+        </div>
+
+        {/* Combinaciones comunes */}
+        <h3 className="text-xl font-bold text-hku-ash mb-5 flex items-center">
+          <Layers className="w-5 h-5 mr-2 text-hku-green" /> Combinaciones comunes del «Lo» neutro
+        </h3>
+
+        <div className="space-y-4">
+          {[
+            {
+              combo: 'Lo + Adjetivo',
+              desc: 'Enfatiza una cualidad.',
+              examples: [
+                { text: '«Lo importante es ser feliz».' },
+              ],
+              subnote: 'Lo + adjetivo + que: Introduce una nueva oración con otro verbo para dar énfasis.',
+              subex: '«Lo bueno es que no tenemos muchos deberes».',
+              color: 'blue',
+            },
+            {
+              combo: 'Lo + Adverbio',
+              desc: 'Enfatiza la cualidad de un adverbio y no puede sustituirse por «la cosa».',
+              examples: [
+                { text: '«Ven lo antes posible».' },
+              ],
+              subnote: 'Lo + adverbio + que:',
+              subex: '«Lo bien que habla tu hermana».',
+              color: 'green',
+            },
+            {
+              combo: 'Lo + Que',
+              desc: 'Sustituye a «la cosa/el tema» y enfatiza la acción del verbo.',
+              examples: [
+                { text: '«He olvidado lo que respondí» (La cosa que respondí).' },
+              ],
+              color: 'purple',
+            },
+            {
+              combo: 'Lo + De',
+              desc: 'Se usa para referirse a un tema o situación mencionada anteriormente.',
+              examples: [
+                { text: 'Con sustantivo: «Me resulta muy curioso lo de Paula» (El tema de Paula).' },
+                { text: 'Con infinitivo: «Me da vergüenza lo de hablar en público» (La situación de hablar...).' },
+              ],
+              color: 'orange',
+            },
+          ].map(item => {
+            const colorMap: Record<string, string> = {
+              blue: 'bg-blue-50 border-hku-blue',
+              green: 'bg-green-50 border-hku-green',
+              purple: 'bg-purple-50 border-purple-500',
+              orange: 'bg-orange-50 border-orange-400',
+            };
+            const headMap: Record<string, string> = {
+              blue: 'text-hku-blue',
+              green: 'text-hku-green',
+              purple: 'text-purple-700',
+              orange: 'text-orange-700',
+            };
+            return (
+              <div key={item.combo} className={`p-5 rounded-xl border-l-4 ${colorMap[item.color]}`}>
+                <h4 className={`font-bold text-lg mb-1 ${headMap[item.color]}`}>{item.combo}</h4>
+                <p className="text-sm text-gray-600 mb-3">{item.desc}</p>
+                <div className="space-y-1">
+                  {item.examples.map((ex, i) => (
+                    <div key={i} className="bg-white px-3 py-2 rounded-lg border border-gray-100 text-sm italic text-gray-700 inline-block w-full">
+                      {ex.text}
+                    </div>
+                  ))}
+                </div>
+                {item.subnote && (
+                  <div className="mt-3 pl-3 border-l-2 border-gray-300">
+                    <p className="text-xs font-semibold text-gray-500 mb-1">{item.subnote}</p>
+                    <div className="bg-white px-3 py-2 rounded-lg border border-gray-100 text-sm italic text-gray-700 inline-block w-full">
+                      {item.subex}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 3. ¿"Lo", "El" o "La"? */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-3xl font-bold text-hku-ash mb-6 flex items-center font-serif">
+          <HelpCircle className="mr-3" size={32} /> 3. &iquest;&laquo;Lo&raquo;, &laquo;El&raquo; o &laquo;La&raquo;?
+        </h2>
+        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          Es vital no confundirlos, especialmente cuando hablamos de personas o cosas específicas.
+        </p>
+
+        <div className="overflow-x-auto mb-6">
+          <table className="w-full border-collapse bg-white rounded-lg overflow-hidden shadow-sm">
+            <thead>
+              <tr className="bg-hku-ash text-white">
+                <th className="px-6 py-4 text-left font-semibold">Forma</th>
+                <th className="px-6 py-4 text-left font-semibold">Referencia</th>
+                <th className="px-6 py-4 text-left font-semibold">Ejemplo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                {
+                  forma: 'lo mejor',
+                  ref: 'Un objeto, evento o concepto abstracto.',
+                  ex: '«Esta fiesta es lo mejor».',
+                  bg: 'bg-white',
+                },
+                {
+                  forma: 'el mejor',
+                  ref: 'Un hombre, chico o niño.',
+                  ex: '«Juan es el mejor de la clase».',
+                  bg: 'bg-gray-50',
+                },
+                {
+                  forma: 'la mejor',
+                  ref: 'Una mujer, chica o niña.',
+                  ex: '«Rosa es la mejor de su equipo».',
+                  bg: 'bg-white',
+                },
+              ].map(row => (
+                <tr key={row.forma} className={`border-b border-gray-200 hover:bg-blue-50 transition-colors ${row.bg}`}>
+                  <td className="px-6 py-4 font-bold font-mono text-hku-blue">{row.forma}</td>
+                  <td className="px-6 py-4 text-sm text-gray-700">{row.ref}</td>
+                  <td className="px-6 py-4 text-sm italic text-gray-600">{row.ex}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-amber-50 border-l-4 border-amber-400 p-5 rounded-xl flex items-start">
+          <AlertTriangle className="w-6 h-6 text-amber-500 mr-3 mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="font-bold text-amber-800 mb-1">Nota importante</p>
+            <p className="text-sm text-amber-700">
+              Usamos <em>el</em> o <em>la</em> cuando nos referimos a personas, animales o cosas que ya se mencionaron
+              o que el contexto deja claras. Por ejemplo, en una tienda de ropa diríamos:{' '}
+              <strong>«Me gusta <em>la</em> (camiseta) que tiene el corazón»</strong>.
+            </p>
+          </div>
+        </div>
       </section>
     </div>
   );
