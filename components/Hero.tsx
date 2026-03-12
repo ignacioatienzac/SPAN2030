@@ -39,10 +39,9 @@ export const Hero: React.FC = () => {
 
           <div className="relative">
             <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
-               {/* Using a placeholder image related to studying/architecture similar to HKU */}
               <img 
-                src="https://picsum.photos/800/600?grayscale" 
-                alt="University of Hong Kong Campus vibe" 
+                src="images/imagen-portada.png" 
+                alt="Portada SPAN2030" 
                 className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-hku-blue/20 to-transparent pointer-events-none"></div>
