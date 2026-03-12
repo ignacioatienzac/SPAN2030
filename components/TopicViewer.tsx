@@ -1845,7 +1845,7 @@ const VerbsContent: React.FC = () => {
 const SerEstarHaberContent: React.FC = () => {
   return (
     <div className="space-y-12 text-gray-700 font-sans">
-      {/* 1. El Verbo SER */
+      {/* 1. El Verbo SER */}
       <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
         <h2 className="text-3xl font-bold text-hku-blue mb-6 flex items-center font-serif">
           <Layers className="mr-3" size={32} /> 1. El Verbo SER: Definición e Identidad
