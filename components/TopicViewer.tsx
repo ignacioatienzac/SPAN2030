@@ -7935,16 +7935,58 @@ const VerbsPractice: React.FC = () => {
 
 // --- SER, ESTAR Y HABER PRACTICE (Topic 2-1) ---
 const SerEstarHaberPractice: React.FC = () => {
-  // ── Bloque 1: completar frases ──
+  // ── Bloque 1: Usos del verbo SER ──
+  const serOpts = ['Definir conceptos', 'Clasificar objetos', 'Características propias', 'Identificar', 'Valorar acciones'];
+  const b1SerItems = [
+    { id: 's1', verb: 'es', before: 'El perro ', after: ' un animal doméstico con cuatro patas y una cola.', sol: 'Definir conceptos', explanation: 'Se usa para explicar qué es algo de manera general.' },
+    { id: 's2', verb: 'es', before: 'La Tierra ', after: ' un planeta.', sol: 'Clasificar objetos', explanation: 'Sitúa a la Tierra dentro de una categoría específica (planetas).' },
+    { id: 's3', verb: 'es', before: 'Julio César ', after: ' el gato de Ainhoa.', sol: 'Identificar', explanation: 'Sirve para señalar exactamente a qué objeto o ser nos referimos entre otros.' },
+    { id: 's4', verb: 'es', before: 'La Tierra ', after: ' redonda.', sol: 'Características propias', explanation: 'Describe una cualidad intrínseca o física del objeto.' },
+    { id: 's5', verb: 'es', before: 'Hacer deporte ', after: ' bueno para la salud.', sol: 'Valorar acciones', explanation: 'Se utiliza para dar una opinión o juicio sobre una situación o actividad.' },
+    { id: 's6', verb: 'es', before: 'Un planeta ', after: ' un astro sin luz que puede tener satélites.', sol: 'Definir conceptos', explanation: 'Proporciona la definición técnica de lo que es un planeta.' },
+    { id: 's7', verb: 'es', before: 'Julio César ', after: ' un gato.', sol: 'Clasificar objetos', explanation: 'Clasifica al sujeto (Julio César) dentro del grupo de los gatos.' },
+    { id: 's8', verb: 'es', before: 'La Tierra ', after: ' el tercer planeta del sistema solar.', sol: 'Identificar', explanation: 'Determina la identidad única de la Tierra por su posición en el sistema solar.' },
+  ];
+  const [b1SerAnswers, setB1SerAnswers] = useState<Record<string, string>>({});
+  const [b1SerResults, setB1SerResults] = useState<Record<string, boolean | null>>({});
+  const checkB1Ser = () => {
+    const r: Record<string, boolean | null> = {};
+    b1SerItems.forEach(item => { r[item.id] = b1SerAnswers[item.id] === item.sol; });
+    setB1SerResults(r);
+  };
+  const resetB1Ser = () => { setB1SerAnswers({}); setB1SerResults({}); };
+
+  // ── Bloque 2: Usos del verbo ESTAR ──
+  const estarOpts = ['Localización y ubicación', 'Posición física o estado', 'Acciones en curso', 'Acciones terminadas'];
+  const b2EstarItems = [
+    { id: 'e1', verb: 'Está', before: '', after: ' debajo de la mesa.', sol: 'Localización y ubicación', explanation: 'Indica el lugar físico donde se encuentra algo respecto a otro objeto.' },
+    { id: 'e2', verb: 'Está', before: '', after: ' sentado.', sol: 'Posición física o estado', explanation: 'Describe la postura corporal del sujeto.' },
+    { id: 'e3', verb: 'Estoy', before: '', after: ' abriendo la tienda.', sol: 'Acciones en curso', explanation: 'Usa la estructura estar + gerundio para hablar de una acción que no ha terminado.' },
+    { id: 'e4', verb: 'está', before: 'La tienda ', after: ' abierta.', sol: 'Acciones terminadas', explanation: 'Usa la estructura estar + participio para describir el estado resultante de una acción ya finalizada.' },
+    { id: 'e5', verb: 'Está', before: '', after: ' asustado.', sol: 'Posición física o estado', explanation: 'Describe un estado anímico o emocional temporal.' },
+    { id: 'e6', verb: 'Está', before: '', after: ' cerca.', sol: 'Localización y ubicación', explanation: 'Expresa la distancia o posición espacial.' },
+    { id: 'e7', verb: 'Está', before: '', after: ' dormido.', sol: 'Posición física o estado', explanation: 'Indica un estado físico temporal del sujeto.' },
+    { id: 'e8', verb: 'Está', before: '', after: ' en el árbol.', sol: 'Localización y ubicación', explanation: 'Señala el lugar donde se ubica el sujeto en ese momento.' },
+  ];
+  const [b2EstarAnswers, setB2EstarAnswers] = useState<Record<string, string>>({});
+  const [b2EstarResults, setB2EstarResults] = useState<Record<string, boolean | null>>({});
+  const checkB2Estar = () => {
+    const r: Record<string, boolean | null> = {};
+    b2EstarItems.forEach(item => { r[item.id] = b2EstarAnswers[item.id] === item.sol; });
+    setB2EstarResults(r);
+  };
+  const resetB2Estar = () => { setB2EstarAnswers({}); setB2EstarResults({}); };
+
+  // ── Bloque 3: completar frases ──
   const b1Items = [
-    { id: '1', before: 'En esta calle', after: 'tres farmacias muy antiguas.', sols: ['hay'], note: 'presente' },
-    { id: '2', before: 'Mi hermano', after: 'médico en un hospital de Madrid.', sols: ['es'], note: 'presente' },
-    { id: '3', before: 'La conferencia', after: 'en CRT-5.24.', sols: ['es'], note: 'presente' },
-    { id: '4', before: 'El lunes', after: 'Navidad y todavía no tengo los regalos.', sols: ['es'], note: 'presente' },
-    { id: '5', before: 'El ejercicio de matemáticas', after: 'muy fácil.', sols: ['ha sido'], note: 'pretérito perfecto' },
-    { id: '6', before: 'La tienda', after: 'cerrada los domingos.', sols: ['está'], note: 'presente' },
-    { id: '7', before: 'Antes, en este parque', after: 'muchos árboles centenarios.', sols: ['había'], note: 'pretérito imperfecto' },
-    { id: '8', before: 'Rodolfo', after: 'cubano, pero ahora vive en España.', sols: ['es'], note: 'presente' },
+    { id: '1', before: 'En esta calle', after: 'tres farmacias muy antiguas.', sols: ['hay'], note: 'presente', explanation: 'expresa existencia' },
+    { id: '2', before: 'Mi hermano', after: 'médico en un hospital de Madrid.', sols: ['es'], note: 'presente', explanation: 'se identifica la profesión de la persona' },
+    { id: '3', before: 'La conferencia', after: 'en CRT-5.24.', sols: ['es'], note: 'presente', explanation: 'se identifica el lugar donde ocurre la conferencia' },
+    { id: '4', before: 'El lunes', after: 'Navidad y todavía no tengo los regalos.', sols: ['es'], note: 'presente', explanation: 'identifica qué día es el lunes' },
+    { id: '5', before: 'El ejercicio de matemáticas', after: 'muy fácil.', sols: ['ha sido'], note: 'pretérito perfecto', explanation: 'valora la dificultad del examen' },
+    { id: '6', before: 'La tienda', after: 'cerrada los domingos.', sols: ['está'], note: 'presente', explanation: 'acción terminada' },
+    { id: '7', before: 'Antes, en este parque', after: 'muchos árboles centenarios.', sols: ['había'], note: 'pretérito imperfecto', explanation: 'existencia' },
+    { id: '8', before: 'Rodolfo', after: 'cubano, pero ahora vive en España.', sols: ['es'], note: 'presente', explanation: 'procedencia' },
   ];
 
   const [b1Answers, setB1Answers] = useState<Record<string, string>>({});
@@ -7968,7 +8010,7 @@ const SerEstarHaberPractice: React.FC = () => {
       : 'border-red-500 bg-red-50'
   }`;
 
-  // ── Bloque 2: opción múltiple ──
+  // ── Bloque 4: opción múltiple ──
   const b2Items = [
     {
       id: '1',
@@ -8037,7 +8079,7 @@ const SerEstarHaberPractice: React.FC = () => {
     return 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300';
   };
 
-  // ── Bloque 3: auxiliar vs impersonal ──
+  // ── Bloque 5: auxiliar vs impersonal ──
   const b3Items = [
     { id: '1', text: 'Eugenia no ha venido a trabajar hoy.', sol: 'Auxiliar', note: 'Pretérito Perfecto' },
     { id: '2', text: 'Ayer hubo un problema con el ordenador.', sol: 'Impersonal', note: 'Existencia – Pretérito Indefinido' },
@@ -8067,80 +8109,266 @@ const SerEstarHaberPractice: React.FC = () => {
     return 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300';
   };
 
+  // helper: button class for SER/ESTAR dropdown blocks
+  const dropBtnCls = (answers: Record<string, string>, results: Record<string, boolean | null>, id: string, opt: string) => {
+    const selected = answers[id] === opt;
+    if (selected) {
+      if (results[id] === true)  return 'bg-green-100 border-green-500 text-green-800';
+      if (results[id] === false) return 'bg-red-100 border-red-500 text-red-800';
+      return 'bg-blue-100 border-blue-500 text-blue-800';
+    }
+    return 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300';
+  };
+
   return (
     <div className="space-y-10">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-hku-blue to-blue-700 text-white p-8 rounded-2xl shadow-lg">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <h2 className="text-3xl font-bold mb-3 flex items-center">
-              <Pencil className="mr-3" size={32} />
-              Práctica: Ser, Estar y Haber
-            </h2>
-            <p className="text-blue-100 text-lg">
-              Pon a prueba tu conocimiento sobre los usos de <em>ser</em>, <em>estar</em> y <em>haber</em> con estos tres bloques de ejercicios.
-            </p>
-          </div>
-          <button
-            onClick={() => setShowRespuestas(!showRespuestas)}
-            className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg font-semibold transition-all border border-white/30 text-sm whitespace-nowrap mt-1"
+      {/* Modal de respuestas */}
+      {showRespuestas && (
+        <div
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 overflow-y-auto py-10 px-4"
+          onClick={() => setShowRespuestas(false)}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-8 space-y-6"
+            onClick={e => e.stopPropagation()}
           >
-            <Eye size={16} />
-            {showRespuestas ? 'Ocultar respuestas' : 'Ver respuestas'}
-          </button>
-        </div>
+            <div className="flex items-center justify-between border-b pb-4">
+              <h3 className="text-xl font-bold text-hku-ash flex items-center gap-2">
+                <Eye size={22} className="text-hku-blue" /> Respuestas
+              </h3>
+              <button
+                onClick={() => setShowRespuestas(false)}
+                className="text-gray-400 hover:text-gray-600 text-2xl leading-none font-bold"
+                aria-label="Cerrar"
+              >
+                ×
+              </button>
+            </div>
 
-        {showRespuestas && (
-          <div className="mt-6 bg-white/10 rounded-xl p-5 border border-white/20 space-y-5 text-sm">
+            {/* Bloque 1 SER */}
             <div>
-              <p className="font-bold text-white mb-2 uppercase tracking-wide text-xs">Bloque 1 – Completar frases</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {b1Items.map((item, idx) => (
-                  <div key={item.id} className="bg-white/10 rounded-lg px-3 py-2">
-                    <span className="font-bold text-blue-200 mr-1">{idx + 1}.</span>
-                    <span className="text-white font-semibold">{item.sols[0]}</span>
-                    <span className="text-blue-200 italic ml-1">({item.note})</span>
+              <p className="font-bold text-hku-blue mb-3 uppercase tracking-wide text-xs">Bloque 1 – Usos del verbo SER</p>
+              <div className="space-y-2">
+                {b1SerItems.map((item, idx) => (
+                  <div key={item.id} className="bg-blue-50 rounded-lg px-4 py-3">
+                    <p className="text-sm text-gray-700">
+                      <span className="font-bold text-hku-blue mr-1">{idx + 1}.</span>
+                      <span className="italic text-gray-500">{item.before}<strong className="text-hku-blue not-italic">{item.verb}</strong>{item.after}</span>
+                    </p>
+                    <p className="text-sm mt-1">
+                      <span className="font-semibold text-green-700">{item.sol}</span>
+                      <span className="text-gray-500 ml-2">— {item.explanation}</span>
+                    </p>
                   </div>
                 ))}
               </div>
             </div>
+
+            {/* Bloque 2 ESTAR */}
             <div>
-              <p className="font-bold text-white mb-2 uppercase tracking-wide text-xs">Bloque 2 – Opción múltiple</p>
+              <p className="font-bold text-hku-green mb-3 uppercase tracking-wide text-xs">Bloque 2 – Usos del verbo ESTAR</p>
+              <div className="space-y-2">
+                {b2EstarItems.map((item, idx) => (
+                  <div key={item.id} className="bg-green-50 rounded-lg px-4 py-3">
+                    <p className="text-sm text-gray-700">
+                      <span className="font-bold text-hku-green mr-1">{idx + 1}.</span>
+                      <span className="italic text-gray-500">{item.before}<strong className="text-hku-green not-italic">{item.verb}</strong>{item.after}</span>
+                    </p>
+                    <p className="text-sm mt-1">
+                      <span className="font-semibold text-green-700">{item.sol}</span>
+                      <span className="text-gray-500 ml-2">— {item.explanation}</span>
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bloque 3 completar */}
+            <div>
+              <p className="font-bold text-gray-600 mb-3 uppercase tracking-wide text-xs">Bloque 3 – Completar frases</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {b1Items.map((item, idx) => (
+                  <div key={item.id} className="bg-gray-50 rounded-lg px-3 py-2 text-sm">
+                    <span className="font-bold text-gray-500 mr-1">{idx + 1}.</span>
+                    <span className="font-semibold text-hku-blue">{item.sols[0]}</span>
+                    <span className="text-gray-400 italic ml-2">({item.note}) — {item.explanation}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bloque 4 opción múltiple */}
+            <div>
+              <p className="font-bold text-gray-600 mb-3 uppercase tracking-wide text-xs">Bloque 4 – Opción múltiple</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {b2Items.map((item, idx) => {
                   const correct = item.opts.find(o => o.k === item.sol);
                   return (
-                    <div key={item.id} className="bg-white/10 rounded-lg px-3 py-2">
-                      <span className="font-bold text-blue-200 mr-1">{idx + 1}.</span>
-                      <span className="text-blue-200 mr-1">{item.sol})</span>
-                      <span className="text-white">{correct?.text}</span>
+                    <div key={item.id} className="bg-gray-50 rounded-lg px-3 py-2 text-sm">
+                      <span className="font-bold text-gray-500 mr-1">{idx + 1}.</span>
+                      <span className="text-hku-green font-semibold">{item.sol})</span>
+                      <span className="text-gray-700 ml-1">{correct?.text}</span>
                     </div>
                   );
                 })}
               </div>
             </div>
+
+            {/* Bloque 5 auxiliar vs impersonal */}
             <div>
-              <p className="font-bold text-white mb-2 uppercase tracking-wide text-xs">Bloque 3 – Auxiliar vs. Impersonal</p>
+              <p className="font-bold text-indigo-600 mb-3 uppercase tracking-wide text-xs">Bloque 5 – Auxiliar vs. Impersonal</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {b3Items.map((item, idx) => (
-                  <div key={item.id} className="bg-white/10 rounded-lg px-3 py-2">
-                    <span className="font-bold text-blue-200 mr-1">{idx + 1}.</span>
-                    <span className="text-white font-semibold">{item.sol}</span>
-                    <span className="text-blue-200 italic ml-1">({item.note})</span>
+                  <div key={item.id} className="bg-indigo-50 rounded-lg px-3 py-2 text-sm">
+                    <span className="font-bold text-indigo-400 mr-1">{idx + 1}.</span>
+                    <span className="font-semibold text-indigo-700">{item.sol}</span>
+                    <span className="text-gray-400 italic ml-2">({item.note})</span>
                   </div>
                 ))}
               </div>
             </div>
+
+            <div className="pt-2 border-t text-right">
+              <button
+                onClick={() => setShowRespuestas(false)}
+                className="bg-hku-blue hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors text-sm"
+              >
+                Cerrar
+              </button>
+            </div>
           </div>
-        )}
+        </div>
+      )}
+
+      {/* Header */}
+      <div className="bg-gradient-to-r from-hku-blue to-blue-700 text-white p-8 rounded-2xl shadow-lg">
+        <h2 className="text-3xl font-bold mb-3 flex items-center">
+          <Pencil className="mr-3" size={32} />
+          Práctica: Ser, Estar y Haber
+        </h2>
+        <p className="text-blue-100 text-lg">
+          Pon a prueba tu conocimiento sobre los usos de <em>ser</em>, <em>estar</em> y <em>haber</em> con estos cinco bloques de ejercicios.
+        </p>
       </div>
 
-      {/* Bloque 1 */}
+      {/* Botón Ver respuestas */}
+      <div className="flex justify-end">
+        <button
+          onClick={() => setShowRespuestas(true)}
+          className="flex items-center gap-2 bg-hku-blue hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-semibold transition-colors shadow text-sm"
+        >
+          <Eye size={16} /> Ver respuestas
+        </button>
+      </div>
+
+      {/* Bloque 1: Usos de SER */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="mb-6">
+          <h3 className="text-2xl font-bold text-hku-ash mb-2 flex items-center">
+            <Layers className="mr-2 text-hku-blue" size={28} />
+            Bloque 1: Usos del verbo SER
+          </h3>
+          <p className="text-gray-600">
+            Clasifica el uso del verbo <strong>ser</strong> en cada frase. Selecciona la opción correcta del desplegable.
+          </p>
+        </div>
+
+        <div className="bg-blue-50 p-6 rounded-xl border-l-4 border-hku-blue">
+          <div className="space-y-4">
+            {b1SerItems.map((item, idx) => (
+              <div key={item.id} className="bg-white p-4 rounded-lg shadow-sm border border-blue-100">
+                <p className="text-gray-800 text-sm md:text-base mb-3">
+                  <span className="font-bold text-hku-blue mr-1">{idx + 1}.</span>
+                  {item.before}<strong className="text-hku-blue">{item.verb}</strong>{item.after}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {serOpts.map(opt => (
+                    <button
+                      key={opt}
+                      onClick={() => setB1SerAnswers(prev => ({ ...prev, [item.id]: opt }))}
+                      className={`px-3 py-1.5 rounded-lg border-2 text-xs font-medium transition-all ${dropBtnCls(b1SerAnswers, b1SerResults, item.id, opt)}`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <button
+              onClick={checkB1Ser}
+              className="bg-hku-blue hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md"
+            >
+              <CheckCircle size={18} className="mr-2" /> Comprobar
+            </button>
+            <button
+              onClick={resetB1Ser}
+              className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md"
+            >
+              <RefreshCw size={18} className="mr-2" /> Reiniciar
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Bloque 2: Usos de ESTAR */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="mb-6">
+          <h3 className="text-2xl font-bold text-hku-ash mb-2 flex items-center">
+            <Layers className="mr-2 text-hku-green" size={28} />
+            Bloque 2: Usos del verbo ESTAR
+          </h3>
+          <p className="text-gray-600">
+            Clasifica el uso del verbo <strong>estar</strong> en cada frase. Selecciona la opción correcta del desplegable.
+          </p>
+        </div>
+
+        <div className="bg-green-50 p-6 rounded-xl border-l-4 border-hku-green">
+          <div className="space-y-4">
+            {b2EstarItems.map((item, idx) => (
+              <div key={item.id} className="bg-white p-4 rounded-lg shadow-sm border border-green-100">
+                <p className="text-gray-800 text-sm md:text-base mb-3">
+                  <span className="font-bold text-hku-green mr-1">{idx + 1}.</span>
+                  {item.before}<strong className="text-hku-green">{item.verb}</strong>{item.after}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {estarOpts.map(opt => (
+                    <button
+                      key={opt}
+                      onClick={() => setB2EstarAnswers(prev => ({ ...prev, [item.id]: opt }))}
+                      className={`px-3 py-1.5 rounded-lg border-2 text-xs font-medium transition-all ${dropBtnCls(b2EstarAnswers, b2EstarResults, item.id, opt)}`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <button
+              onClick={checkB2Estar}
+              className="bg-hku-green hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md"
+            >
+              <CheckCircle size={18} className="mr-2" /> Comprobar
+            </button>
+            <button
+              onClick={resetB2Estar}
+              className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md"
+            >
+              <RefreshCw size={18} className="mr-2" /> Reiniciar
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Bloque 3: Completar frases */}
       <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
         <div className="mb-6">
           <h3 className="text-2xl font-bold text-hku-ash mb-2 flex items-center">
             <PenTool className="mr-2 text-hku-blue" size={28} />
-            Bloque 1: Completar frases
+            Bloque 3: Completar frases
           </h3>
           <p className="text-gray-600">
             Escribe la forma correcta de <strong>ser</strong>, <strong>estar</strong> o <strong>haber</strong> en el tiempo verbal indicado entre paréntesis.
@@ -8184,12 +8412,12 @@ const SerEstarHaberPractice: React.FC = () => {
         </div>
       </section>
 
-      {/* Bloque 2 */}
+      {/* Bloque 4: Opción múltiple */}
       <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
         <div className="mb-6">
           <h3 className="text-2xl font-bold text-hku-ash mb-2 flex items-center">
             <Split className="mr-2 text-hku-green" size={28} />
-            Bloque 2: Opción múltiple (Cambios de significado)
+            Bloque 4: Opción múltiple (Cambios de significado)
           </h3>
           <p className="text-gray-600">
             Selecciona la opción que mejor describa el significado de la frase según el uso de <em>ser</em> o <em>estar</em>.
@@ -8235,12 +8463,12 @@ const SerEstarHaberPractice: React.FC = () => {
         </div>
       </section>
 
-      {/* Bloque 3 */}
+      {/* Bloque 5: Auxiliar vs. Impersonal */}
       <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
         <div className="mb-6">
           <h3 className="text-2xl font-bold text-hku-ash mb-2 flex items-center">
             <GitBranch className="mr-2 text-indigo-600" size={28} />
-            Bloque 3: Haber Auxiliar vs. Haber Impersonal
+            Bloque 5: Haber Auxiliar vs. Haber Impersonal
           </h3>
           <p className="text-gray-600">
             Decide si la forma del verbo <strong>haber</strong> se usa como <strong>auxiliar</strong> (tiempo compuesto) o para expresar <strong>existencia</strong> (forma impersonal).
