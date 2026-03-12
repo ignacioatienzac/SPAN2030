@@ -203,6 +203,8 @@ export const TopicViewer: React.FC<TopicViewerProps> = ({ topic, onBack }) => {
                   <AdjectivesPractice />
                 ) : isVerbs ? (
                   <VerbsPractice />
+                ) : isSerEstarHaber ? (
+                  <SerEstarHaberPractice />
                 ) : (
                   <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-gray-200 shadow-sm border-l-4 border-l-hku-green">
                     <div className="bg-green-50 p-4 rounded-full mb-4">
@@ -7931,6 +7933,324 @@ const VerbsPractice: React.FC = () => {
             <strong>Consejo:</strong> Revisa la teoría siempre que dudes. Presta especial atención
             a las formas irregulares (gerundios como <em>sonriendo</em>, <em>pidiendo</em>) y recuerda
             que el aspecto perfectivo implica una acción completada, mientras que el imperfectivo la presenta como en curso o habitual.
+          </span>
+        </p>
+      </section>
+    </div>
+  );
+};
+
+// --- SER, ESTAR Y HABER PRACTICE (Topic 2-1) ---
+const SerEstarHaberPractice: React.FC = () => {
+  // ── Bloque 1: completar frases ──
+  const b1Items = [
+    { id: '1', before: 'En esta calle', after: 'tres farmacias muy antiguas.', sols: ['hay'], note: 'haber – presente' },
+    { id: '2', before: 'Mi hermano', after: 'médico en un hospital de Madrid.', sols: ['es'], note: 'ser – presente' },
+    { id: '3', before: '¿Sabes dónde', after: 'las llaves del coche?', sols: ['están'], note: 'estar – presente' },
+    { id: '4', before: 'El lunes', after: 'Navidad y todavía no tengo los regalos.', sols: ['es'], note: 'ser – presente' },
+    { id: '5', before: 'El ejercicio de matemáticas', after: 'muy fácil.', sols: ['ha sido'], note: 'ser – pretérito perfecto' },
+    { id: '6', before: 'La tienda', after: 'cerrada los domingos.', sols: ['está'], note: 'estar – presente' },
+    { id: '7', before: 'Antes, en este parque', after: 'muchos árboles centenarios.', sols: ['había'], note: 'haber – pretérito imperfecto' },
+    { id: '8', before: 'Rodolfo', after: 'cubano, pero ahora vive en España.', sols: ['es'], note: 'ser – presente' },
+  ];
+
+  const [b1Answers, setB1Answers] = useState<Record<string, string>>({});
+  const [b1Results, setB1Results] = useState<Record<string, boolean | null>>({});
+
+  const checkB1 = () => {
+    const r: Record<string, boolean | null> = {};
+    b1Items.forEach(item => {
+      const ans = (b1Answers[item.id] || '').trim().toLowerCase();
+      r[item.id] = item.sols.map(s => s.toLowerCase()).includes(ans);
+    });
+    setB1Results(r);
+  };
+  const resetB1 = () => { setB1Answers({}); setB1Results({}); };
+
+  const b1InputCls = (id: string) => `px-3 py-1.5 border-2 rounded-lg focus:outline-none text-sm min-w-[120px] mx-2 ${
+    b1Results[id] == null
+      ? 'border-gray-300 focus:border-hku-blue'
+      : b1Results[id]
+      ? 'border-green-500 bg-green-50'
+      : 'border-red-500 bg-red-50'
+  }`;
+
+  // ── Bloque 2: opción múltiple ──
+  const b2Items = [
+    {
+      id: '1',
+      sentence: '"Esa tarta está muy rica".',
+      opts: [
+        { k: 'a', text: 'La tarta tiene mucho dinero.' },
+        { k: 'b', text: 'La tarta tiene un sabor delicioso.' },
+      ],
+      sol: 'b',
+    },
+    {
+      id: '2',
+      sentence: '"Manuel es muy listo".',
+      opts: [
+        { k: 'a', text: 'Manuel es una persona inteligente.' },
+        { k: 'b', text: 'Manuel está preparado para salir.' },
+      ],
+      sol: 'a',
+    },
+    {
+      id: '3',
+      sentence: '"Mi jefe está negro hoy".',
+      opts: [
+        { k: 'a', text: 'Mi jefe es de color negro.' },
+        { k: 'b', text: 'Mi jefe está muy enfadado o harto de algo.' },
+      ],
+      sol: 'b',
+    },
+    {
+      id: '4',
+      sentence: '"El color de su coche es verde".',
+      opts: [
+        { k: 'a', text: 'El coche es de color verde.' },
+        { k: 'b', text: 'El coche es inmaduro o inexperto.' },
+      ],
+      sol: 'a',
+    },
+    {
+      id: '5',
+      sentence: '"Esa chica es muy buena".',
+      opts: [
+        { k: 'a', text: 'Es una buena persona.' },
+        { k: 'b', text: 'Tiene un físico atractivo.' },
+      ],
+      sol: 'a',
+    },
+  ];
+
+  const [b2Answers, setB2Answers] = useState<Record<string, string>>({});
+  const [b2Results, setB2Results] = useState<Record<string, boolean | null>>({});
+
+  const checkB2 = () => {
+    const r: Record<string, boolean | null> = {};
+    b2Items.forEach(item => { r[item.id] = b2Answers[item.id] === item.sol; });
+    setB2Results(r);
+  };
+  const resetB2 = () => { setB2Answers({}); setB2Results({}); };
+
+  const b2BtnCls = (id: string, k: string) => {
+    const selected = b2Answers[id] === k;
+    if (selected) {
+      if (b2Results[id] === true)  return 'bg-green-100 border-green-500 text-green-800';
+      if (b2Results[id] === false) return 'bg-red-100 border-red-500 text-red-800';
+      return 'bg-blue-100 border-blue-500 text-blue-800';
+    }
+    return 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300';
+  };
+
+  // ── Bloque 3: auxiliar vs impersonal ──
+  const b3Items = [
+    { id: '1', text: 'Eugenia no ha venido a trabajar hoy.', sol: 'Auxiliar', note: 'Pretérito Perfecto' },
+    { id: '2', text: 'Esta mañana ha habido un problema con el ordenador.', sol: 'Impersonal', note: 'Existencia – Pretérito Perfecto' },
+    { id: '3', text: 'Cuando llegó la policía, los ladrones ya habían huido.', sol: 'Auxiliar', note: 'Pluscuamperfecto' },
+    { id: '4', text: 'Dentro de unos años ya no habrá ordenadores tan grandes.', sol: 'Impersonal', note: 'Existencia – Futuro' },
+    { id: '5', text: '¿Has ido alguna vez al concierto de "Los Repanocha"?', sol: 'Auxiliar', note: 'Pretérito Perfecto' },
+  ];
+
+  const [b3Answers, setB3Answers] = useState<Record<string, string>>({});
+  const [b3Results, setB3Results] = useState<Record<string, boolean | null>>({});
+
+  const checkB3 = () => {
+    const r: Record<string, boolean | null> = {};
+    b3Items.forEach(item => { r[item.id] = b3Answers[item.id] === item.sol; });
+    setB3Results(r);
+  };
+  const resetB3 = () => { setB3Answers({}); setB3Results({}); };
+
+  const b3BtnCls = (id: string, opt: string) => {
+    const selected = b3Answers[id] === opt;
+    if (selected) {
+      if (b3Results[id] === true)  return 'bg-green-100 border-green-500 text-green-800';
+      if (b3Results[id] === false) return 'bg-red-100 border-red-500 text-red-800';
+      return 'bg-indigo-100 border-indigo-500 text-indigo-800';
+    }
+    return 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300';
+  };
+
+  return (
+    <div className="space-y-10">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-hku-blue to-blue-700 text-white p-8 rounded-2xl shadow-lg">
+        <h2 className="text-3xl font-bold mb-3 flex items-center">
+          <Pencil className="mr-3" size={32} />
+          Práctica: Ser, Estar y Haber
+        </h2>
+        <p className="text-blue-100 text-lg">
+          Pon a prueba tu conocimiento sobre los usos de <em>ser</em>, <em>estar</em> y <em>haber</em> con estos tres bloques de ejercicios.
+        </p>
+      </div>
+
+      {/* Bloque 1 */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="mb-6">
+          <h3 className="text-2xl font-bold text-hku-ash mb-2 flex items-center">
+            <PenTool className="mr-2 text-hku-blue" size={28} />
+            Bloque 1: Completar frases
+          </h3>
+          <p className="text-gray-600">
+            Escribe la forma correcta de <strong>ser</strong>, <strong>estar</strong> o <strong>haber</strong> en el tiempo verbal indicado entre paréntesis.
+          </p>
+        </div>
+
+        <div className="bg-blue-50 p-6 rounded-xl border-l-4 border-hku-blue">
+          <div className="space-y-5">
+            {b1Items.map((item, idx) => (
+              <div key={item.id} className="bg-white p-4 rounded-lg shadow-sm border border-blue-100">
+                <div className="flex flex-wrap items-center gap-1 text-gray-800 text-sm md:text-base leading-relaxed">
+                  <span className="font-bold text-hku-blue mr-1">{idx + 1}.</span>
+                  <span>{item.before}</span>
+                  <input
+                    type="text"
+                    value={b1Answers[item.id] || ''}
+                    onChange={e => setB1Answers(prev => ({ ...prev, [item.id]: e.target.value }))}
+                    placeholder="_______"
+                    className={b1InputCls(item.id)}
+                  />
+                  <span>{item.after}</span>
+                </div>
+                <p className="mt-1 text-xs text-gray-400 italic">{item.note}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <button
+              onClick={checkB1}
+              className="bg-hku-blue hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md"
+            >
+              <CheckCircle size={18} className="mr-2" /> Comprobar
+            </button>
+            <button
+              onClick={resetB1}
+              className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md"
+            >
+              <RefreshCw size={18} className="mr-2" /> Reiniciar
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Bloque 2 */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="mb-6">
+          <h3 className="text-2xl font-bold text-hku-ash mb-2 flex items-center">
+            <Split className="mr-2 text-hku-green" size={28} />
+            Bloque 2: Opción múltiple (Cambios de significado)
+          </h3>
+          <p className="text-gray-600">
+            Selecciona la opción que mejor describa el significado de la frase según el uso de <em>ser</em> o <em>estar</em>.
+          </p>
+        </div>
+
+        <div className="bg-green-50 p-6 rounded-xl border-l-4 border-hku-green">
+          <div className="space-y-6">
+            {b2Items.map((item, idx) => (
+              <div key={item.id} className="bg-white p-5 rounded-lg border border-green-100 shadow-sm">
+                <p className="text-gray-800 font-semibold mb-4">
+                  <span className="font-bold text-hku-green mr-2">{idx + 1}.</span>
+                  <span className="italic">{item.sentence}</span>
+                </p>
+                <div className="space-y-2">
+                  {item.opts.map(opt => (
+                    <button
+                      key={opt.k}
+                      onClick={() => setB2Answers(prev => ({ ...prev, [item.id]: opt.k }))}
+                      className={`w-full text-left px-4 py-3 rounded-lg border-2 text-sm font-medium transition-all ${b2BtnCls(item.id, opt.k)}`}
+                    >
+                      <span className="font-bold mr-2">{opt.k})</span>{opt.text}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <button
+              onClick={checkB2}
+              className="bg-hku-green hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md"
+            >
+              <CheckCircle size={18} className="mr-2" /> Comprobar
+            </button>
+            <button
+              onClick={resetB2}
+              className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md"
+            >
+              <RefreshCw size={18} className="mr-2" /> Reiniciar
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Bloque 3 */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="mb-6">
+          <h3 className="text-2xl font-bold text-hku-ash mb-2 flex items-center">
+            <GitBranch className="mr-2 text-indigo-600" size={28} />
+            Bloque 3: Haber Auxiliar vs. Haber Impersonal
+          </h3>
+          <p className="text-gray-600">
+            Decide si la forma del verbo <strong>haber</strong> se usa como <strong>auxiliar</strong> (tiempo compuesto) o para expresar <strong>existencia</strong> (forma impersonal).
+          </p>
+        </div>
+
+        <div className="bg-indigo-50 p-6 rounded-xl border-l-4 border-indigo-500">
+          <div className="space-y-4">
+            {b3Items.map((item, idx) => (
+              <div key={item.id} className="bg-white p-5 rounded-lg border border-indigo-100 shadow-sm">
+                <p className="text-gray-800 font-medium mb-3">
+                  <span className="font-bold text-indigo-600 mr-2">{idx + 1}.</span>{item.text}
+                </p>
+                <div className="flex gap-3 flex-wrap">
+                  {['Auxiliar', 'Impersonal'].map(opt => (
+                    <button
+                      key={opt}
+                      onClick={() => setB3Answers(prev => ({ ...prev, [item.id]: opt }))}
+                      className={`px-5 py-2 rounded-lg border-2 text-sm font-medium transition-all ${b3BtnCls(item.id, opt)}`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                  {b3Results[item.id] !== undefined && b3Results[item.id] !== null && (
+                    <span className={`self-center text-xs font-semibold italic ${
+                      b3Results[item.id] ? 'text-green-600' : 'text-red-600'
+                    }`}>
+                      {b3Results[item.id] ? `✓ ${item.note}` : `✗ ${item.note}`}
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <button
+              onClick={checkB3}
+              className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md"
+            >
+              <CheckCircle size={18} className="mr-2" /> Comprobar
+            </button>
+            <button
+              onClick={resetB3}
+              className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md"
+            >
+              <RefreshCw size={18} className="mr-2" /> Reiniciar
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Nota final */}
+      <section className="bg-gradient-to-r from-blue-50 to-green-50 p-6 rounded-xl border-l-4 border-hku-blue">
+        <p className="text-gray-700 flex items-start">
+          <Lightbulb size={20} className="mr-2 text-hku-blue flex-shrink-0 mt-1" />
+          <span>
+            <strong>Consejo:</strong> Si dudas entre <em>ser</em> y <em>estar</em>, recuerda que <em>ser</em> define
+            características inherentes o permanentes, mientras que <em>estar</em> expresa estados o ubicaciones.
+            Para <em>haber</em> impersonal, fíjate en si hay un participio después: si lo hay, es auxiliar.
           </span>
         </p>
       </section>
