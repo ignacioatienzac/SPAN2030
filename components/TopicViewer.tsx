@@ -20,6 +20,7 @@ export const TopicViewer: React.FC<TopicViewerProps> = ({ topic, onBack }) => {
   const isNouns = topic.id === '1-3';
   const isAdjectives = topic.id === '1-4';
   const isVerbs = topic.id === '1-5';
+  const isSerEstarHaber = topic.id === '2-1';
 
   // Tabs configuration for Determinants
   const determinantsTabs = [
@@ -51,7 +52,7 @@ export const TopicViewer: React.FC<TopicViewerProps> = ({ topic, onBack }) => {
                 <ArrowLeft size={24} />
               </button>
               <div>
-                <span className="text-hku-green text-sm font-bold uppercase tracking-wider">Tema 1</span>
+                <span className="text-hku-green text-sm font-bold uppercase tracking-wider">{topic.id.startsWith('2-') ? 'Tema 2' : 'Tema 1'}</span>
                 <h1 className="text-2xl md:text-3xl font-serif font-bold text-hku-ash">{topic.title}</h1>
               </div>
             </div>
@@ -185,7 +186,8 @@ export const TopicViewer: React.FC<TopicViewerProps> = ({ topic, onBack }) => {
                 {isNouns && <NounsContent />}
                 {isAdjectives && <AdjectivesContent />}
                 {isVerbs && <VerbsContent />}
-                {!isMorphology && !isNouns && !isAdjectives && !isVerbs && (
+                {isSerEstarHaber && <SerEstarHaberContent />}
+                {!isMorphology && !isNouns && !isAdjectives && !isVerbs && !isSerEstarHaber && (
                   <div className="text-center py-20 bg-white rounded-2xl border border-gray-200 shadow-sm">
                     <p className="text-gray-500">Contenido disponible próximamente para {topic.title}.</p>
                   </div>
@@ -1832,6 +1834,298 @@ const VerbsContent: React.FC = () => {
             a cómo se usan los diferentes tiempos y modos en contextos reales.
           </span>
         </p>
+      </section>
+    </div>
+  );
+};
+
+// --- SER, ESTAR Y HABER CONTENT (Topic 2-1) ---
+const SerEstarHaberContent: React.FC = () => {
+  return (
+    <div className="space-y-12 text-gray-700 font-sans">
+      {/* Introducción */}
+      <section className="bg-gradient-to-r from-blue-50 to-green-50 p-8 rounded-2xl border-l-4 border-hku-blue">
+        <p className="text-lg text-gray-700 leading-relaxed">
+          Los verbos <strong>ser</strong>, <strong>estar</strong> y <strong>haber</strong> son tres de los más fundamentales del español.
+          Aunque todos pueden traducirse como formas del verbo «to be» en inglés, cada uno tiene
+          usos muy distintos que reflejan diferentes maneras de conceptualizar la realidad.
+        </p>
+      </section>
+
+      {/* 1. El Verbo SER */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-3xl font-bold text-hku-blue mb-6 flex items-center font-serif">
+          <Layers className="mr-3" size={32} /> 1. El Verbo SER: Definición e Identidad
+        </h2>
+        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          El verbo <strong>ser</strong> se utiliza principalmente para <strong>definir, clasificar e identificar</strong> personas,
+          objetos o conceptos de manera permanente o inherente.
+        </p>
+
+        {/* Usos principales */}
+        <h3 className="text-xl font-bold text-hku-ash mb-4 flex items-center">
+          <Key className="w-5 h-5 mr-2 text-hku-blue" /> Usos principales
+        </h3>
+        <div className="space-y-4 mb-8">
+          {[
+            {
+              title: 'Definir conceptos',
+              desc: 'Para dar la definición de algo.',
+              ex: '"Un gato es un felino doméstico".',
+            },
+            {
+              title: 'Clasificar objetos',
+              desc: 'Para situar algo dentro de una categoría.',
+              ex: '"La Tierra es un planeta".',
+            },
+            {
+              title: 'Características propias',
+              desc: 'Para describir cualidades intrínsecas como el color o la forma.',
+              ex: '"La Tierra es redonda" o "Julio César es blanco y marrón".',
+            },
+            {
+              title: 'Identificación',
+              desc: 'Para señalar un objeto específico entre otros.',
+              ex: '"La Tierra es el tercer planeta del sistema solar".',
+            },
+            {
+              title: 'Valorar acciones',
+              desc: 'Para dar una opinión sobre una situación.',
+              ex: '"Hacer deporte es bueno para la salud".',
+            },
+          ].map((item) => (
+            <div key={item.title} className="flex items-start bg-blue-50 p-4 rounded-xl border border-blue-100">
+              <CheckCircle className="w-5 h-5 text-hku-blue mr-3 mt-1 flex-shrink-0" />
+              <div>
+                <span className="font-bold text-hku-ash">{item.title}:</span>{' '}
+                <span className="text-gray-600">{item.desc}</span>
+                <div className="mt-1 text-sm italic text-gray-500">{item.ex}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Otras categorías comunes */}
+        <h3 className="text-xl font-bold text-hku-ash mb-4 flex items-center">
+          <Tag className="w-5 h-5 mr-2 text-hku-blue" /> Otras categorías comunes
+        </h3>
+        <div className="overflow-x-auto mb-6">
+          <table className="w-full border-collapse bg-white rounded-lg overflow-hidden shadow-sm">
+            <thead>
+              <tr className="bg-hku-blue text-white">
+                <th className="px-6 py-4 text-left font-semibold">Categoría</th>
+                <th className="px-6 py-4 text-left font-semibold">Ejemplo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { cat: 'Identidad', ex: '"Esa es María".' },
+                { cat: 'Carácter', ex: '"Manuel es muy tímido".' },
+                { cat: 'Procedencia', ex: '"Rodolfo es cubano".' },
+                { cat: 'Material', ex: '"¿Este anillo será de oro?".' },
+                { cat: 'Profesión', ex: '"Era médico".' },
+                { cat: 'Relaciones', ex: '"Es mi sobrino".' },
+                { cat: 'Fechas y Horas', ex: '"El lunes es Navidad" o "¿Ya son las cinco?".' },
+              ].map((row, i) => (
+                <tr key={row.cat} className={`border-b border-gray-200 hover:bg-blue-50 transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                  <td className="px-6 py-4 font-bold text-hku-ash">{row.cat}</td>
+                  <td className="px-6 py-4 italic text-gray-600">{row.ex}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Nota importante */}
+        <div className="bg-amber-50 border-l-4 border-amber-400 p-5 rounded-xl flex items-start">
+          <AlertTriangle className="w-6 h-6 text-amber-500 mr-3 mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="font-bold text-amber-800 mb-1">Nota importante</p>
+            <p className="text-sm text-amber-700">
+              En español <strong>no se usa el verbo ser para la edad</strong>; se utiliza el verbo <strong>tener</strong>.
+            </p>
+            <p className="mt-2 text-sm italic text-amber-600">Ejemplo: "Tengo veinte años".</p>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. El Verbo ESTAR */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-3xl font-bold text-hku-green mb-6 flex items-center font-serif">
+          <MapPin className="mr-3" size={32} /> 2. El Verbo ESTAR: Ubicación y Estados
+        </h2>
+        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          El verbo <strong>estar</strong> se centra en la <strong>localización espacial</strong> y en
+          <strong> estados temporales</strong> o resultantes de una acción.
+        </p>
+
+        <h3 className="text-xl font-bold text-hku-ash mb-4 flex items-center">
+          <Key className="w-5 h-5 mr-2 text-hku-green" /> Usos principales
+        </h3>
+        <div className="space-y-4">
+          {[
+            {
+              title: 'Localización y ubicación',
+              ex: '"Está debajo de la mesa" o "Está en el árbol".',
+            },
+            {
+              title: 'Posición física o estado',
+              ex: '"Está sentado", "Está dormido" o "Está asustado".',
+            },
+            {
+              title: 'Acciones en curso (estar + gerundio)',
+              desc: 'Describe una acción no terminada.',
+              ex: '"Estoy abriendo la tienda".',
+            },
+            {
+              title: 'Acciones terminadas (estar + participio)',
+              desc: 'Describe el estado resultante de una acción.',
+              ex: '"La tienda está abierta".',
+            },
+          ].map((item) => (
+            <div key={item.title} className="flex items-start bg-green-50 p-4 rounded-xl border border-green-100">
+              <CheckCircle className="w-5 h-5 text-hku-green mr-3 mt-1 flex-shrink-0" />
+              <div>
+                <span className="font-bold text-hku-ash">{item.title}:</span>{' '}
+                {item.desc && <span className="text-gray-600">{item.desc}</span>}
+                <div className="mt-1 text-sm italic text-gray-500">{item.ex}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 3. SER vs. ESTAR */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-3xl font-bold text-hku-ash mb-6 flex items-center font-serif">
+          <Split className="mr-3" size={32} /> 3. SER vs. ESTAR: Cambios de Significado
+        </h2>
+        <p className="text-lg text-gray-700 mb-8 leading-relaxed">
+          El uso de un verbo u otro con el mismo adjetivo puede <strong>cambiar drásticamente el sentido</strong> de la frase:
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[
+            {
+              adj: 'Rico',
+              ser: { label: 'Ser rico', desc: 'Tener mucho dinero.' },
+              estar: { label: 'Estar rico', desc: 'Que algo tiene un sabor delicioso.' },
+            },
+            {
+              adj: 'Bueno',
+              ser: { label: 'Ser bueno', desc: 'Ser una buena persona.' },
+              estar: { label: 'Estar bueno', desc: 'Tener un físico atractivo o que un alimento sabe bien.' },
+            },
+            {
+              adj: 'Negro',
+              ser: { label: 'Ser negro', desc: 'Referido al color.' },
+              estar: { label: 'Estar negro', desc: 'Estar muy sucio o estar harto/enfadado por algo.' },
+            },
+            {
+              adj: 'Verde',
+              ser: { label: 'Ser verde', desc: 'Referido al color.' },
+              estar: { label: 'Estar verde', desc: 'Estar inmaduro (fruta) o ser inexperto en algo.' },
+            },
+            {
+              adj: 'Listo',
+              ser: { label: 'Ser listo', desc: 'Ser inteligente.' },
+              estar: { label: 'Estar listo', desc: 'Estar preparado para algo.' },
+            },
+            {
+              adj: 'Claro',
+              ser: { label: 'Ser claro', desc: 'Referido a tonos de colores.' },
+              estar: { label: 'Estar claro', desc: 'Que algo se entiende sin dudas.' },
+            },
+          ].map((item) => (
+            <div key={item.adj} className="bg-gray-50 rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+              <div className="bg-hku-ash text-white px-5 py-3">
+                <span className="font-bold text-lg">{item.adj}</span>
+              </div>
+              <div className="divide-y divide-gray-200">
+                <div className="flex items-start p-4">
+                  <span className="inline-block bg-blue-100 text-hku-blue text-xs font-bold px-2 py-1 rounded mr-3 mt-0.5 min-w-[32px] text-center">SER</span>
+                  <div>
+                    <p className="font-semibold text-gray-800 text-sm">{item.ser.label}:</p>
+                    <p className="text-sm text-gray-600">{item.ser.desc}</p>
+                  </div>
+                </div>
+                <div className="flex items-start p-4">
+                  <span className="inline-block bg-green-100 text-hku-green text-xs font-bold px-2 py-1 rounded mr-3 mt-0.5 min-w-[32px] text-center">ESTAR</span>
+                  <div>
+                    <p className="font-semibold text-gray-800 text-sm">{item.estar.label}:</p>
+                    <p className="text-sm text-gray-600">{item.estar.desc}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 4. El Verbo HABER */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-3xl font-bold text-hku-blue mb-6 flex items-center font-serif">
+          <GitBranch className="mr-3" size={32} /> 4. El Verbo HABER: Auxiliar y Existencia
+        </h2>
+        <p className="text-lg text-gray-700 mb-8 leading-relaxed">
+          El verbo <strong>haber</strong> cumple dos funciones distintas dependiendo de si se usa de forma
+          personal o impersonal.
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Forma Personal */}
+          <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
+            <h3 className="text-xl font-bold text-hku-blue mb-2">A. Forma Personal (Auxiliar)</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Se utiliza para construir los <strong>tiempos compuestos</strong> junto con un participio.
+            </p>
+            <div className="space-y-3">
+              {[
+                { tense: 'Pretérito Perfecto', ex: '"Eugenia no ha venido a trabajar".' },
+                { tense: 'Pluscuamperfecto', ex: '"Los ladrones habían huido".' },
+                { tense: 'Futuro Perfecto', ex: '"El dolor habrá desaparecido".' },
+              ].map((item) => (
+                <div key={item.tense} className="bg-white p-3 rounded-lg shadow-sm">
+                  <p className="font-bold text-hku-blue text-sm mb-1">{item.tense}</p>
+                  <p className="text-sm italic text-gray-600">{item.ex}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Forma Impersonal */}
+          <div className="bg-green-50 p-6 rounded-xl border border-green-100">
+            <h3 className="text-xl font-bold text-hku-green mb-2">B. Forma Impersonal (Existencia)</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Se utiliza para expresar la <strong>existencia de algo</strong>. El verbo es{' '}
+              <strong>invariable</strong> y siempre se conjuga en tercera persona del singular.
+            </p>
+            <div className="space-y-3">
+              {[
+                { tense: 'Presente', ex: '"Hay una farmacia por aquí".' },
+                { tense: 'Pretérito Indefinido', ex: '"Hubo un problema".' },
+                { tense: 'Pretérito Imperfecto', ex: '"Había gallinas y cabras".' },
+              ].map((item) => (
+                <div key={item.tense} className="bg-white p-3 rounded-lg shadow-sm">
+                  <p className="font-bold text-hku-green text-sm mb-1">{item.tense}</p>
+                  <p className="text-sm italic text-gray-600">{item.ex}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Regla de Oro */}
+        <div className="mt-8 bg-amber-50 border-l-4 border-amber-400 p-5 rounded-xl flex items-start">
+          <Award className="w-6 h-6 text-amber-500 mr-3 mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="font-bold text-amber-800 mb-2">Regla de Oro del <em>haber</em> impersonal</p>
+            <p className="text-sm text-amber-700">
+              No se puede usar <strong>"hay"</strong> con artículos determinados <strong>(el/la/los/las)</strong> para
+              lugares específicos. Se usa para informar sobre la existencia de algo que el oyente desconoce.
+            </p>
+          </div>
+        </div>
       </section>
     </div>
   );
