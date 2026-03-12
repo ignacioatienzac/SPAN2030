@@ -1845,16 +1845,7 @@ const VerbsContent: React.FC = () => {
 const SerEstarHaberContent: React.FC = () => {
   return (
     <div className="space-y-12 text-gray-700 font-sans">
-      {/* Introducción */}
-      <section className="bg-gradient-to-r from-blue-50 to-green-50 p-8 rounded-2xl border-l-4 border-hku-blue">
-        <p className="text-lg text-gray-700 leading-relaxed">
-          Los verbos <strong>ser</strong>, <strong>estar</strong> y <strong>haber</strong> son tres de los más fundamentales del español.
-          Aunque todos pueden traducirse como formas del verbo «to be» en inglés, cada uno tiene
-          usos muy distintos que reflejan diferentes maneras de conceptualizar la realidad.
-        </p>
-      </section>
-
-      {/* 1. El Verbo SER */}
+      {/* 1. El Verbo SER */
       <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
         <h2 className="text-3xl font-bold text-hku-blue mb-6 flex items-center font-serif">
           <Layers className="mr-3" size={32} /> 1. El Verbo SER: Definición e Identidad
@@ -7944,14 +7935,14 @@ const VerbsPractice: React.FC = () => {
 const SerEstarHaberPractice: React.FC = () => {
   // ── Bloque 1: completar frases ──
   const b1Items = [
-    { id: '1', before: 'En esta calle', after: 'tres farmacias muy antiguas.', sols: ['hay'], note: 'haber – presente' },
-    { id: '2', before: 'Mi hermano', after: 'médico en un hospital de Madrid.', sols: ['es'], note: 'ser – presente' },
-    { id: '3', before: '¿Sabes dónde', after: 'las llaves del coche?', sols: ['están'], note: 'estar – presente' },
-    { id: '4', before: 'El lunes', after: 'Navidad y todavía no tengo los regalos.', sols: ['es'], note: 'ser – presente' },
-    { id: '5', before: 'El ejercicio de matemáticas', after: 'muy fácil.', sols: ['ha sido'], note: 'ser – pretérito perfecto' },
-    { id: '6', before: 'La tienda', after: 'cerrada los domingos.', sols: ['está'], note: 'estar – presente' },
-    { id: '7', before: 'Antes, en este parque', after: 'muchos árboles centenarios.', sols: ['había'], note: 'haber – pretérito imperfecto' },
-    { id: '8', before: 'Rodolfo', after: 'cubano, pero ahora vive en España.', sols: ['es'], note: 'ser – presente' },
+    { id: '1', before: 'En esta calle', after: 'tres farmacias muy antiguas.', sols: ['hay'], note: 'presente' },
+    { id: '2', before: 'Mi hermano', after: 'médico en un hospital de Madrid.', sols: ['es'], note: 'presente' },
+    { id: '3', before: 'La conferencia', after: 'en CRT-5.24.', sols: ['es'], note: 'presente' },
+    { id: '4', before: 'El lunes', after: 'Navidad y todavía no tengo los regalos.', sols: ['es'], note: 'presente' },
+    { id: '5', before: 'El ejercicio de matemáticas', after: 'muy fácil.', sols: ['ha sido'], note: 'pretérito perfecto' },
+    { id: '6', before: 'La tienda', after: 'cerrada los domingos.', sols: ['está'], note: 'presente' },
+    { id: '7', before: 'Antes, en este parque', after: 'muchos árboles centenarios.', sols: ['había'], note: 'pretérito imperfecto' },
+    { id: '8', before: 'Rodolfo', after: 'cubano, pero ahora vive en España.', sols: ['es'], note: 'presente' },
   ];
 
   const [b1Answers, setB1Answers] = useState<Record<string, string>>({});
@@ -7979,16 +7970,16 @@ const SerEstarHaberPractice: React.FC = () => {
   const b2Items = [
     {
       id: '1',
-      sentence: '"Esa tarta está muy rica".',
+      sentence: '"Está muy rica".',
       opts: [
-        { k: 'a', text: 'La tarta tiene mucho dinero.' },
-        { k: 'b', text: 'La tarta tiene un sabor delicioso.' },
+        { k: 'a', text: 'Tiene mucho dinero.' },
+        { k: 'b', text: 'Tiene un sabor delicioso.' },
       ],
       sol: 'b',
     },
     {
       id: '2',
-      sentence: '"Manuel es muy listo".',
+      sentence: '"Manuel es listo".',
       opts: [
         { k: 'a', text: 'Manuel es una persona inteligente.' },
         { k: 'b', text: 'Manuel está preparado para salir.' },
@@ -7997,19 +7988,19 @@ const SerEstarHaberPractice: React.FC = () => {
     },
     {
       id: '3',
-      sentence: '"Mi jefe está negro hoy".',
+      sentence: '"Juan está negro".',
       opts: [
-        { k: 'a', text: 'Mi jefe es de color negro.' },
-        { k: 'b', text: 'Mi jefe está muy enfadado o harto de algo.' },
+        { k: 'a', text: 'Describe el color.' },
+        { k: 'b', text: 'Describe el estado o condición.' },
       ],
       sol: 'b',
     },
     {
       id: '4',
-      sentence: '"El color de su coche es verde".',
+      sentence: '"Es verde".',
       opts: [
-        { k: 'a', text: 'El coche es de color verde.' },
-        { k: 'b', text: 'El coche es inmaduro o inexperto.' },
+        { k: 'a', text: 'Describe el color.' },
+        { k: 'b', text: 'Describe el estado o condición.' },
       ],
       sol: 'a',
     },
@@ -8047,7 +8038,7 @@ const SerEstarHaberPractice: React.FC = () => {
   // ── Bloque 3: auxiliar vs impersonal ──
   const b3Items = [
     { id: '1', text: 'Eugenia no ha venido a trabajar hoy.', sol: 'Auxiliar', note: 'Pretérito Perfecto' },
-    { id: '2', text: 'Esta mañana ha habido un problema con el ordenador.', sol: 'Impersonal', note: 'Existencia – Pretérito Perfecto' },
+    { id: '2', text: 'Ayer hubo un problema con el ordenador.', sol: 'Impersonal', note: 'Existencia – Pretérito Indefinido' },
     { id: '3', text: 'Cuando llegó la policía, los ladrones ya habían huido.', sol: 'Auxiliar', note: 'Pluscuamperfecto' },
     { id: '4', text: 'Dentro de unos años ya no habrá ordenadores tan grandes.', sol: 'Impersonal', note: 'Existencia – Futuro' },
     { id: '5', text: '¿Has ido alguna vez al concierto de "Los Repanocha"?', sol: 'Auxiliar', note: 'Pretérito Perfecto' },
