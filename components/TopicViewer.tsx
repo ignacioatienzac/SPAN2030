@@ -22,6 +22,7 @@ export const TopicViewer: React.FC<TopicViewerProps> = ({ topic, onBack }) => {
   const isVerbs = topic.id === '1-5';
   const isSerEstarHaber = topic.id === '2-1';
   const isLoUsos = topic.id === '2-2';
+  const isUsosSe = topic.id === '2-3';
 
   // Tabs configuration for Determinants
   const determinantsTabs = [
@@ -189,7 +190,8 @@ export const TopicViewer: React.FC<TopicViewerProps> = ({ topic, onBack }) => {
                 {isVerbs && <VerbsContent />}
                 {isSerEstarHaber && <SerEstarHaberContent />}
                 {isLoUsos && <LoUsosContent />}
-                {!isMorphology && !isNouns && !isAdjectives && !isVerbs && !isSerEstarHaber && !isLoUsos && (
+                {isUsosSe && <UsosSeContent />}
+                {!isMorphology && !isNouns && !isAdjectives && !isVerbs && !isSerEstarHaber && !isLoUsos && !isUsosSe && (
                   <div className="text-center py-20 bg-white rounded-2xl border border-gray-200 shadow-sm">
                     <p className="text-gray-500">Contenido disponible próximamente para {topic.title}.</p>
                   </div>
@@ -209,6 +211,14 @@ export const TopicViewer: React.FC<TopicViewerProps> = ({ topic, onBack }) => {
                   <SerEstarHaberPractice />
                 ) : isLoUsos ? (
                   <LoUsosPractice />
+                ) : isUsosSe ? (
+                  <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-gray-200 shadow-sm border-l-4 border-l-hku-green">
+                    <div className="bg-green-50 p-4 rounded-full mb-4">
+                      <PenTool className="w-8 h-8 text-hku-green" />
+                    </div>
+                    <h3 className="text-xl font-bold text-hku-ash mb-2">Sección de Práctica</h3>
+                    <p className="text-gray-500 text-center max-w-md">Próximamente incluiremos ejercicios para este tema.</p>
+                  </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-gray-200 shadow-sm border-l-4 border-l-hku-green">
                     <div className="bg-green-50 p-4 rounded-full mb-4">
@@ -8796,6 +8806,252 @@ const LoUsosContent: React.FC = () => {
           </div>
         </div>
       </section>
+    </div>
+  );
+};
+
+// --- USOS DEL SE CONTENT (Topic 2-3) ---
+const UsosSeContent: React.FC = () => {
+  return (
+    <div className="space-y-12 text-gray-700 font-sans">
+
+      {/* 1. Se Reflexivo */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-3xl font-bold text-hku-blue mb-6 flex items-center font-serif">
+          <User className="mr-3" size={32} /> 1. «Se» con Función Reflexiva
+        </h2>
+        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          Se utiliza cuando la acción del verbo recae sobre el mismo sujeto que la realiza (el sujeto y el objeto coinciden).
+          El pronombre debe concordar siempre con la persona del verbo.
+        </p>
+
+        {/* Pronombres table */}
+        <div className="overflow-x-auto mb-8">
+          <table className="w-full border-collapse bg-white rounded-lg overflow-hidden shadow-sm text-sm">
+            <thead>
+              <tr className="bg-hku-blue text-white">
+                {['Yo', 'Tú', 'Él/Ella', 'Nosotros', 'Vosotros', 'Ellos/Ellas'].map(p => (
+                  <th key={p} className="px-4 py-3 text-center font-semibold">{p}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {['me', 'te', 'se', 'nos', 'os', 'se'].map(pr => (
+                  <td key={pr} className="px-4 py-3 text-center font-mono font-bold text-hku-blue border border-blue-100">
+                    {pr}
+                  </td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="space-y-4">
+          {[
+            {
+              label: 'Sobre el sujeto completo',
+              example: '«Yo me baño todos los días».',
+              color: 'blue',
+            },
+            {
+              label: 'Sobre una parte del cuerpo',
+              example: '«Pepe se está afeitando el bigote».',
+              color: 'blue',
+            },
+            {
+              label: 'Sobre algo que el sujeto lleva o tiene',
+              example: '«Ponte el pijama» / «Me he manchado el bolso».',
+              color: 'blue',
+            },
+          ].map(item => (
+            <div key={item.label} className="bg-blue-50 p-5 rounded-xl border-l-4 border-hku-blue">
+              <h4 className="font-bold text-hku-ash mb-2">{item.label}</h4>
+              <div className="bg-white px-3 py-2 rounded-lg border border-blue-100 text-sm italic text-gray-700 inline-block">
+                {item.example}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 2. Se Recíproco */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-3xl font-bold text-hku-green mb-6 flex items-center font-serif">
+          <Users className="mr-3" size={32} /> 2. «Se» con Función Recíproca
+        </h2>
+        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          Se emplea cuando <strong>dos o más sujetos</strong> realizan la acción <em>el uno al otro</em>.
+        </p>
+        <div className="bg-green-50 p-6 rounded-xl border-l-4 border-hku-green space-y-3">
+          {[
+            '«Juan y Sofía se aman» (el uno al otro).',
+            '«Pepe y su primo se pegan por todo».',
+            '«Ana y tú os escribís, ¿no?».',
+          ].map((ex, i) => (
+            <div key={i} className="bg-white px-3 py-2 rounded-lg border border-green-100 text-sm italic text-gray-700 inline-block w-full">
+              {ex}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 3. Se Cambio de Estado */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-3xl font-bold text-purple-700 mb-6 flex items-center font-serif">
+          <GitBranch className="mr-3" size={32} /> 3. «Se» de Cambio de Estado (Verbos Pronominales)
+        </h2>
+        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          Indica una <strong>transformación</strong> física, anímica o de situación. Algunos verbos son siempre pronominales
+          (como <em>arrepentirse</em> o <em>quejarse</em>), mientras que otros cambian su significado al añadir el pronombre.
+        </p>
+
+        <h3 className="text-xl font-bold text-hku-ash mb-5 flex items-center">
+          <Layers className="w-5 h-5 mr-2 text-purple-600" /> Verbos de cambio comunes
+        </h3>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            { verb: 'Ponerse', desc: 'Destaca el proceso del cambio.', example: '«Se puso muy triste con la noticia».' },
+            { verb: 'Quedarse', desc: 'Destaca el resultado final.', example: '«¡Se ha quedado calvo!».' },
+            { verb: 'Convertirse en', desc: 'Seguido de sustantivo, indica una transformación profunda.', example: '«El gusano se convierte en mariposa».' },
+            { verb: 'Volverse', desc: 'Expresa un cambio en el carácter o la personalidad.', example: '«Mi hermano se ha vuelto muy desconfiado».' },
+          ].map(item => (
+            <div key={item.verb} className="bg-purple-50 p-5 rounded-xl border border-purple-100">
+              <h4 className="font-bold text-purple-700 text-lg mb-1">{item.verb}</h4>
+              <p className="text-sm text-gray-600 mb-3">{item.desc}</p>
+              <div className="bg-white px-3 py-2 rounded-lg border border-purple-100 text-sm italic text-gray-700 inline-block w-full">
+                {item.example}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 4. Sustituto OI */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-3xl font-bold text-orange-600 mb-6 flex items-center font-serif">
+          <Copy className="mr-3" size={32} /> 4. «Se» como Sustituto de Objeto Indirecto (OI)
+        </h2>
+        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          Cuando en una frase coinciden los pronombres de objeto directo (<em>lo, la, los, las</em>) e indirecto (<em>le, les</em>),
+          el objeto indirecto se transforma en <strong>«se»</strong> para evitar la cacofonía.
+        </p>
+        <div className="bg-orange-50 p-6 rounded-xl border-l-4 border-orange-400">
+          <h4 className="font-bold text-hku-ash mb-4 flex items-center">
+            <ChevronRight className="mr-1 text-orange-500" size={18} /> Transformación
+          </h4>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 text-sm flex-wrap">
+            <span className="bg-white px-3 py-2 rounded-lg border border-orange-100 italic text-gray-600">
+              «Pepa <strong>le</strong> compra flores a Pepe»
+            </span>
+            <ChevronRight className="text-orange-500 flex-shrink-0" size={20} />
+            <span className="bg-white px-3 py-2 rounded-lg border border-orange-300 italic text-gray-700">
+              «Pepa <strong className="text-orange-600">se las</strong> compra»
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Verbos de Ingestión */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-3xl font-bold text-hku-ash mb-6 flex items-center font-serif">
+          <MessageSquare className="mr-3" size={32} /> 5. «Se» con Verbos de Ingestión
+        </h2>
+        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          Se usa con verbos como <em>comer</em>, <em>beber</em> o <em>tomar</em> para indicar que se consume una
+          <strong> cantidad determinada o específica</strong> de algo. Enfatiza la totalidad de la acción, aunque no siempre es obligatorio.
+        </p>
+        <div className="bg-gray-50 p-6 rounded-xl border-l-4 border-hku-ash space-y-3">
+          {[
+            '«Se ha tomado un buen bocata de calamares».',
+            '«Me estoy comiendo este muslo de pollo».',
+            '«Se bebe toda la botella sin parar».',
+          ].map((ex, i) => (
+            <div key={i} className="bg-white px-3 py-2 rounded-lg border border-gray-200 text-sm italic text-gray-700 inline-block w-full">
+              {ex}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 6. Pasiva Refleja e Impersonal */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-3xl font-bold text-hku-blue mb-6 flex items-center font-serif">
+          <Layers className="mr-3" size={32} /> 6. «Se» Pasiva Refleja e Impersonal
+        </h2>
+        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+          Muy comunes en anuncios, normas e instrucciones de uso, ya que permiten <strong>ocultar quién realiza la acción</strong>.
+        </p>
+
+        {/* Comparison table */}
+        <div className="overflow-x-auto mb-8">
+          <table className="w-full border-collapse bg-white rounded-lg overflow-hidden shadow-sm">
+            <thead>
+              <tr className="bg-hku-ash text-white">
+                <th className="px-5 py-4 text-left font-semibold">Característica</th>
+                <th className="px-5 py-4 text-left font-semibold text-blue-200">Pasiva Refleja</th>
+                <th className="px-5 py-4 text-left font-semibold text-green-200">«Se» Impersonal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                {
+                  feat: 'Sujeto',
+                  pr: 'Sí tiene (la cosa o persona buscada).',
+                  imp: 'No tiene.',
+                },
+                {
+                  feat: 'Concordancia',
+                  pr: 'El verbo concuerda con el sujeto (singular o plural).',
+                  imp: 'El verbo siempre va en 3.ª persona del singular.',
+                },
+                {
+                  feat: 'Uso con «a»',
+                  pr: 'No se usa la preposición «a» antes del sustantivo.',
+                  imp: 'Se usa con a + persona (que funciona como objeto directo).',
+                },
+              ].map((row, i) => (
+                <tr key={row.feat} className={`border-b border-gray-200 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                  <td className="px-5 py-4 font-semibold text-hku-ash text-sm">{row.feat}</td>
+                  <td className="px-5 py-4 text-sm text-gray-700">{row.pr}</td>
+                  <td className="px-5 py-4 text-sm text-gray-700">{row.imp}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="bg-blue-50 p-5 rounded-xl border-l-4 border-hku-blue">
+            <h4 className="font-bold text-hku-blue mb-3 text-lg">Pasiva Refleja</h4>
+            <div className="space-y-2">
+              {[
+                '«Se venden pisos baratos».',
+                '«Se buscan actores de teatro».',
+              ].map((ex, i) => (
+                <div key={i} className="bg-white px-3 py-2 rounded-lg border border-blue-100 text-sm italic text-gray-700">
+                  {ex}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="bg-green-50 p-5 rounded-xl border-l-4 border-hku-green">
+            <h4 className="font-bold text-hku-green mb-3 text-lg">«Se» Impersonal</h4>
+            <div className="space-y-2">
+              {[
+                '«Aquí se come muy bien».',
+                '«Se busca a los actores de teatro».',
+              ].map((ex, i) => (
+                <div key={i} className="bg-white px-3 py-2 rounded-lg border border-green-100 text-sm italic text-gray-700">
+                  {ex}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 };
