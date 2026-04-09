@@ -9256,6 +9256,157 @@ const UsosSePractice: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Bloque 4 */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="mb-6">
+          <h3 className="text-2xl font-bold text-hku-ash mb-2 flex items-center">
+            <GitBranch className="mr-2 text-purple-600" size={28} />
+            Bloque 4: Verbos de Cambio de Estado
+          </h3>
+          <p className="text-gray-600">
+            Completa las frases con el verbo de cambio adecuado:
+            {' '}<strong>ponerse</strong>, <strong>quedarse</strong>, <strong>convertirse en</strong> o <strong>volverse</strong>.
+          </p>
+        </div>
+        <div className="bg-purple-50 p-6 rounded-xl border-l-4 border-purple-500 space-y-4">
+          {b4Items.map((item, idx) => (
+            <div key={item.id} className="bg-white p-4 rounded-lg shadow-sm border border-purple-100">
+              <p className="text-gray-800 text-sm md:text-base mb-3">
+                <span className="font-bold text-purple-600 mr-1">{idx + 1}.</span>
+                {item.sentence}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {b4Opts.map(opt => (
+                  <button
+                    key={opt}
+                    onClick={() => setB4Answers(prev => ({ ...prev, [item.id]: opt }))}
+                    className={`px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all ${b4BtnCls(item.id, opt)}`}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+          <div className="flex flex-wrap gap-3">
+            <button onClick={checkB4} className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
+              <CheckCircle size={18} className="mr-2" /> Comprobar
+            </button>
+            <button onClick={resetB4} className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
+              <RefreshCw size={18} className="mr-2" /> Reiniciar
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Ver respuestas */}
+      <div className="flex justify-center pt-2 pb-4">
+        <button
+          onClick={() => setShowRespuestas(true)}
+          className="bg-hku-ash hover:bg-gray-700 text-white px-8 py-3 rounded-xl font-semibold transition-colors flex items-center shadow-md"
+        >
+          <Eye size={20} className="mr-2" /> Ver respuestas
+        </button>
+      </div>
+
+      {/* Modal de respuestas */}
+      {showRespuestas && (
+        <div
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 overflow-y-auto py-10 px-4"
+          onClick={() => setShowRespuestas(false)}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-8 space-y-6"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b pb-4">
+              <h3 className="text-xl font-bold text-hku-ash flex items-center gap-2">
+                <Eye size={22} className="text-hku-blue" /> Respuestas y Explicaciones
+              </h3>
+              <button
+                onClick={() => setShowRespuestas(false)}
+                className="text-gray-400 hover:text-gray-600 text-2xl leading-none font-bold"
+                aria-label="Cerrar"
+              >×</button>
+            </div>
+
+            {/* Bloque 1 */}
+            <div>
+              <p className="font-bold text-hku-blue mb-3 uppercase tracking-wide text-xs">Bloque 1 – Identificación del tipo de «se»</p>
+              <div className="space-y-2">
+                {[
+                  { sol: 'Recíproco',           exp: 'Los sujetos realizan la acción el uno al otro.' },
+                  { sol: '«Se» impersonal',      exp: 'No hay sujeto y lleva la preposición «A» antes de personas.' },
+                  { sol: 'Reflexivo',            exp: 'La acción recae sobre el mismo sujeto que la realiza.' },
+                  { sol: 'Pasiva refleja',        exp: '«Las clases» es el sujeto y concuerda con el verbo en plural.' },
+                  { sol: 'Verbos de ingestión',  exp: 'Indica que se consumió una cantidad concreta (el libro entero).' },
+                  { sol: 'Cambio de estado',      exp: 'Indica una transformación anímica temporal.' },
+                ].map((item, idx) => (
+                  <div key={idx} className="bg-blue-50 rounded-lg px-4 py-3 text-sm">
+                    <span className="font-bold text-hku-blue mr-1">{idx + 1}.</span>
+                    <span className="font-semibold text-green-700">{item.sol}</span>
+                    <span className="text-gray-500 ml-2">— {item.exp}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bloque 2 */}
+            <div>
+              <p className="font-bold text-hku-green mb-3 uppercase tracking-wide text-xs">Bloque 2 – Sustitución de Pronombres</p>
+              <div className="space-y-2">
+                {[
+                  'El camarero se lo sirvió.',
+                  'Se lo he enviado.',
+                  '¿Se lo has devuelto?',
+                  'La profesora se la explicó.',
+                ].map((sol, idx) => (
+                  <div key={idx} className="bg-green-50 rounded-lg px-4 py-3 text-sm">
+                    <span className="font-bold text-hku-green mr-1">{idx + 1}.</span>
+                    <span className="font-semibold text-green-700 italic">{sol}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bloque 3 */}
+            <div>
+              <p className="font-bold text-indigo-600 mb-3 uppercase tracking-wide text-xs">Bloque 3 – Pasiva Refleja vs. Impersonal</p>
+              <div className="space-y-2">
+                {[
+                  { sol: 'se vive',       exp: 'Impersonal, el verbo siempre va en singular.' },
+                  { sol: 'Se necesitan',  exp: 'Pasiva refleja, concuerda con el sujeto plural «camareros».' },
+                  { sol: 'se ha avisado', exp: 'Impersonal, porque lleva la preposición «a» + persona (objeto directo).' },
+                  { sol: 'se puede',      exp: 'Impersonal, se refiere a una norma general.' },
+                  { sol: 'Se venden',     exp: 'Pasiva refleja, concuerda con el sujeto plural «bicicletas».' },
+                ].map((item, idx) => (
+                  <div key={idx} className="bg-indigo-50 rounded-lg px-4 py-3 text-sm">
+                    <span className="font-bold text-indigo-600 mr-1">{idx + 1}.</span>
+                    <span className="font-semibold text-green-700 italic">{item.sol}</span>
+                    <span className="text-gray-500 ml-2">— {item.exp}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bloque 4 */}
+            <div>
+              <p className="font-bold text-purple-600 mb-3 uppercase tracking-wide text-xs">Bloque 4 – Verbos de Cambio de Estado</p>
+              <div className="space-y-2">
+                {b4Items.map((item, idx) => (
+                  <div key={idx} className="bg-purple-50 rounded-lg px-4 py-3 text-sm">
+                    <span className="font-bold text-purple-600 mr-1">{idx + 1}.</span>
+                    <span className="font-semibold text-green-700 italic">{item.conjugated}</span>
+                    <span className="text-gray-500 ml-2">— {item.explanation}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 };
