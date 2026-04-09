@@ -8804,6 +8804,408 @@ const LoUsosContent: React.FC = () => {
   );
 };
 
+const LoUsosPractice: React.FC = () => {
+
+  // ── Bloque 1: Pronombre vs. Artículo neutro ──
+  const b1Items = [
+    { id: 'b1-1', text: '¿Has traído el libro de gramática? — Sí, lo he traído en la mochila.', sol: 'Pronombre', explanation: 'Sustituye al sustantivo masculino singular "el libro".' },
+    { id: 'b1-2', text: 'Lo bueno de este curso es que practicamos mucha conversación.', sol: 'Artículo neutro', explanation: 'Acompaña al adjetivo "bueno" para referirse a "la parte buena".' },
+    { id: 'b1-3', text: 'No entiendo lo que ha dicho el profesor sobre el examen.', sol: 'Artículo neutro', explanation: 'Se combina con "que" para referirse a "la cosa" o "el tema".' },
+    { id: 'b1-4', text: 'Intenté abrir la puerta con la llave equivocada, pero no lo conseguí.', sol: 'Pronombre', explanation: 'Sustituye a la acción de "abrir la puerta".' },
+    { id: 'b1-5', text: 'Lo de Paula en la oficina es una situación muy curiosa.', sol: 'Artículo neutro', explanation: 'Se usa con "de" para referirse al "tema de Paula".' },
+  ];
+  const [b1Answers, setB1Answers] = useState<Record<string, string>>({});
+  const [b1Results, setB1Results] = useState<Record<string, boolean | null>>({});
+  const checkB1 = () => {
+    const r: Record<string, boolean | null> = {};
+    b1Items.forEach(item => { r[item.id] = b1Answers[item.id] === item.sol; });
+    setB1Results(r);
+  };
+  const resetB1 = () => { setB1Answers({}); setB1Results({}); };
+  const b1BtnCls = (id: string, opt: string) => {
+    const sel = b1Answers[id] === opt;
+    if (sel) {
+      if (b1Results[id] === true)  return 'bg-green-100 border-green-500 text-green-800';
+      if (b1Results[id] === false) return 'bg-red-100 border-red-500 text-red-800';
+      return 'bg-blue-100 border-blue-500 text-blue-800';
+    }
+    return 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300';
+  };
+
+  // ── Bloque 2: Drag-and-drop ──
+  const b2Items = [
+    { id: 'b2-1', before: 'He olvidado', after: 'respondí en la última pregunta del ejercicio.', sol: 'lo que', explanation: 'Sustituye a "la cosa" que se respondió.' },
+    { id: 'b2-2', before: 'Por favor, intenta llegar a casa', after: 'posible.', sol: 'lo antes', explanation: 'Se usa con el adverbio "antes" para enfatizar la rapidez.' },
+    { id: 'b2-3', before: '', after: 'es que te sientas cómodo hablando en español.', sol: 'lo importante', explanation: 'Enfatiza la cualidad de "importante" como un concepto sustantivado.' },
+    { id: 'b2-4', before: 'Respecto a', after: 'practicar más la audición: estoy totalmente de acuerdo.', sol: 'lo de', explanation: 'Se refiere a una situación o tema mencionado antes (practicar audición).' },
+    { id: 'b2-5', before: '¡Mira', after: 'que cocina tu hermano!', sol: 'lo bien', explanation: 'Enfatiza la calidad del adverbio "bien".' },
+    { id: 'b2-6', before: '', after: 'de los libros de historia es recordar todas las fechas.', sol: 'lo difícil', explanation: 'Sustituye a "la parte difícil".' },
+  ];
+
+  const allTokens = useMemo<{ id: string; label: string }[]>(() => [
+    { id: 't01', label: 'lo de' },
+    { id: 't02', label: 'lo que' },
+    { id: 't03', label: 'lo importante' },
+    { id: 't04', label: 'lo bien' },
+    { id: 't05', label: 'lo de' },
+    { id: 't06', label: 'lo bueno' },
+    { id: 't07', label: 'lo que' },
+    { id: 't08', label: 'lo antes' },
+    { id: 't09', label: 'lo difícil' },
+    { id: 't10', label: 'lo rápido' },
+  ], []);
+
+  const [b2Placed, setB2Placed] = useState<Record<string, string>>({});   // blankId → tokenId
+  const [b2Results, setB2Results] = useState<Record<string, boolean | null>>({});
+  const [dragging, setDragging] = useState<{ tokenId: string; fromBlank?: string } | null>(null);
+
+  // ── Bloque 3: El / La / Lo ──
+  const b3Items = [
+    { id: 'b3-1', sentence: 'De todos los postres, este pastel de chocolate es ( ___ ) mejor.', opts: ['el', 'lo'], sol: 'el', explanation: 'Se refiere a un objeto específico (el pastel).' },
+    { id: 'b3-2', sentence: '( ___ ) mejor de las vacaciones fue poder desconectar del trabajo.', opts: ['El', 'Lo'], sol: 'Lo', explanation: 'Se refiere a un concepto o evento abstracto (la experiencia).' },
+    { id: 'b3-3', sentence: 'Rosa es ( ___ ) que lleva la camiseta de color rosa.', opts: ['la', 'lo'], sol: 'la', explanation: 'Se refiere a una persona femenina (Rosa).' },
+    { id: 'b3-4', sentence: 'No me gusta esa chaqueta; prefiero ( ___ ) que tiene el corazón bordado.', opts: ['el', 'la'], sol: 'la', explanation: 'Se refiere a una cosa mencionada antes (la chaqueta).' },
+    { id: 'b3-5', sentence: 'Juan siempre quiere ser ( ___ ) mejor en todos los deportes.', opts: ['el', 'lo'], sol: 'el', explanation: 'Se refiere a una persona masculina (Juan).' },
+  ];
+  const [b3Answers, setB3Answers] = useState<Record<string, string>>({});
+  const [b3Results, setB3Results] = useState<Record<string, boolean | null>>({});
+  const checkB3 = () => {
+    const r: Record<string, boolean | null> = {};
+    b3Items.forEach(item => { r[item.id] = b3Answers[item.id]?.toLowerCase() === item.sol.toLowerCase(); });
+    setB3Results(r);
+  };
+  const resetB3 = () => { setB3Answers({}); setB3Results({}); };
+  const b3BtnCls = (id: string, opt: string) => {
+    const sel = b3Answers[id] === opt;
+    if (sel) {
+      if (b3Results[id] === true)  return 'bg-green-100 border-green-500 text-green-800';
+      if (b3Results[id] === false) return 'bg-red-100 border-red-500 text-red-800';
+      return 'bg-purple-100 border-purple-500 text-purple-800';
+    }
+    return 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300';
+  };
+
+  // ── Modal de respuestas ──
+  const [showRespuestas, setShowRespuestas] = useState(false);
+
+  const poolTokens = allTokens.filter(t => !Object.values(b2Placed).includes(t.id));
+
+  const handleDropOnBlank = (blankId: string) => {
+    if (!dragging) return;
+    setB2Placed(prev => {
+      const next = { ...prev };
+      if (dragging.fromBlank) delete next[dragging.fromBlank];
+      next[blankId] = dragging.tokenId;
+      return next;
+    });
+    setDragging(null);
+  };
+
+  const checkB2 = () => {
+    const r: Record<string, boolean | null> = {};
+    b2Items.forEach(item => {
+      const tokenId = b2Placed[item.id];
+      if (!tokenId) { r[item.id] = null; return; }
+      const token = allTokens.find(t => t.id === tokenId);
+      r[item.id] = token ? token.label.toLowerCase() === item.sol.toLowerCase() : false;
+    });
+    setB2Results(r);
+  };
+  const resetB2 = () => { setB2Placed({}); setB2Results({}); setDragging(null); };
+
+  const blankCls = (blankId: string) => {
+    const result = b2Results[blankId];
+    const filled = !!b2Placed[blankId];
+    if (result === true)  return 'border-green-500 bg-green-50 text-green-800';
+    if (result === false) return 'border-red-500 bg-red-50 text-red-800';
+    return filled
+      ? 'border-hku-green bg-green-50 text-hku-green cursor-grab'
+      : 'border-dashed border-gray-400 bg-white text-gray-400';
+  };
+
+  return (
+    <div className="space-y-10">
+      {/* Modal de respuestas */}
+      {showRespuestas && (
+        <div
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 overflow-y-auto py-10 px-4"
+          onClick={() => setShowRespuestas(false)}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-8 space-y-6"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b pb-4">
+              <h3 className="text-xl font-bold text-hku-ash flex items-center gap-2">
+                <Eye size={22} className="text-hku-green" /> Respuestas
+              </h3>
+              <button
+                onClick={() => setShowRespuestas(false)}
+                className="text-gray-400 hover:text-gray-600 text-2xl leading-none font-bold"
+                aria-label="Cerrar"
+              >×</button>
+            </div>
+
+            {/* Bloque 1 */}
+            <div>
+              <p className="font-bold text-hku-blue mb-3 uppercase tracking-wide text-xs">Bloque 1 – Identificación y Sustitución</p>
+              <div className="space-y-2">
+                {b1Items.map((item, idx) => (
+                  <div key={item.id} className="bg-blue-50 rounded-lg px-4 py-3 text-sm">
+                    <span className="font-bold text-hku-blue mr-1">{idx + 1}.</span>
+                    <span className="font-semibold text-green-700">{item.sol}</span>
+                    <span className="text-gray-500 ml-2">— {item.explanation}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bloque 2 */}
+            <div>
+              <p className="font-bold text-hku-green mb-3 uppercase tracking-wide text-xs">Bloque 2 – Combinaciones de «Lo»</p>
+              <div className="space-y-2">
+                {b2Items.map((item, idx) => (
+                  <div key={item.id} className="bg-green-50 rounded-lg px-4 py-3 text-sm">
+                    <span className="font-bold text-hku-green mr-1">{idx + 1}.</span>
+                    <span className="font-semibold text-green-700">{item.sol}</span>
+                    <span className="text-gray-500 ml-2">— {item.explanation}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bloque 3 */}
+            <div>
+              <p className="font-bold text-purple-600 mb-3 uppercase tracking-wide text-xs">Bloque 3 – «El», «La» o «Lo»</p>
+              <div className="space-y-2">
+                {b3Items.map((item, idx) => (
+                  <div key={item.id} className="bg-purple-50 rounded-lg px-4 py-3 text-sm">
+                    <span className="font-bold text-purple-400 mr-1">{idx + 1}.</span>
+                    <span className="font-semibold text-purple-700">{item.sol}</span>
+                    <span className="text-gray-500 ml-2">— {item.explanation}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="pt-2 border-t text-right">
+              <button
+                onClick={() => setShowRespuestas(false)}
+                className="bg-hku-green hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors text-sm"
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Header */}
+      <div className="bg-gradient-to-r from-hku-green to-green-700 text-white p-8 rounded-2xl shadow-lg">
+        <h2 className="text-3xl font-bold mb-3 flex items-center">
+          <Pencil className="mr-3" size={32} />
+          Práctica: Los usos de «lo»
+        </h2>
+        <p className="text-green-100 text-lg">
+          Practica los diferentes usos del pronombre y artículo neutro <em>lo</em> con estos ejercicios.
+        </p>
+      </div>
+
+      {/* Botón Ver respuestas */}
+      <div className="flex justify-end">
+        <button
+          onClick={() => setShowRespuestas(true)}
+          className="flex items-center gap-2 bg-hku-green hover:bg-green-700 text-white px-5 py-2.5 rounded-lg font-semibold transition-colors shadow text-sm"
+        >
+          <Eye size={16} /> Ver respuestas
+        </button>
+      </div>
+
+      {/* Bloque 1 */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="mb-6">
+          <h3 className="text-2xl font-bold text-hku-ash mb-2 flex items-center">
+            <Search className="mr-2 text-hku-blue" size={28} />
+            Bloque 1: Identificación y Sustitución
+          </h3>
+          <p className="text-gray-600">
+            Decide si el uso de <strong>«lo»</strong> funciona como <strong>pronombre de objeto directo</strong> o como <strong>artículo neutro</strong>.
+          </p>
+        </div>
+        <div className="bg-blue-50 p-6 rounded-xl border-l-4 border-hku-blue">
+          <div className="space-y-4">
+            {b1Items.map((item, idx) => (
+              <div key={item.id} className="bg-white p-4 rounded-lg shadow-sm border border-blue-100">
+                <p className="text-gray-800 text-sm md:text-base mb-3 italic">
+                  <span className="font-bold text-hku-blue not-italic mr-1">{idx + 1}.</span>
+                  {item.text}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {['Pronombre', 'Artículo neutro'].map(opt => (
+                    <button
+                      key={opt}
+                      onClick={() => setB1Answers(prev => ({ ...prev, [item.id]: opt }))}
+                      className={`px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all ${b1BtnCls(item.id, opt)}`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <button onClick={checkB1} className="bg-hku-blue hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
+              <CheckCircle size={18} className="mr-2" /> Comprobar
+            </button>
+            <button onClick={resetB1} className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
+              <RefreshCw size={18} className="mr-2" /> Reiniciar
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Bloque 2 */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="mb-6">
+          <h3 className="text-2xl font-bold text-hku-ash mb-2 flex items-center">
+            <Layers className="mr-2 text-hku-green" size={28} />
+            Bloque 2: Completar con Combinaciones de «Lo»
+          </h3>
+          <p className="text-gray-600">
+            Arrastra la combinación correcta al espacio en blanco de cada frase. Hay más opciones de las necesarias.
+            Haz clic en una ficha colocada para devolverla al banco.
+          </p>
+        </div>
+        <div className="bg-green-50 p-6 rounded-xl border-l-4 border-hku-green space-y-6">
+
+          {/* Token pool */}
+          <div
+            className="bg-white rounded-xl border-2 border-dashed border-green-300 p-4 min-h-[64px]"
+            onDragOver={e => e.preventDefault()}
+            onDrop={e => {
+              e.preventDefault();
+              if (dragging?.fromBlank) {
+                const fb = dragging.fromBlank;
+                setB2Placed(prev => { const n = { ...prev }; delete n[fb]; return n; });
+                setB2Results(prev => { const n = { ...prev }; delete n[fb]; return n; });
+                setDragging(null);
+              }
+            }}
+          >
+            <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-3">
+              Banco de fichas — arrastra al espacio correspondiente
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {poolTokens.map(token => (
+                <div
+                  key={token.id}
+                  draggable
+                  onDragStart={() => setDragging({ tokenId: token.id })}
+                  onDragEnd={() => setDragging(null)}
+                  className="px-4 py-2 bg-hku-green text-white rounded-lg text-sm font-semibold cursor-grab active:cursor-grabbing shadow-sm select-none hover:bg-green-700 transition-colors"
+                >
+                  {token.label}
+                </div>
+              ))}
+              {poolTokens.length === 0 && (
+                <p className="text-sm text-gray-400 italic">Todas las fichas están colocadas.</p>
+              )}
+            </div>
+          </div>
+
+          {/* Sentences */}
+          <div className="space-y-4">
+            {b2Items.map((item, idx) => {
+              const placedToken = b2Placed[item.id]
+                ? (allTokens.find(t => t.id === b2Placed[item.id]) ?? null)
+                : null;
+              return (
+                <div key={item.id} className="bg-white p-4 rounded-lg shadow-sm border border-green-100">
+                  <div className="flex flex-wrap items-center gap-2 text-gray-800 text-sm md:text-base leading-relaxed">
+                    <span className="font-bold text-hku-green flex-shrink-0">{idx + 1}.</span>
+                    {item.before && <span>{item.before}</span>}
+                    <div
+                      className={`inline-flex items-center justify-center min-w-[120px] h-9 px-3 rounded-lg border-2 text-sm font-semibold transition-all select-none ${blankCls(item.id)}`}
+                      onDragOver={e => e.preventDefault()}
+                      onDrop={e => { e.preventDefault(); handleDropOnBlank(item.id); }}
+                      draggable={!!placedToken}
+                      onDragStart={placedToken ? () => setDragging({ tokenId: placedToken.id, fromBlank: item.id }) : undefined}
+                      onDragEnd={() => setDragging(null)}
+                      onClick={() => {
+                        if (placedToken) {
+                          setB2Placed(prev => { const n = { ...prev }; delete n[item.id]; return n; });
+                          setB2Results(prev => { const n = { ...prev }; delete n[item.id]; return n; });
+                        }
+                      }}
+                    >
+                      {placedToken ? placedToken.label : '▢ arrastra aquí'}
+                    </div>
+                    {item.after && <span>{item.after}</span>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <button onClick={checkB2} className="bg-hku-green hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
+              <CheckCircle size={18} className="mr-2" /> Comprobar
+            </button>
+            <button onClick={resetB2} className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
+              <RefreshCw size={18} className="mr-2" /> Reiniciar
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Bloque 3 */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="mb-6">
+          <h3 className="text-2xl font-bold text-hku-ash mb-2 flex items-center">
+            <HelpCircle className="mr-2 text-purple-600" size={28} />
+            Bloque 3: ¿«El», «La» o «Lo»?
+          </h3>
+          <p className="text-gray-600">
+            Elige el artículo correcto para cada frase.
+          </p>
+        </div>
+        <div className="bg-purple-50 p-6 rounded-xl border-l-4 border-purple-500">
+          <div className="space-y-4">
+            {b3Items.map((item, idx) => (
+              <div key={item.id} className="bg-white p-4 rounded-lg shadow-sm border border-purple-100">
+                <p className="text-gray-800 text-sm md:text-base mb-3">
+                  <span className="font-bold text-purple-600 mr-1">{idx + 1}.</span>
+                  {item.sentence.replace('( ___ )', ' _____ ')}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {item.opts.map(opt => (
+                    <button
+                      key={opt}
+                      onClick={() => setB3Answers(prev => ({ ...prev, [item.id]: opt }))}
+                      className={`px-5 py-2 rounded-lg border-2 text-sm font-medium transition-all ${b3BtnCls(item.id, opt)}`}
+                    >
+                      {opt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <button onClick={checkB3} className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
+              <CheckCircle size={18} className="mr-2" /> Comprobar
+            </button>
+            <button onClick={resetB3} className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
+              <RefreshCw size={18} className="mr-2" /> Reiniciar
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
 const UsosSeContent: React.FC = () => {
   return (
     <div className="space-y-12 text-gray-700 font-sans">
