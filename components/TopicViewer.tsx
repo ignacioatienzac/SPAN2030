@@ -9122,6 +9122,40 @@ const UsosSePractice: React.FC = () => {
     return 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300';
   };
 
+  // ── Bloque 4: Verbos de cambio de estado ──
+  const b4Opts = ['ponerse', 'quedarse', 'convertirse en', 'volverse'];
+  const b4Items = [
+    { id: 'b4-1', sentence: 'Mi mejor amigo _______ muy nervioso durante las presentaciones.', sol: 'ponerse', conjugated: 'se pone', explanation: 'Se usa ponerse porque destaca el proceso de un cambio de ánimo o reacción física momentánea (nervioso).' },
+    { id: 'b4-2', sentence: 'Después del accidente, el coche _______ totalmente destrozado.', sol: 'quedarse', conjugated: 'se quedó', explanation: 'Se usa quedarse para destacar el resultado final o el estado en que permanece algo tras una acción (destrozado).' },
+    { id: 'b4-3', sentence: 'Tras años de estudio, ella _______ una experta en ciberseguridad.', sol: 'convertirse en', conjugated: 'se convirtió en', explanation: 'Se utiliza convertirse en porque indica una transformación profunda y va seguido de un sustantivo (experta).' },
+    { id: 'b4-4', sentence: 'Con el tiempo, mi vecino _______ un hombre muy solitario.', sol: 'volverse', conjugated: 'se ha vuelto / se volvió', explanation: 'Se usa volverse para señalar un cambio en el carácter o la personalidad, generalmente más duradero (huraño).' },
+    { id: 'b4-5', sentence: 'Lucía _______ muy contenta con los resultados del examen de español.', sol: 'ponerse', conjugated: 'se puso', explanation: 'Indica un cambio anímico o emocional repentino ante una noticia positiva (contenta).' },
+    { id: 'b4-6', sentence: 'El teléfono _______ sin batería en el momento más inoportuno.', sol: 'quedarse', conjugated: 'se quedó', explanation: 'Expresa el estado resultante de un objeto tras agotarse su energía (sin batería).' },
+    { id: 'b4-7', sentence: 'Con el paso de los siglos, el latín _______ en las diferentes lenguas románicas.', sol: 'convertirse en', conjugated: 'se convirtió en', explanation: 'Describe una transformación evolutiva radical seguida de un sustantivo (lenguas románicas).' },
+    { id: 'b4-8', sentence: 'El actor _______ insoportable tras hacerse famoso a nivel mundial.', sol: 'volverse', conjugated: 'se volvió', explanation: 'Refleja un cambio negativo en el carácter o comportamiento de una persona debido a su nueva situación (insoportable).' },
+    { id: 'b4-9', sentence: 'Yo _______ de piedra al enterarme de que habían cancelado el viaje.', sol: 'quedarse', conjugated: 'me quedé', explanation: 'Es una expresión fija que destaca el resultado de una impresión fuerte que deja a alguien inmóvil o sin palabras.' },
+    { id: 'b4-10', sentence: '¡Qué bien! Tu hijo _______ un hombre exitoso.', sol: 'convertirse en', conjugated: 'se ha convertido en', explanation: 'Señala una transformación importante en la naturaleza o estatus de una persona (un hombre).' },
+  ];
+  const [b4Answers, setB4Answers] = useState<Record<string, string>>({});
+  const [b4Results, setB4Results] = useState<Record<string, boolean | null>>({});
+  const checkB4 = () => {
+    const r: Record<string, boolean | null> = {};
+    b4Items.forEach(item => { r[item.id] = b4Answers[item.id] === item.sol; });
+    setB4Results(r);
+  };
+  const resetB4 = () => { setB4Answers({}); setB4Results({}); };
+  const b4BtnCls = (id: string, opt: string) => {
+    const sel = b4Answers[id] === opt;
+    if (sel) {
+      if (b4Results[id] === true)  return 'bg-green-100 border-green-500 text-green-800';
+      if (b4Results[id] === false) return 'bg-red-100 border-red-500 text-red-800';
+      return 'bg-purple-100 border-purple-500 text-purple-800';
+    }
+    return 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300';
+  };
+
+  const [showRespuestas, setShowRespuestas] = useState(false);
+
   return (
     <div className="space-y-10">
       {/* Header */}
