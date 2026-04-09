@@ -212,13 +212,7 @@ export const TopicViewer: React.FC<TopicViewerProps> = ({ topic, onBack }) => {
                 ) : isLoUsos ? (
                   <LoUsosPractice />
                 ) : isUsosSe ? (
-                  <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-gray-200 shadow-sm border-l-4 border-l-hku-green">
-                    <div className="bg-green-50 p-4 rounded-full mb-4">
-                      <PenTool className="w-8 h-8 text-hku-green" />
-                    </div>
-                    <h3 className="text-xl font-bold text-hku-ash mb-2">Sección de Práctica</h3>
-                    <p className="text-gray-500 text-center max-w-md">Próximamente incluiremos ejercicios para este tema.</p>
-                  </div>
+                  <UsosSePractice />
                 ) : (
                   <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-gray-200 shadow-sm border-l-4 border-l-hku-green">
                     <div className="bg-green-50 p-4 rounded-full mb-4">
@@ -8810,262 +8804,18 @@ const LoUsosContent: React.FC = () => {
   );
 };
 
-// --- USOS DEL SE CONTENT (Topic 2-3) ---
-const UsosSeContent: React.FC = () => {
-  return (
-    <div className="space-y-12 text-gray-700 font-sans">
+// --- USOS DEL SE PRACTICE (Topic 2-3) ---
+const UsosSePractice: React.FC = () => {
 
-      {/* 1. Se Reflexivo */}
-      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-        <h2 className="text-3xl font-bold text-hku-blue mb-6 flex items-center font-serif">
-          <User className="mr-3" size={32} /> 1. «Se» con Función Reflexiva
-        </h2>
-        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-          Se utiliza cuando la acción del verbo recae sobre el mismo sujeto que la realiza (el sujeto y el objeto coinciden).
-          El pronombre debe concordar siempre con la persona del verbo.
-        </p>
-
-        {/* Pronombres table */}
-        <div className="overflow-x-auto mb-8">
-          <table className="w-full border-collapse bg-white rounded-lg overflow-hidden shadow-sm text-sm">
-            <thead>
-              <tr className="bg-hku-blue text-white">
-                {['Yo', 'Tú', 'Él/Ella', 'Nosotros', 'Vosotros', 'Ellos/Ellas'].map(p => (
-                  <th key={p} className="px-4 py-3 text-center font-semibold">{p}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                {['me', 'te', 'se', 'nos', 'os', 'se'].map(pr => (
-                  <td key={pr} className="px-4 py-3 text-center font-mono font-bold text-hku-blue border border-blue-100">
-                    {pr}
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div className="space-y-4">
-          {[
-            {
-              label: 'Sobre el sujeto completo',
-              example: '«Yo me baño todos los días».',
-              color: 'blue',
-            },
-            {
-              label: 'Sobre una parte del cuerpo',
-              example: '«Pepe se está afeitando el bigote».',
-              color: 'blue',
-            },
-            {
-              label: 'Sobre algo que el sujeto lleva o tiene',
-              example: '«Ponte el pijama» / «Me he manchado el bolso».',
-              color: 'blue',
-            },
-          ].map(item => (
-            <div key={item.label} className="bg-blue-50 p-5 rounded-xl border-l-4 border-hku-blue">
-              <h4 className="font-bold text-hku-ash mb-2">{item.label}</h4>
-              <div className="bg-white px-3 py-2 rounded-lg border border-blue-100 text-sm italic text-gray-700 inline-block">
-                {item.example}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 2. Se Recíproco */}
-      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-        <h2 className="text-3xl font-bold text-hku-green mb-6 flex items-center font-serif">
-          <Users className="mr-3" size={32} /> 2. «Se» con Función Recíproca
-        </h2>
-        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-          Se emplea cuando <strong>dos o más sujetos</strong> realizan la acción <em>el uno al otro</em>.
-        </p>
-        <div className="bg-green-50 p-6 rounded-xl border-l-4 border-hku-green space-y-3">
-          {[
-            '«Juan y Sofía se aman» (el uno al otro).',
-            '«Pepe y su primo se pegan por todo».',
-            '«Ana y tú os escribís, ¿no?».',
-          ].map((ex, i) => (
-            <div key={i} className="bg-white px-3 py-2 rounded-lg border border-green-100 text-sm italic text-gray-700 inline-block w-full">
-              {ex}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 3. Se Cambio de Estado */}
-      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-        <h2 className="text-3xl font-bold text-purple-700 mb-6 flex items-center font-serif">
-          <GitBranch className="mr-3" size={32} /> 3. «Se» de Cambio de Estado (Verbos Pronominales)
-        </h2>
-        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-          Indica una <strong>transformación</strong> física, anímica o de situación. Algunos verbos son siempre pronominales
-          (como <em>arrepentirse</em> o <em>quejarse</em>), mientras que otros cambian su significado al añadir el pronombre.
-        </p>
-
-        <h3 className="text-xl font-bold text-hku-ash mb-5 flex items-center">
-          <Layers className="w-5 h-5 mr-2 text-purple-600" /> Verbos de cambio comunes
-        </h3>
-
-        <div className="grid md:grid-cols-2 gap-4">
-          {[
-            { verb: 'Ponerse', desc: 'Destaca el proceso del cambio.', example: '«Se puso muy triste con la noticia».' },
-            { verb: 'Quedarse', desc: 'Destaca el resultado final.', example: '«¡Se ha quedado calvo!».' },
-            { verb: 'Convertirse en', desc: 'Seguido de sustantivo, indica una transformación profunda.', example: '«El gusano se convierte en mariposa».' },
-            { verb: 'Volverse', desc: 'Expresa un cambio en el carácter o la personalidad.', example: '«Mi hermano se ha vuelto muy desconfiado».' },
-          ].map(item => (
-            <div key={item.verb} className="bg-purple-50 p-5 rounded-xl border border-purple-100">
-              <h4 className="font-bold text-purple-700 text-lg mb-1">{item.verb}</h4>
-              <p className="text-sm text-gray-600 mb-3">{item.desc}</p>
-              <div className="bg-white px-3 py-2 rounded-lg border border-purple-100 text-sm italic text-gray-700 inline-block w-full">
-                {item.example}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 4. Sustituto OI */}
-      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-        <h2 className="text-3xl font-bold text-orange-600 mb-6 flex items-center font-serif">
-          <Copy className="mr-3" size={32} /> 4. «Se» como Sustituto de Objeto Indirecto (OI)
-        </h2>
-        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-          Cuando en una frase coinciden los pronombres de objeto directo (<em>lo, la, los, las</em>) e indirecto (<em>le, les</em>),
-          el objeto indirecto se transforma en <strong>«se»</strong> para evitar la cacofonía.
-        </p>
-        <div className="bg-orange-50 p-6 rounded-xl border-l-4 border-orange-400">
-          <h4 className="font-bold text-hku-ash mb-4 flex items-center">
-            <ChevronRight className="mr-1 text-orange-500" size={18} /> Transformación
-          </h4>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 text-sm flex-wrap">
-            <span className="bg-white px-3 py-2 rounded-lg border border-orange-100 italic text-gray-600">
-              «Pepa <strong>le</strong> compra flores a Pepe»
-            </span>
-            <ChevronRight className="text-orange-500 flex-shrink-0" size={20} />
-            <span className="bg-white px-3 py-2 rounded-lg border border-orange-300 italic text-gray-700">
-              «Pepa <strong className="text-orange-600">se las</strong> compra»
-            </span>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Verbos de Ingestión */}
-      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-        <h2 className="text-3xl font-bold text-hku-ash mb-6 flex items-center font-serif">
-          <MessageSquare className="mr-3" size={32} /> 5. «Se» con Verbos de Ingestión
-        </h2>
-        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-          Se usa con verbos como <em>comer</em>, <em>beber</em> o <em>tomar</em> para indicar que se consume una
-          <strong> cantidad determinada o específica</strong> de algo. Enfatiza la totalidad de la acción, aunque no siempre es obligatorio.
-        </p>
-        <div className="bg-gray-50 p-6 rounded-xl border-l-4 border-hku-ash space-y-3">
-          {[
-            '«Se ha tomado un buen bocata de calamares».',
-            '«Me estoy comiendo este muslo de pollo».',
-            '«Se bebe toda la botella sin parar».',
-          ].map((ex, i) => (
-            <div key={i} className="bg-white px-3 py-2 rounded-lg border border-gray-200 text-sm italic text-gray-700 inline-block w-full">
-              {ex}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 6. Pasiva Refleja e Impersonal */}
-      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-        <h2 className="text-3xl font-bold text-hku-blue mb-6 flex items-center font-serif">
-          <Layers className="mr-3" size={32} /> 6. «Se» Pasiva Refleja e Impersonal
-        </h2>
-        <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-          Muy comunes en anuncios, normas e instrucciones de uso, ya que permiten <strong>ocultar quién realiza la acción</strong>.
-        </p>
-
-        {/* Comparison table */}
-        <div className="overflow-x-auto mb-8">
-          <table className="w-full border-collapse bg-white rounded-lg overflow-hidden shadow-sm">
-            <thead>
-              <tr className="bg-hku-ash text-white">
-                <th className="px-5 py-4 text-left font-semibold">Característica</th>
-                <th className="px-5 py-4 text-left font-semibold text-blue-200">Pasiva Refleja</th>
-                <th className="px-5 py-4 text-left font-semibold text-green-200">«Se» Impersonal</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                {
-                  feat: 'Sujeto',
-                  pr: 'Sí tiene (la cosa o persona buscada).',
-                  imp: 'No tiene.',
-                },
-                {
-                  feat: 'Concordancia',
-                  pr: 'El verbo concuerda con el sujeto (singular o plural).',
-                  imp: 'El verbo siempre va en 3.ª persona del singular.',
-                },
-                {
-                  feat: 'Uso con «a»',
-                  pr: 'No se usa la preposición «a» antes del sustantivo.',
-                  imp: 'Se usa con a + persona (que funciona como objeto directo).',
-                },
-              ].map((row, i) => (
-                <tr key={row.feat} className={`border-b border-gray-200 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                  <td className="px-5 py-4 font-semibold text-hku-ash text-sm">{row.feat}</td>
-                  <td className="px-5 py-4 text-sm text-gray-700">{row.pr}</td>
-                  <td className="px-5 py-4 text-sm text-gray-700">{row.imp}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="bg-blue-50 p-5 rounded-xl border-l-4 border-hku-blue">
-            <h4 className="font-bold text-hku-blue mb-3 text-lg">Pasiva Refleja</h4>
-            <div className="space-y-2">
-              {[
-                '«Se venden pisos baratos».',
-                '«Se buscan actores de teatro».',
-              ].map((ex, i) => (
-                <div key={i} className="bg-white px-3 py-2 rounded-lg border border-blue-100 text-sm italic text-gray-700">
-                  {ex}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="bg-green-50 p-5 rounded-xl border-l-4 border-hku-green">
-            <h4 className="font-bold text-hku-green mb-3 text-lg">«Se» Impersonal</h4>
-            <div className="space-y-2">
-              {[
-                '«Aquí se come muy bien».',
-                '«Se busca a los actores de teatro».',
-              ].map((ex, i) => (
-                <div key={i} className="bg-white px-3 py-2 rounded-lg border border-green-100 text-sm italic text-gray-700">
-                  {ex}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </div>
-  );
-};
-
-// --- LO USOS PRACTICE (Topic 2-2) ---
-const LoUsosPractice: React.FC = () => {
-
-  // ── Bloque 1: Pronombre vs. Artículo neutro ──
+  // ── Bloque 1: Identificación del tipo de "se" ──
+  const seOpts = ['Reflexivo', 'Recíproco', 'Cambio de estado', 'Sustituto de OI', 'Verbos de ingestión', 'Pasiva refleja', 'Impersonal'];
   const b1Items = [
-    { id: 'b1-1', text: '¿Has traído el libro de gramática? — Sí, lo he traído en la mochila.', sol: 'Pronombre', explanation: 'Sustituye al sustantivo masculino singular "el libro".' },
-    { id: 'b1-2', text: 'Lo bueno de este curso es que practicamos mucha conversación.', sol: 'Artículo neutro', explanation: 'Acompaña al adjetivo "bueno" para referirse a "la parte buena".' },
-    { id: 'b1-3', text: 'No entiendo lo que ha dicho el profesor sobre el examen.', sol: 'Artículo neutro', explanation: 'Se combina con "que" para referirse a "la cosa" o "el tema".' },
-    { id: 'b1-4', text: 'Intenté abrir la puerta con la llave equivocada, pero no lo conseguí.', sol: 'Pronombre', explanation: 'Sustituye a la acción de "abrir la puerta".' },
-    { id: 'b1-5', text: 'Lo de Paula en la oficina es una situación muy curiosa.', sol: 'Artículo neutro', explanation: 'Se usa con "de" para referirse al "tema de Paula".' },
+    { id: 'b1-1', text: '«Los delegados se saludaron cordialmente al empezar la reunión».', sol: 'Recíproco' },
+    { id: 'b1-2', text: '«Se busca a los responsables del grafiti en la fachada».', sol: 'Impersonal' },
+    { id: 'b1-3', text: '«Marta se mira en el espejo antes de salir de casa».', sol: 'Reflexivo' },
+    { id: 'b1-4', text: '«Se suspendieron las clases debido a la tormenta».', sol: 'Pasiva refleja' },
+    { id: 'b1-5', text: '«Ayer se terminó el libro entero en una sola tarde».', sol: 'Verbos de ingestión' },
+    { id: 'b1-6', text: '«El niño se puso muy alegre cuando vio a sus primos».', sol: 'Cambio de estado' },
   ];
   const [b1Answers, setB1Answers] = useState<Record<string, string>>({});
   const [b1Results, setB1Results] = useState<Record<string, boolean | null>>({});
@@ -9085,46 +8835,46 @@ const LoUsosPractice: React.FC = () => {
     return 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300';
   };
 
-  // ── Bloque 2: Drag-and-drop ──
+  // ── Bloque 2: Sustitución de pronombres ──
   const b2Items = [
-    { id: 'b2-1', before: 'He olvidado', after: 'respondí en la última pregunta del ejercicio.', sol: 'lo que', explanation: 'Sustituye a "la cosa" que se respondió.' },
-    { id: 'b2-2', before: 'Por favor, intenta llegar a casa', after: 'posible.', sol: 'lo antes', explanation: 'Se usa con el adverbio "antes" para enfatizar la rapidez.' },
-    { id: 'b2-3', before: '', after: 'es que te sientas cómodo hablando en español.', sol: 'lo importante', explanation: 'Enfatiza la cualidad de "importante" como un concepto sustantivado.' },
-    { id: 'b2-4', before: 'Respecto a', after: 'practicar más la audición: estoy totalmente de acuerdo.', sol: 'lo de', explanation: 'Se refiere a una situación o tema mencionado antes (practicar audición).' },
-    { id: 'b2-5', before: '¡Mira', after: 'que cocina tu hermano!', sol: 'lo bien', explanation: 'Enfatiza la calidad del adverbio "bien".' },
-    { id: 'b2-6', before: '', after: 'de los libros de historia es recordar todas las fechas.', sol: 'lo difícil', explanation: 'Sustituye a "la parte difícil".' },
+    { id: 'b2-1', sentence: 'El camarero sirvió el café a los clientes.', sol: 'El camarero se lo sirvió.' },
+    { id: 'b2-2', sentence: 'He enviado el informe a la directora.', sol: 'Se lo he enviado.' },
+    { id: 'b2-3', sentence: '¿Has devuelto el dinero a tu hermano?', sol: '¿Se lo has devuelto?' },
+    { id: 'b2-4', sentence: 'La profesora explicó la lección a los alumnos.', sol: 'La profesora se la explicó.' },
   ];
-
-  const allTokens = useMemo<{ id: string; label: string }[]>(() => [
-    { id: 't01', label: 'lo de' },
-    { id: 't02', label: 'lo que' },
-    { id: 't03', label: 'lo importante' },
-    { id: 't04', label: 'lo bien' },
-    { id: 't05', label: 'lo de' },
-    { id: 't06', label: 'lo bueno' },
-    { id: 't07', label: 'lo que' },
-    { id: 't08', label: 'lo antes' },
-    { id: 't09', label: 'lo difícil' },
-    { id: 't10', label: 'lo rápido' },
-  ], []);
-
-  const [b2Placed, setB2Placed] = useState<Record<string, string>>({});   // blankId → tokenId
+  const [b2Answers, setB2Answers] = useState<Record<string, string>>({});
   const [b2Results, setB2Results] = useState<Record<string, boolean | null>>({});
-  const [dragging, setDragging] = useState<{ tokenId: string; fromBlank?: string } | null>(null);
+  const checkB2 = () => {
+    const r: Record<string, boolean | null> = {};
+    b2Items.forEach(item => {
+      const ans = (b2Answers[item.id] || '').trim().toLowerCase().replace(/[¿?]/g, '').replace(/\s+/g, ' ');
+      const sol = item.sol.toLowerCase().replace(/[¿?]/g, '').replace(/\s+/g, ' ');
+      r[item.id] = ans === sol;
+    });
+    setB2Results(r);
+  };
+  const resetB2 = () => { setB2Answers({}); setB2Results({}); };
+  const b2InputCls = (id: string) => `w-full mt-2 px-3 py-2 border-2 rounded-lg focus:outline-none text-sm ${
+    b2Results[id] == null
+      ? 'border-gray-300 focus:border-hku-blue'
+      : b2Results[id]
+      ? 'border-green-500 bg-green-50'
+      : 'border-red-500 bg-red-50'
+  }`;
 
-  // ── Bloque 3: El / La / Lo ──
+  // ── Bloque 3: Pasiva refleja vs Impersonal ──
   const b3Items = [
-    { id: 'b3-1', sentence: 'De todos los postres, este pastel de chocolate es ( ___ ) mejor.', opts: ['el', 'lo'], sol: 'el', explanation: 'Se refiere a un objeto específico (el pastel).' },
-    { id: 'b3-2', sentence: '( ___ ) mejor de las vacaciones fue poder desconectar del trabajo.', opts: ['El', 'Lo'], sol: 'Lo', explanation: 'Se refiere a un concepto o evento abstracto (la experiencia).' },
-    { id: 'b3-3', sentence: 'Rosa es ( ___ ) que lleva la camiseta de color rosa.', opts: ['la', 'lo'], sol: 'la', explanation: 'Se refiere a una persona femenina (Rosa).' },
-    { id: 'b3-4', sentence: 'No me gusta esa chaqueta; prefiero ( ___ ) que tiene el corazón bordado.', opts: ['el', 'la'], sol: 'la', explanation: 'Se refiere a una cosa mencionada antes (la chaqueta).' },
-    { id: 'b3-5', sentence: 'Juan siempre quiere ser ( ___ ) mejor en todos los deportes.', opts: ['el', 'lo'], sol: 'el', explanation: 'Se refiere a una persona masculina (Juan).' },
+    { id: 'b3-1', before: 'En este pueblo (', after: ') muy tranquilamente.', opts: ['se vive', 'se viven'], sol: 'se vive' },
+    { id: 'b3-2', before: '(', after: ') camareros con experiencia para el verano.', opts: ['Se necesita', 'Se necesitan'], sol: 'Se necesitan' },
+    { id: 'b3-3', before: 'Todavía no (', after: ') a los alumnos del cambio de aula.', opts: ['se ha avisado', 'se han avisado'], sol: 'se ha avisado' },
+    { id: 'b3-4', before: 'En la biblioteca no (', after: ') hacer ruido.', opts: ['se puede', 'se pueden'], sol: 'se puede' },
+    { id: 'b3-5', before: '(', after: ') bicicletas de segunda mano en buen estado.', opts: ['Se vende', 'Se venden'], sol: 'Se venden' },
   ];
   const [b3Answers, setB3Answers] = useState<Record<string, string>>({});
   const [b3Results, setB3Results] = useState<Record<string, boolean | null>>({});
   const checkB3 = () => {
     const r: Record<string, boolean | null> = {};
-    b3Items.forEach(item => { r[item.id] = b3Answers[item.id]?.toLowerCase() === item.sol.toLowerCase(); });
+    b3Items.forEach(item => { r[item.id] = b3Answers[item.id] === item.sol; });
     setB3Results(r);
   };
   const resetB3 = () => { setB3Answers({}); setB3Results({}); };
@@ -9133,145 +8883,22 @@ const LoUsosPractice: React.FC = () => {
     if (sel) {
       if (b3Results[id] === true)  return 'bg-green-100 border-green-500 text-green-800';
       if (b3Results[id] === false) return 'bg-red-100 border-red-500 text-red-800';
-      return 'bg-purple-100 border-purple-500 text-purple-800';
+      return 'bg-indigo-100 border-indigo-500 text-indigo-800';
     }
     return 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300';
   };
 
-  // ── Modal de respuestas ──
-  const [showRespuestas, setShowRespuestas] = useState(false);
-
-  const poolTokens = allTokens.filter(t => !Object.values(b2Placed).includes(t.id));
-
-  const handleDropOnBlank = (blankId: string) => {
-    if (!dragging) return;
-    setB2Placed(prev => {
-      const next = { ...prev };
-      if (dragging.fromBlank) delete next[dragging.fromBlank];
-      next[blankId] = dragging.tokenId;
-      return next;
-    });
-    setDragging(null);
-  };
-
-  const checkB2 = () => {
-    const r: Record<string, boolean | null> = {};
-    b2Items.forEach(item => {
-      const tokenId = b2Placed[item.id];
-      if (!tokenId) { r[item.id] = null; return; }
-      const token = allTokens.find(t => t.id === tokenId);
-      r[item.id] = token ? token.label.toLowerCase() === item.sol.toLowerCase() : false;
-    });
-    setB2Results(r);
-  };
-  const resetB2 = () => { setB2Placed({}); setB2Results({}); setDragging(null); };
-
-  const blankCls = (blankId: string) => {
-    const result = b2Results[blankId];
-    const filled = !!b2Placed[blankId];
-    if (result === true)  return 'border-green-500 bg-green-50 text-green-800';
-    if (result === false) return 'border-red-500 bg-red-50 text-red-800';
-    return filled
-      ? 'border-hku-green bg-green-50 text-hku-green cursor-grab'
-      : 'border-dashed border-gray-400 bg-white text-gray-400';
-  };
-
   return (
     <div className="space-y-10">
-      {/* Modal de respuestas */}
-      {showRespuestas && (
-        <div
-          className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 overflow-y-auto py-10 px-4"
-          onClick={() => setShowRespuestas(false)}
-        >
-          <div
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-8 space-y-6"
-            onClick={e => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between border-b pb-4">
-              <h3 className="text-xl font-bold text-hku-ash flex items-center gap-2">
-                <Eye size={22} className="text-hku-green" /> Respuestas
-              </h3>
-              <button
-                onClick={() => setShowRespuestas(false)}
-                className="text-gray-400 hover:text-gray-600 text-2xl leading-none font-bold"
-                aria-label="Cerrar"
-              >×</button>
-            </div>
-
-            {/* Bloque 1 */}
-            <div>
-              <p className="font-bold text-hku-blue mb-3 uppercase tracking-wide text-xs">Bloque 1 – Identificación y Sustitución</p>
-              <div className="space-y-2">
-                {b1Items.map((item, idx) => (
-                  <div key={item.id} className="bg-blue-50 rounded-lg px-4 py-3 text-sm">
-                    <span className="font-bold text-hku-blue mr-1">{idx + 1}.</span>
-                    <span className="font-semibold text-green-700">{item.sol}</span>
-                    <span className="text-gray-500 ml-2">— {item.explanation}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Bloque 2 */}
-            <div>
-              <p className="font-bold text-hku-green mb-3 uppercase tracking-wide text-xs">Bloque 2 – Combinaciones de «Lo»</p>
-              <div className="space-y-2">
-                {b2Items.map((item, idx) => (
-                  <div key={item.id} className="bg-green-50 rounded-lg px-4 py-3 text-sm">
-                    <span className="font-bold text-hku-green mr-1">{idx + 1}.</span>
-                    <span className="font-semibold text-green-700">{item.sol}</span>
-                    <span className="text-gray-500 ml-2">— {item.explanation}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Bloque 3 */}
-            <div>
-              <p className="font-bold text-purple-600 mb-3 uppercase tracking-wide text-xs">Bloque 3 – «El», «La» o «Lo»</p>
-              <div className="space-y-2">
-                {b3Items.map((item, idx) => (
-                  <div key={item.id} className="bg-purple-50 rounded-lg px-4 py-3 text-sm">
-                    <span className="font-bold text-purple-400 mr-1">{idx + 1}.</span>
-                    <span className="font-semibold text-purple-700">{item.sol}</span>
-                    <span className="text-gray-500 ml-2">— {item.explanation}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="pt-2 border-t text-right">
-              <button
-                onClick={() => setShowRespuestas(false)}
-                className="bg-hku-green hover:bg-green-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors text-sm"
-              >
-                Cerrar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Header */}
-      <div className="bg-gradient-to-r from-hku-green to-green-700 text-white p-8 rounded-2xl shadow-lg">
+      <div className="bg-gradient-to-r from-hku-blue to-blue-700 text-white p-8 rounded-2xl shadow-lg">
         <h2 className="text-3xl font-bold mb-3 flex items-center">
           <Pencil className="mr-3" size={32} />
-          Práctica: Los usos de «lo»
+          Práctica: Los usos del «se»
         </h2>
-        <p className="text-green-100 text-lg">
-          Practica los diferentes usos del pronombre y artículo neutro <em>lo</em> con estos ejercicios.
+        <p className="text-blue-100 text-lg">
+          Pon a prueba tu conocimiento sobre los diferentes valores del pronombre <em>se</em> con estos ejercicios.
         </p>
-      </div>
-
-      {/* Botón Ver respuestas */}
-      <div className="flex justify-end">
-        <button
-          onClick={() => setShowRespuestas(true)}
-          className="flex items-center gap-2 bg-hku-green hover:bg-green-700 text-white px-5 py-2.5 rounded-lg font-semibold transition-colors shadow text-sm"
-        >
-          <Eye size={16} /> Ver respuestas
-        </button>
       </div>
 
       {/* Bloque 1 */}
@@ -9279,35 +8906,33 @@ const LoUsosPractice: React.FC = () => {
         <div className="mb-6">
           <h3 className="text-2xl font-bold text-hku-ash mb-2 flex items-center">
             <Search className="mr-2 text-hku-blue" size={28} />
-            Bloque 1: Identificación y Sustitución
+            Bloque 1: Identificación del tipo de «se»
           </h3>
           <p className="text-gray-600">
-            Decide si el uso de <strong>«lo»</strong> funciona como <strong>pronombre de objeto directo</strong> o como <strong>artículo neutro</strong>.
+            Lee cada oración e identifica qué función cumple el pronombre <strong>«se»</strong>. Selecciona la opción correcta.
           </p>
         </div>
-        <div className="bg-blue-50 p-6 rounded-xl border-l-4 border-hku-blue">
-          <div className="space-y-4">
-            {b1Items.map((item, idx) => (
-              <div key={item.id} className="bg-white p-4 rounded-lg shadow-sm border border-blue-100">
-                <p className="text-gray-800 text-sm md:text-base mb-3 italic">
-                  <span className="font-bold text-hku-blue not-italic mr-1">{idx + 1}.</span>
-                  {item.text}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {['Pronombre', 'Artículo neutro'].map(opt => (
-                    <button
-                      key={opt}
-                      onClick={() => setB1Answers(prev => ({ ...prev, [item.id]: opt }))}
-                      className={`px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all ${b1BtnCls(item.id, opt)}`}
-                    >
-                      {opt}
-                    </button>
-                  ))}
-                </div>
+        <div className="bg-blue-50 p-6 rounded-xl border-l-4 border-hku-blue space-y-4">
+          {b1Items.map((item, idx) => (
+            <div key={item.id} className="bg-white p-4 rounded-lg shadow-sm border border-blue-100">
+              <p className="text-gray-800 text-sm md:text-base italic mb-3">
+                <span className="font-bold text-hku-blue not-italic mr-1">{idx + 1}.</span>
+                {item.text}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {seOpts.map(opt => (
+                  <button
+                    key={opt}
+                    onClick={() => setB1Answers(prev => ({ ...prev, [item.id]: opt }))}
+                    className={`px-3 py-1.5 rounded-lg border-2 text-xs font-medium transition-all ${b1BtnCls(item.id, opt)}`}
+                  >
+                    {opt}
+                  </button>
+                ))}
               </div>
-            ))}
-          </div>
-          <div className="mt-6 flex flex-wrap gap-3">
+            </div>
+          ))}
+          <div className="mt-2 flex flex-wrap gap-3">
             <button onClick={checkB1} className="bg-hku-blue hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
               <CheckCircle size={18} className="mr-2" /> Comprobar
             </button>
@@ -9322,85 +8947,29 @@ const LoUsosPractice: React.FC = () => {
       <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
         <div className="mb-6">
           <h3 className="text-2xl font-bold text-hku-ash mb-2 flex items-center">
-            <Layers className="mr-2 text-hku-green" size={28} />
-            Bloque 2: Completar con Combinaciones de «Lo»
+            <Copy className="mr-2 text-hku-green" size={28} />
+            Bloque 2: Sustitución de Pronombres (Función de OI)
           </h3>
           <p className="text-gray-600">
-            Arrastra la combinación correcta al espacio en blanco de cada frase. Hay más opciones de las necesarias.
-            Haz clic en una ficha colocada para devolverla al banco.
+            Transforma cada oración sustituyendo el Objeto Directo (OD) y el Objeto Indirecto (OI) por los pronombres correspondientes.
           </p>
         </div>
-        <div className="bg-green-50 p-6 rounded-xl border-l-4 border-hku-green space-y-6">
-
-          {/* Token pool */}
-          <div
-            className="bg-white rounded-xl border-2 border-dashed border-green-300 p-4 min-h-[64px]"
-            onDragOver={e => e.preventDefault()}
-            onDrop={e => {
-              e.preventDefault();
-              if (dragging?.fromBlank) {
-                const fb = dragging.fromBlank;
-                setB2Placed(prev => { const n = { ...prev }; delete n[fb]; return n; });
-                setB2Results(prev => { const n = { ...prev }; delete n[fb]; return n; });
-                setDragging(null);
-              }
-            }}
-          >
-            <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-3">
-              Banco de fichas — arrastra al espacio correspondiente
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {poolTokens.map(token => (
-                <div
-                  key={token.id}
-                  draggable
-                  onDragStart={() => setDragging({ tokenId: token.id })}
-                  onDragEnd={() => setDragging(null)}
-                  className="px-4 py-2 bg-hku-green text-white rounded-lg text-sm font-semibold cursor-grab active:cursor-grabbing shadow-sm select-none hover:bg-green-700 transition-colors"
-                >
-                  {token.label}
-                </div>
-              ))}
-              {poolTokens.length === 0 && (
-                <p className="text-sm text-gray-400 italic">Todas las fichas están colocadas.</p>
-              )}
+        <div className="bg-green-50 p-6 rounded-xl border-l-4 border-hku-green space-y-5">
+          {b2Items.map((item, idx) => (
+            <div key={item.id} className="bg-white p-4 rounded-lg shadow-sm border border-green-100">
+              <p className="text-gray-700 text-sm md:text-base italic mb-1">
+                <span className="font-bold text-hku-green not-italic mr-1">{idx + 1}.</span>
+                {item.sentence}
+              </p>
+              <input
+                type="text"
+                value={b2Answers[item.id] || ''}
+                onChange={e => setB2Answers(prev => ({ ...prev, [item.id]: e.target.value }))}
+                placeholder="Escribe la transformación aquí..."
+                className={b2InputCls(item.id)}
+              />
             </div>
-          </div>
-
-          {/* Sentences */}
-          <div className="space-y-4">
-            {b2Items.map((item, idx) => {
-              const placedToken = b2Placed[item.id]
-                ? (allTokens.find(t => t.id === b2Placed[item.id]) ?? null)
-                : null;
-              return (
-                <div key={item.id} className="bg-white p-4 rounded-lg shadow-sm border border-green-100">
-                  <div className="flex flex-wrap items-center gap-2 text-gray-800 text-sm md:text-base leading-relaxed">
-                    <span className="font-bold text-hku-green flex-shrink-0">{idx + 1}.</span>
-                    {item.before && <span>{item.before}</span>}
-                    <div
-                      className={`inline-flex items-center justify-center min-w-[120px] h-9 px-3 rounded-lg border-2 text-sm font-semibold transition-all select-none ${blankCls(item.id)}`}
-                      onDragOver={e => e.preventDefault()}
-                      onDrop={e => { e.preventDefault(); handleDropOnBlank(item.id); }}
-                      draggable={!!placedToken}
-                      onDragStart={placedToken ? () => setDragging({ tokenId: placedToken.id, fromBlank: item.id }) : undefined}
-                      onDragEnd={() => setDragging(null)}
-                      onClick={() => {
-                        if (placedToken) {
-                          setB2Placed(prev => { const n = { ...prev }; delete n[item.id]; return n; });
-                          setB2Results(prev => { const n = { ...prev }; delete n[item.id]; return n; });
-                        }
-                      }}
-                    >
-                      {placedToken ? placedToken.label : '▢ arrastra aquí'}
-                    </div>
-                    {item.after && <span>{item.after}</span>}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
+          ))}
           <div className="flex flex-wrap gap-3">
             <button onClick={checkB2} className="bg-hku-green hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
               <CheckCircle size={18} className="mr-2" /> Comprobar
@@ -9416,37 +8985,35 @@ const LoUsosPractice: React.FC = () => {
       <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
         <div className="mb-6">
           <h3 className="text-2xl font-bold text-hku-ash mb-2 flex items-center">
-            <HelpCircle className="mr-2 text-purple-600" size={28} />
-            Bloque 3: ¿«El», «La» o «Lo»?
+            <GitBranch className="mr-2 text-indigo-600" size={28} />
+            Bloque 3: Pasiva Refleja vs. Impersonal
           </h3>
           <p className="text-gray-600">
-            Elige el artículo correcto para cada frase.
+            Elige la forma correcta del verbo: <strong>pasiva refleja</strong> (el verbo concuerda con el sujeto) o <strong>impersonal</strong> (siempre en 3.ª persona del singular).
           </p>
         </div>
-        <div className="bg-purple-50 p-6 rounded-xl border-l-4 border-purple-500">
-          <div className="space-y-4">
-            {b3Items.map((item, idx) => (
-              <div key={item.id} className="bg-white p-4 rounded-lg shadow-sm border border-purple-100">
-                <p className="text-gray-800 text-sm md:text-base mb-3">
-                  <span className="font-bold text-purple-600 mr-1">{idx + 1}.</span>
-                  {item.sentence.replace('( ___ )', ' _____ ')}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {item.opts.map(opt => (
-                    <button
-                      key={opt}
-                      onClick={() => setB3Answers(prev => ({ ...prev, [item.id]: opt }))}
-                      className={`px-5 py-2 rounded-lg border-2 text-sm font-medium transition-all ${b3BtnCls(item.id, opt)}`}
-                    >
-                      {opt}
-                    </button>
-                  ))}
-                </div>
+        <div className="bg-indigo-50 p-6 rounded-xl border-l-4 border-indigo-500 space-y-4">
+          {b3Items.map((item, idx) => (
+            <div key={item.id} className="bg-white p-4 rounded-lg shadow-sm border border-indigo-100">
+              <p className="text-gray-800 text-sm md:text-base mb-3">
+                <span className="font-bold text-indigo-600 mr-1">{idx + 1}.</span>
+                {item.before} _____ {item.after}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {item.opts.map(opt => (
+                  <button
+                    key={opt}
+                    onClick={() => setB3Answers(prev => ({ ...prev, [item.id]: opt }))}
+                    className={`px-5 py-2 rounded-lg border-2 text-sm font-medium transition-all ${b3BtnCls(item.id, opt)}`}
+                  >
+                    {opt}
+                  </button>
+                ))}
               </div>
-            ))}
-          </div>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <button onClick={checkB3} className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
+            </div>
+          ))}
+          <div className="flex flex-wrap gap-3">
+            <button onClick={checkB3} className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
               <CheckCircle size={18} className="mr-2" /> Comprobar
             </button>
             <button onClick={resetB3} className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold transition-colors flex items-center shadow-md">
