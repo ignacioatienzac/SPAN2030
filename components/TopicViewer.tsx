@@ -23,6 +23,7 @@ export const TopicViewer: React.FC<TopicViewerProps> = ({ topic, onBack }) => {
   const isSerEstarHaber = topic.id === '2-1';
   const isLoUsos = topic.id === '2-2';
   const isUsosSe = topic.id === '2-3';
+  const isEstructuraOracion = topic.id === '2-4';
 
   // Tabs configuration for Determinants
   const determinantsTabs = [
@@ -191,7 +192,8 @@ export const TopicViewer: React.FC<TopicViewerProps> = ({ topic, onBack }) => {
                 {isSerEstarHaber && <SerEstarHaberContent />}
                 {isLoUsos && <LoUsosContent />}
                 {isUsosSe && <UsosSeContent />}
-                {!isMorphology && !isNouns && !isAdjectives && !isVerbs && !isSerEstarHaber && !isLoUsos && !isUsosSe && (
+                {isEstructuraOracion && <EstructuraOracionContent />}
+                {!isMorphology && !isNouns && !isAdjectives && !isVerbs && !isSerEstarHaber && !isLoUsos && !isUsosSe && !isEstructuraOracion && (
                   <div className="text-center py-20 bg-white rounded-2xl border border-gray-200 shadow-sm">
                     <p className="text-gray-500">Contenido disponible próximamente para {topic.title}.</p>
                   </div>
@@ -9843,6 +9845,226 @@ const UsosSePractice: React.FC = () => {
           </div>
         </div>
       )}
+    </div>
+  );
+};
+
+// --- CONTENT COMPONENT: ESTRUCTURA DE LA ORACIÓN (Topic 2-4) ---
+const EstructuraOracionContent: React.FC = () => {
+  return (
+    <div className="space-y-12 text-gray-700 font-sans">
+
+      {/* 1. ¿Qué es una oración? */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-2xl font-bold text-hku-blue mb-6 flex items-center font-serif">
+          <BookOpen className="mr-3" size={28} /> 1. ¿Qué es una oración?
+        </h2>
+        <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+          En español, es fundamental distinguir entre una <strong>frase</strong> y una <strong>oración</strong>:
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="bg-blue-50 p-6 rounded-xl border-l-4 border-hku-blue">
+            <h3 className="font-bold text-hku-blue text-lg mb-2 flex items-center"><CheckCircle size={18} className="mr-2" /> Oración</h3>
+            <p className="text-sm text-gray-700 mb-3 leading-relaxed">
+              Es un conjunto de palabras que expresa una idea completa y necesita al menos un <strong>verbo conjugado</strong>.
+            </p>
+            <div className="bg-white px-4 py-2 rounded-lg border border-blue-200 text-sm font-mono text-hku-blue">
+              "Rodrigo es el de la chaqueta negra."
+            </div>
+          </div>
+          <div className="bg-gray-50 p-6 rounded-xl border-l-4 border-gray-400">
+            <h3 className="font-bold text-gray-600 text-lg mb-2 flex items-center"><XCircle size={18} className="mr-2 text-gray-400" /> Frase</h3>
+            <p className="text-sm text-gray-700 mb-3 leading-relaxed">
+              No tiene un <strong>verbo conjugado</strong>. Puede expresar saludos, exclamaciones o ideas incompletas.
+            </p>
+            <div className="bg-white px-4 py-2 rounded-lg border border-gray-200 text-sm font-mono text-gray-600">
+              "¡Buenos días, Manuel!"
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-gray-100 pt-8">
+          <h3 className="font-bold text-hku-ash text-xl mb-4 flex items-center">
+            <Layers size={20} className="mr-2 text-hku-green" /> El orden de las palabras
+          </h3>
+          <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+            Aunque el español es flexible, el orden estándar suele seguir estos esquemas:
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse bg-white rounded-xl overflow-hidden shadow-sm text-sm">
+              <thead>
+                <tr className="bg-hku-blue text-white">
+                  <th className="px-5 py-3 text-left font-semibold">Tipo de Oración</th>
+                  <th className="px-5 py-3 text-left font-semibold">Estructura Común</th>
+                  <th className="px-5 py-3 text-left font-semibold">Ejemplo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="bg-blue-50 border-b border-blue-100">
+                  <td className="px-5 py-3 font-medium text-hku-blue">Enunciativas</td>
+                  <td className="px-5 py-3 font-mono text-xs text-gray-600">Sujeto + Verbo + Objeto (S-V-O)</td>
+                  <td className="px-5 py-3 italic text-gray-700">(Yo) hablo español muy bien.</td>
+                </tr>
+                <tr className="bg-white border-b border-gray-100">
+                  <td className="px-5 py-3 font-medium text-hku-blue">Interrogativas <span className="text-xs font-normal">(con pronombre)</span></td>
+                  <td className="px-5 py-3 font-mono text-xs text-gray-600">Pron. + Verbo + Objeto + Sujeto</td>
+                  <td className="px-5 py-3 italic text-gray-700">¿Cómo hablas español (tú)?</td>
+                </tr>
+                <tr className="bg-blue-50">
+                  <td className="px-5 py-3 font-medium text-hku-blue">Interrogativas <span className="text-xs font-normal">(sin pronombre)</span></td>
+                  <td className="px-5 py-3 font-mono text-xs text-gray-600">Verbo + Objeto + Sujeto</td>
+                  <td className="px-5 py-3 italic text-gray-700">¿Hablas español (tú)?</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. Tipos de Oraciones */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-2xl font-bold text-hku-blue mb-6 flex items-center font-serif">
+          <GitBranch className="mr-3" size={28} /> 2. Tipos de Oraciones según su Estructura
+        </h2>
+        <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+          Existen tres categorías principales según cómo se organizan las ideas:
+        </p>
+
+        {/* A. Oraciones Simples */}
+        <div className="mb-10">
+          <div className="flex items-center mb-4">
+            <span className="bg-hku-blue text-white text-xs font-bold px-3 py-1 rounded-full mr-3">A</span>
+            <h3 className="text-xl font-bold text-hku-ash font-serif">Oraciones Simples</h3>
+          </div>
+          <p className="text-gray-600 mb-4 leading-relaxed">
+            Tienen solo <strong>un verbo principal conjugado</strong>. Pueden incluir verbos auxiliares (como en las perífrasis), pero la acción principal es una sola.
+          </p>
+          <div className="bg-blue-50 px-5 py-3 rounded-xl border-l-4 border-hku-blue inline-block">
+            <span className="text-sm text-gray-500 mr-2">Ejemplo:</span>
+            <span className="font-mono italic text-hku-blue">"Mi perro se llama Buddy."</span>
+          </div>
+        </div>
+
+        {/* B. Oraciones Coordinadas */}
+        <div className="mb-10">
+          <div className="flex items-center mb-4">
+            <span className="bg-hku-green text-white text-xs font-bold px-3 py-1 rounded-full mr-3">B</span>
+            <h3 className="text-xl font-bold text-hku-ash font-serif">Oraciones Coordinadas</h3>
+          </div>
+          <p className="text-gray-600 mb-4 leading-relaxed">
+            Unen dos o más oraciones simples que están <strong>al mismo nivel</strong>; ninguna depende de la otra para tener sentido. Se clasifican según su conector (<em>nexo</em>):
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse bg-white rounded-xl overflow-hidden shadow-sm text-sm mb-4">
+              <thead>
+                <tr className="bg-hku-green text-white">
+                  <th className="px-4 py-3 text-left font-semibold">Tipo</th>
+                  <th className="px-4 py-3 text-left font-semibold">Función</th>
+                  <th className="px-4 py-3 text-left font-semibold">Nexos comunes</th>
+                  <th className="px-4 py-3 text-left font-semibold">Ejemplo</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { tipo: 'Copulativas', funcion: 'Suman o niegan ideas.', nexos: 'y, e, ni', ej: 'Ni llueve ni lo deja.' },
+                  { tipo: 'Disyuntivas', funcion: 'Plantean opciones que se excluyen.', nexos: 'o, u, o bien', ej: 'O te tomas el desayuno o no nos vamos.' },
+                  { tipo: 'Adversativas', funcion: 'Una idea corrige a la otra.', nexos: 'pero, aunque, sin embargo', ej: 'La idea es buena, pero es difícil.' },
+                  { tipo: 'Distributivas', funcion: 'Acciones alternativas no excluyentes.', nexos: 'unas veces... otras, ya... ya', ej: 'Tan pronto me quiere como me aborrece.' },
+                  { tipo: 'Explicativas', funcion: 'Una aclara el sentido de la otra.', nexos: 'es decir, o sea, esto es', ej: 'No se toma un respiro; es decir, trabaja todo el día.' },
+                ].map((row, idx) => (
+                  <tr key={row.tipo} className={idx % 2 === 0 ? 'bg-green-50' : 'bg-white'}>
+                    <td className="px-4 py-3 font-semibold text-hku-green border-b border-green-100">{row.tipo}</td>
+                    <td className="px-4 py-3 text-gray-600 border-b border-green-100">{row.funcion}</td>
+                    <td className="px-4 py-3 font-mono text-xs text-gray-700 border-b border-green-100">{row.nexos}</td>
+                    <td className="px-4 py-3 italic text-gray-700 border-b border-green-100">{row.ej}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* C. Oraciones Subordinadas */}
+        <div>
+          <div className="flex items-center mb-4">
+            <span className="bg-hku-ash text-white text-xs font-bold px-3 py-1 rounded-full mr-3">C</span>
+            <h3 className="text-xl font-bold text-hku-ash font-serif">Oraciones Subordinadas</h3>
+          </div>
+          <p className="text-gray-600 mb-4 leading-relaxed">
+            Están compuestas por una <strong>oración principal</strong> y una <strong>oración subordinada</strong> que depende de la primera.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
+              <p className="font-bold text-hku-ash mb-2 text-sm uppercase tracking-wide">Cómo identificarlas</p>
+              <ul className="text-sm text-gray-600 space-y-2 list-disc list-inside leading-relaxed">
+                <li>La <strong>principal</strong> tiene sentido sola.</li>
+                <li>La <strong>subordinada</strong> comienza con un nexo (como <em>"que", "si", "cuando"</em>) y no tiene sentido por sí misma.</li>
+              </ul>
+            </div>
+            <div className="bg-gray-50 p-5 rounded-xl border border-gray-200">
+              <p className="font-bold text-hku-ash mb-2 text-sm uppercase tracking-wide">Contextos de uso</p>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Se usan para dar <strong>consejos</strong>, expresar <strong>opiniones</strong>, <strong>condiciones</strong> o <strong>preguntas indirectas</strong>.
+              </p>
+            </div>
+          </div>
+          <div className="bg-gray-100 px-5 py-4 rounded-xl border-l-4 border-hku-ash text-sm">
+            <span className="text-gray-500 mr-2">Ejemplo:</span>
+            <span className="italic text-gray-800">
+              "<span className="text-hku-blue font-semibold">Te recomiendo</span> <span className="text-hku-green font-semibold">que vayas al médico</span>."
+            </span>
+            <div className="mt-2 flex flex-wrap gap-4 text-xs">
+              <span className="flex items-center"><span className="w-3 h-3 rounded-full bg-hku-blue inline-block mr-1"></span> Oración principal</span>
+              <span className="flex items-center"><span className="w-3 h-3 rounded-full bg-hku-green inline-block mr-1"></span> Oración subordinada</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Pronombres Relativos */}
+      <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <h2 className="text-2xl font-bold text-hku-blue mb-6 flex items-center font-serif">
+          <Key className="mr-3" size={28} /> 3. Los Pronombres Relativos
+        </h2>
+        <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+          Se utilizan para introducir oraciones subordinadas y <strong>evitar repetir una palabra ya mencionada</strong>.
+        </p>
+
+        <div className="space-y-4 mb-8">
+          {[
+            { pronombre: 'que', descripcion: 'Sustituye a personas, animales o cosas. Es el más común.' },
+            { pronombre: 'quien / quienes', descripcion: 'Solo para personas.' },
+            { pronombre: 'donde', descripcion: 'Se refiere a un lugar.' },
+            { pronombre: 'cuando', descripcion: 'Se refiere a un momento en el tiempo.' },
+            { pronombre: 'como', descripcion: 'Se refiere a la manera de hacer algo.' },
+            { pronombre: 'cuyo/a/os/as', descripcion: 'Indica posesión y concuerda con el objeto poseído, no con el dueño.', ejemplo: '"Escritora cuyos libros me encantan."' },
+          ].map((item) => (
+            <div key={item.pronombre} className="flex flex-col md:flex-row md:items-center gap-3 bg-blue-50 p-4 rounded-xl border border-blue-100">
+              <span className="font-bold text-hku-blue font-mono text-base min-w-[140px]">{item.pronombre}</span>
+              <span className="text-sm text-gray-700 leading-relaxed flex-1">{item.descripcion}</span>
+              {item.ejemplo && (
+                <span className="text-xs italic text-gray-500 font-mono bg-white px-3 py-1 rounded border border-blue-200">{item.ejemplo}</span>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-yellow-50 p-6 rounded-xl border-l-4 border-yellow-400">
+          <div className="flex items-start gap-3">
+            <AlertTriangle size={22} className="text-yellow-500 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="font-bold text-yellow-700 mb-2">Nota importante sobre preposiciones</p>
+              <p className="text-sm text-gray-700 leading-relaxed mb-3">
+                Si el verbo de la oración principal requiere una preposición (como <em>"quedar con"</em>), esa preposición debe ir <strong>delante del pronombre relativo</strong>.
+              </p>
+              <div className="bg-white px-4 py-2 rounded-lg border border-yellow-200 text-sm font-mono italic text-hku-ash">
+                "El hombre <span className="text-hku-blue font-bold">con quien</span> quedé ayer es mi jefe."
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 };
